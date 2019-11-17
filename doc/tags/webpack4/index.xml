@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>webpack4 on 怪咖晨</title>
+    <link>https://tianhui.xin/tags/webpack4/</link>
+    <description>Recent content in webpack4 on 怪咖晨</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh_CN</language>
+    <lastBuildDate>Fri, 02 Nov 2018 16:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://tianhui.xin/tags/webpack4/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>webpack4 开发环境搭建</title>
+      <link>https://tianhui.xin/blog/2018/11/02/webpack4.develop/</link>
+      <pubDate>Fri, 02 Nov 2018 16:00:00 +0000</pubDate>
+      
+      <guid>https://tianhui.xin/blog/2018/11/02/webpack4.develop/</guid>
+      <description>npm 初始化项目 yarn init  安装webpack依赖 yarn add webpack webpack-dev-server webpack-cli @webpack-cli/init --dev  webpack 初始化 npx webpack-cli init  ? Will your application have multiple bundles? Yes ? Type the names you want for your modules (entry files), separated by comma [example: app,vendor] app ? What is the location of &amp;quot;app&amp;quot;? [example: ./src/app] ./src/app ? Which folder will your generated bundles be in? [default: dist]: dist ? Will you be using ES2015?</description>
+    </item>
+    
+  </channel>
+</rss>

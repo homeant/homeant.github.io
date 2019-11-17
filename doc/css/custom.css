@@ -1,0 +1,86 @@
+/* your styles go here */
+
+.box-image-text .image {
+    min-height: 200px;
+    max-height: 200px;
+}
+
+.box-simple {
+    min-height: 230px;
+}
+
+.article {
+    width: 100%;
+    overflow: hidden;
+    background: linear-gradient(90deg, rgba(233, 233, 233, 0.5) 3%, transparent 0), linear-gradient(rgba(233, 233, 233, 0.5) 3%, transparent 0);
+    background-size: 1.5rem 1.5rem;
+    padding: 0 0.8rem;
+}
+
+#post-content img {
+    display: block;
+    width: 90%;
+    margin: 0 auto;
+    height: auto;
+}
+
+#copyright {
+    padding: 0.5rem 0;
+}
+
+.home-carousel {
+    background-image: none;
+}
+
+.links-list {
+    margin: 0;
+    padding: 0;
+}
+
+.links-list .links-item {
+    padding: 1.5px 0;
+    margin-bottom: 10px;
+}
+
+.links-list .links-item a {
+    color: #ffffff !important;
+}
+
+canvas#c {
+    display: block;
+    width: 100%;
+    top: 0;
+    left: 0;
+}
+
+.home-carousel .dark-mask {
+    background: #ffffff;
+    opacity: 0.5;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+table td, table th {
+    border: 1px solid #cad9ea;
+    color: #666;
+    height: 30px;
+}
+
+table thead th {
+    background-color: #CCE8EB;
+    width: 100px;
+    text-align: center;
+}
+
+table tr:nth-child(odd) {
+    background: #fff;
+}
+
+table tr:nth-child(even) {
+    background: #F5FAFA;
+}
+

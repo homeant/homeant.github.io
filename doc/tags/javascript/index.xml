@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>javascript on 怪咖晨</title>
+    <link>https://tianhui.xin/tags/javascript/</link>
+    <description>Recent content in javascript on 怪咖晨</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh_CN</language>
+    <lastBuildDate>Fri, 02 Nov 2018 16:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://tianhui.xin/tags/javascript/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>webpack4 开发环境搭建</title>
+      <link>https://tianhui.xin/blog/2018/11/02/webpack4.develop/</link>
+      <pubDate>Fri, 02 Nov 2018 16:00:00 +0000</pubDate>
+      
+      <guid>https://tianhui.xin/blog/2018/11/02/webpack4.develop/</guid>
+      <description>npm 初始化项目 yarn init  安装webpack依赖 yarn add webpack webpack-dev-server webpack-cli @webpack-cli/init --dev  webpack 初始化 npx webpack-cli init  ? Will your application have multiple bundles? Yes ? Type the names you want for your modules (entry files), separated by comma [example: app,vendor] app ? What is the location of &amp;quot;app&amp;quot;? [example: ./src/app] ./src/app ? Which folder will your generated bundles be in? [default: dist]: dist ? Will you be using ES2015?</description>
+    </item>
+    
+    <item>
+      <title>Vue CLi 3快速入门</title>
+      <link>https://tianhui.xin/blog/2018/08/24/vue-cli/</link>
+      <pubDate>Fri, 24 Aug 2018 21:00:00 +0000</pubDate>
+      
+      <guid>https://tianhui.xin/blog/2018/08/24/vue-cli/</guid>
+      <description>2018年08月13日在开源中国收到了Vue CLi 3.0 正式版的发布，关于它的横空出世，晨在这里简单说一下，很多人在微博都在调侃Vue,说是不是更新太块了，都学不过来，下面是我搜集的几张图，
+解释一下，Vue这次并没有发布新版本，而是出了一个简化配置的脚手架，命名为Vue CLi 3，不过调侃小右的也是用尽了各种技能。
+好了，言归正传，回归我们今日的正题，快速入门Vue CLi 3，打开官方文档我们都能看到
+ Vue CLI 的包名称由 vue-cli 改成了 @vue/cli。 如果你已经全局安装了旧版本的 vue-cli (1.x 或 2.x)，你需要先通过 npm uninstall vue-cli -g 或 yarn global remove vue-cli 卸载它。
+ 安装的细节，我们这里不做过多的阐述，具体的可以查看官方文档Vue CLi 3
+创建项目 vue create hello-world  刚入门，一直回车就好，🙂
+目录结构是啥样子的，让我们看一下
+@vue/cli在这次发布中，到底更新了什么呢，首先要说的第一个东西就是简化配置文件，集中配置文件到vue.config.js中,文件在哪呢，木有啊，那是因为@vue/cli做了一些默认的配置。我们可以自己创建一个这样的文件。
+vue inspect，是脚手架提供的一个配置检查的服务，并且生成一个你很熟悉的文件
+vue inspect &amp;gt; output.js  那么这样，是不是很熟悉呢
+是的，这个webpack的一些配置项，那么我们应该怎么书写呢，语法是这样的
+// vue.config.js module.exports = { configureWebpack: { plugins: [ new MyAwesomeWebpackPlugin() ] }, chainWebpack: config =&amp;gt; { // GraphQL Loader config.</description>
+    </item>
+    
+  </channel>
+</rss>

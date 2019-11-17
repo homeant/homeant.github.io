@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Spring Integration on 怪咖晨</title>
+    <link>https://tianhui.xin/tags/spring-integration/</link>
+    <description>Recent content in Spring Integration on 怪咖晨</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh_CN</language>
+    <lastBuildDate>Mon, 30 Sep 2019 22:59:24 +0000</lastBuildDate>
+    
+	<atom:link href="https://tianhui.xin/tags/spring-integration/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>SpringBoot中使用SpringIntegration</title>
+      <link>https://tianhui.xin/blog/2019/09/30/springboot.use.springintegration/</link>
+      <pubDate>Mon, 30 Sep 2019 22:59:24 +0000</pubDate>
+      
+      <guid>https://tianhui.xin/blog/2019/09/30/springboot.use.springintegration/</guid>
+      <description>&lt;p&gt;spring-integration是一个功能强大的EIP(Enterprise Integration Patterns)，即企业集成模式。对，spring-integration是一个集大成者。就我自己的理解，集成了众多功能的它，是一种便捷的事件驱动消息框架用来在系统之间做消息传递的。
+今天我们来探索一下如果使用它发送http请求。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
