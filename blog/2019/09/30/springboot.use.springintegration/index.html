@@ -1,248 +1,12 @@
-<!DOCTYPE html>
-<html lang="zh_CN">
-
-  <head>
-  
-  <meta charset="utf-8">
-  <meta name="robots" content="all,follow">
-  <meta name="googlebot" content="index,follow,snippet,archive">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  
-  <title>SpringBoot中使用SpringIntegration</title>
-  <meta name="author" content='homeant' />
-  
-  
-  
-  
-  <meta name="keywords" content='怪咖晨,个人博客,Java,springboot,Spring Integration'>
-  
-  
-  <meta name="description" content="一个Java程序员的碎碎念">
-
-
-
-  
-  <link href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,500,700,800' rel='stylesheet' type='text/css'>
-
-  
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-  
-  <link href='/css/animate.css?v=17119111711' rel="stylesheet">
-
-  
-  
-  
-    <link href='/css/style.default.css?v=17119111711' rel="stylesheet" id='theme-stylesheet'>
-  
-
-  
-  <link href='/css/custom.css?v=17119111711' rel="stylesheet">
-
-  
-  
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-  
-
-  
-  <link rel="shortcut icon" href='/img/favicon.png' type="image/x-icon" />
-  <link rel="apple-touch-icon" href='/img/favicon.png' />
-
-
-  
-  <link href='/css/owl.carousel.css?v=17119111711' rel="stylesheet">
-  <link href='/css/owl.theme.css?v=17119111711' rel="stylesheet">
-
-  
-  <link rel="alternate" href='https://tianhui.xin/index.xml' type="application/rss+xml" title="怪咖晨">
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  <meta property="og:locale" content='zh_CN'>
-  <meta property="og:site_name" content="怪咖晨">
-  <meta property="og:title" content="SpringBoot中使用SpringIntegration">
-  <meta property="og:type" content='article'>
-  <meta property="og:url" content="https://tianhui.xin/blog/2019/09/30/springboot.use.springintegration/" />
-  <meta property="og:description" content="一个Java程序员的碎碎念">
-  <meta property="og:image" content="https://tianhui.xin/img/sharing-default.png">
-  <meta property="og:image:type" content='image/png'>
-  
-  
-  
-  <meta property="og:image:width" content="800">
-  <meta property="og:image:height" content="420">
-  
-  
-  <meta property="og:updated_time" content='2019-09-30T22:59:24Z'>
-  
-  
-  
-  <meta property="article:section" content="学无止境">
-  <meta property="article:tag" content="springboot">
-  <meta property="article:tag" content="Spring Integration">
-  <meta property="article:tag" content="Java">
-  
-  
-  <meta property="article:published_time" content='2019-09-30T22:59:24Z'>
-  <meta property="article:modified_time" content='2019-09-30T22:59:24Z'>
-  
-
-  
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:site" content="@GoHugoIO">
-  <meta name="twitter:title" content="SpringBoot中使用SpringIntegration">
-  
-  <meta name="twitter:image" content="https://tianhui.xin/img/sharing-default.png">
-  
-  <meta name="twitter:description" content="一个Java程序员的碎碎念">
-  
-
-</head>
-
-  <link href="https://cdn.bootcss.com/highlight.js/9.15.9/styles/github.min.css", rel='stylesheet'/>
-  <body>
-
-    <div id="all">
-
-        <header>
-
-          <div class="navbar-affixed-top" data-spy="affix" data-offset-top="200">
-
-    <div class="navbar navbar-default yamm" role="navigation" id="navbar">
-
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand home" href="https://tianhui.xin/">
-                    <img src="https://tianhui.xin/img/logo.png" alt="SpringBoot中使用SpringIntegration logo" class="hidden-xs hidden-sm">
-                    <img src="https://tianhui.xin/img/logo.png" alt="SpringBoot中使用SpringIntegration logo" class="visible-xs visible-sm">
-                    <span class="sr-only">SpringBoot中使用SpringIntegration - 跳到主页</span>
-                </a>
-                <div class="navbar-buttons">
-                    <button type="button" class="navbar-toggle btn-template-main" data-toggle="collapse" data-target="#navigation">
-                      <span class="sr-only">切换导航</span>
-                        <i class="fa fa-align-justify"></i>
-                    </button>
-                </div>
-            </div>
-            
-
-            <div class="navbar-collapse collapse" id="navigation">
-                <ul class="nav navbar-nav navbar-right">
-                  
-                  
-                  
-                  <li class="dropdown">
-                    
-                    <a href="/">首页</a>
-                    
-                  </li>
-                  
-                  
-                  <li class="dropdown active">
-                    
-                    <a href="/blog/">博客</a>
-                    
-                  </li>
-                  
-                  
-                  <li class="dropdown">
-                    
-                    <a href="/about">关于我</a>
-                    
-                  </li>
-                  
-                </ul>
-            </div>
-            
-
-            <div class="collapse clearfix" id="search">
-
-                <form class="navbar-form" role="search">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search">
-                        <span class="input-group-btn">
-
-                    <button type="submit" class="btn btn-template-main"><i class="fa fa-search"></i></button>
-
-                </span>
-                    </div>
-                </form>
-
-            </div>
-            
-
-        </div>
-    </div>
-    
-
-</div>
-
-
-
-
-        </header>
-
-        <div id="heading-breadcrumbs">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <h1>SpringBoot中使用SpringIntegration</h1>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-        <div id="content">
-            <div class="container">
-
-                <div class="row">
-
-                    
-
-                    <div class="col-md-9" id="blog-post">
-
-                        <p class="text-muted text-uppercase mb-small text-right">
-                            
-                            由<a href="#">homeant</a> |
-                            
-                            2019-09-30 22:59
-                            浏览<span id="busuanzi_value_page_pv">99</span>次
-                        </p>
-
-                        <div id="post-content" class="article">
-                          <p>spring-integration是一个功能强大的EIP(Enterprise Integration Patterns)，即企业集成模式。对，spring-integration是一个集大成者。就我自己的理解，集成了众多功能的它，是一种便捷的事件驱动消息框架用来在系统之间做消息传递的。
-今天我们来探索一下如果使用它发送http请求。</p>
-
-<h2 id="什么是spring-integration">什么是Spring Integration</h2>
-
-<blockquote>
-<p>Spring Integration在基于Spring的应用程序中实现轻量级消息传递，并支持通过声明适配器与外部系统集成。 Spring Integration的主要目标是提供一个简单的模型来构建企业集成解决方案，同时保持关注点的分离，这对于生成可维护，可测试的代码至关重要。Spring Framework鼓励开发人员使用接口进行编码，并使用依赖注入（DI）为普通旧Java对象（POJO）提供执行其任务所需的依赖项。 Spring Integration将这一概念更进一步，其中POJO使用消息传递范例连接在一起，并且各个组件可能不了解应用程序中的其他组件。这种应用程序是通过组装细粒度可重用组件来构建的，以形成更高级别的功能。通过精心设计，这些流程可以模块化，并在更高的层次上重复使用。</p>
-</blockquote>
-
-<p>官方地址：<a href="https://spring.io/projects/spring-integration">spring-integration</a></p>
-
-<h2 id="组成">组成</h2>
-
-<p>Spring Integration 主要有Message、Channel、Message EndPoint组成。</p>
-
-<h3 id="message">Message</h3>
-
-<p>Message是用来在不同部分之间传递的数据。Message有两部分组成:消息体(payload)与消息头(header)。消息体可以是任何数据类型；消息头表示的元数据就是解释消息体的内容。</p>
-
-<pre><code class="language-java">/**
+<!doctype html><html lang=zh_cn><head><meta charset=utf-8><meta name=robots content="all,follow"><meta name=googlebot content="index,follow,snippet,archive"><meta name=viewport content="width=device-width,initial-scale=1"><title>SpringBoot中使用SpringIntegration</title><meta name=author content="homeant"><meta name=keywords content="怪咖晨,个人博客,Java,springboot,Spring Integration"><meta name=description content="一个Java程序员的碎碎念"><link href="//fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,500,700,800" rel=stylesheet type=text/css><link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css><link rel=stylesheet href=//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link href="/css/animate.css?v=17119111706" rel=stylesheet><link href="/css/style.default.css?v=17119111706" rel=stylesheet id=theme-stylesheet><link href="/css/custom.css?v=17119111706" rel=stylesheet><!--[if lt IE 9]><script src=https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js></script><script src=https://oss.maxcdn.com/respond/1.4.2/respond.min.js></script><![endif]--><link rel="shortcut icon" href=/img/favicon.png type=image/x-icon><link rel=apple-touch-icon href=/img/favicon.png><link href="/css/owl.carousel.css?v=17119111706" rel=stylesheet><link href="/css/owl.theme.css?v=17119111706" rel=stylesheet><link rel=alternate href=https://tianhui.xin/index.xml type=application/rss+xml title=怪咖晨><meta property="og:locale" content="zh_CN"><meta property="og:site_name" content="怪咖晨"><meta property="og:title" content="SpringBoot中使用SpringIntegration"><meta property="og:type" content="article"><meta property="og:url" content="https://tianhui.xin/blog/2019/09/30/springboot.use.springintegration/"><meta property="og:description" content="一个Java程序员的碎碎念"><meta property="og:image" content="https://tianhui.xin/img/sharing-default.png"><meta property="og:image:type" content="image/png"><meta property="og:image:width" content="800"><meta property="og:image:height" content="420"><meta property="og:updated_time" content="2019-09-30T22:59:24Z"><meta property="article:section" content="学无止境"><meta property="article:tag" content="springboot"><meta property="article:tag" content="Spring Integration"><meta property="article:tag" content="Java"><meta property="article:published_time" content="2019-09-30T22:59:24Z"><meta property="article:modified_time" content="2019-09-30T22:59:24Z"><meta name=twitter:card content="summary"><meta name=twitter:site content="@GoHugoIO"><meta name=twitter:title content="SpringBoot中使用SpringIntegration"><meta name=twitter:image content="https://tianhui.xin/img/sharing-default.png"><meta name=twitter:description content="一个Java程序员的碎碎念"></head><link href=https://cdn.bootcss.com/highlight.js/9.15.9/styles/github.min.css , rel=stylesheet><body><div id=all><header><div class=navbar-affixed-top data-spy=affix data-offset-top=200><div class="navbar navbar-default yamm" role=navigation id=navbar><div class=container><div class=navbar-header><a class="navbar-brand home" href=https://tianhui.xin/><img src=https://tianhui.xin/img/logo.png alt="SpringBoot中使用SpringIntegration logo" class="hidden-xs hidden-sm">
+<img src=https://tianhui.xin/img/logo.png alt="SpringBoot中使用SpringIntegration logo" class="visible-xs visible-sm">
+<span class=sr-only>SpringBoot中使用SpringIntegration - 跳到主页</span></a><div class=navbar-buttons><button type=button class="navbar-toggle btn-template-main" data-toggle=collapse data-target=#navigation>
+<span class=sr-only>切换导航</span>
+<i class="fa fa-align-justify"></i></button></div></div><div class="navbar-collapse collapse" id=navigation><ul class="nav navbar-nav navbar-right"><li class=dropdown><a href=/>首页</a></li><li class="dropdown active"><a href=/blog/>博客</a></li><li class=dropdown><a href=/about/>关于我</a></li></ul></div><div class="collapse clearfix" id=search><form class=navbar-form role=search><div class=input-group><input type=text class=form-control placeholder=Search>
+<span class=input-group-btn><button type=submit class="btn btn-template-main"><i class="fa fa-search"></i></button></span></div></form></div></div></div></div></header><div id=heading-breadcrumbs><div class=container><div class=row><div class=col-md-12><h1>SpringBoot中使用SpringIntegration</h1></div></div></div></div><div id=content><div class=container><div class=row><div class=col-md-9 id=blog-post><p class="text-muted text-uppercase mb-small text-right">由<a href=#>homeant</a> |
+2019-09-30 22:59
+浏览<span id=busuanzi_value_page_pv>99</span>次</p><div id=post-content class=article><p>spring-integration是一个功能强大的EIP(Enterprise Integration Patterns)，即企业集成模式。对，spring-integration是一个集大成者。就我自己的理解，集成了众多功能的它，是一种便捷的事件驱动消息框架用来在系统之间做消息传递的。
+今天我们来探索一下如果使用它发送http请求。</p><h2 id=什么是spring-integration>什么是Spring Integration</h2><blockquote><p>Spring Integration在基于Spring的应用程序中实现轻量级消息传递，并支持通过声明适配器与外部系统集成。 Spring Integration的主要目标是提供一个简单的模型来构建企业集成解决方案，同时保持关注点的分离，这对于生成可维护，可测试的代码至关重要。Spring Framework鼓励开发人员使用接口进行编码，并使用依赖注入（DI）为普通旧Java对象（POJO）提供执行其任务所需的依赖项。 Spring Integration将这一概念更进一步，其中POJO使用消息传递范例连接在一起，并且各个组件可能不了解应用程序中的其他组件。这种应用程序是通过组装细粒度可重用组件来构建的，以形成更高级别的功能。通过精心设计，这些流程可以模块化，并在更高的层次上重复使用。</p></blockquote><p>官方地址：<a href=https://spring.io/projects/spring-integration>spring-integration</a></p><h2 id=组成>组成</h2><p>Spring Integration 主要有Message、Channel、Message EndPoint组成。</p><h3 id=message>Message</h3><p>Message是用来在不同部分之间传递的数据。Message有两部分组成:消息体(payload)与消息头(header)。消息体可以是任何数据类型；消息头表示的元数据就是解释消息体的内容。</p><pre><code class=language-java>/**
  * A generic message representation with headers and body.
  *
  * @author Mark Fisher
@@ -263,18 +27,8 @@ public interface Message&lt;T&gt; {
     MessageHeaders getHeaders();
 
 }
-</code></pre>
-
-<h3 id="channel">Channel</h3>
-
-<p>在消息系统中，消息发送者发送消息到通道(Channel)，消息接受者从通道(Channel)接收消息。
-MessageChannel 有两大子接口，分别是PollableChannel (可轮询)和SubscribableChannel(可订阅)。我们所有的消息通道类都是现实这两个接口。</p>
-
-<h4 id="messagechannel">MessageChannel</h4>
-
-<p>MessageChannel 是Spring Integration消息通道的顶级接口：</p>
-
-<pre><code class="language-java">public interface MessageChannel {
+</code></pre><h3 id=channel>Channel</h3><p>在消息系统中，消息发送者发送消息到通道(Channel)，消息接受者从通道(Channel)接收消息。
+MessageChannel 有两大子接口，分别是PollableChannel (可轮询)和SubscribableChannel(可订阅)。我们所有的消息通道类都是现实这两个接口。</p><h4 id=messagechannel>MessageChannel</h4><p>MessageChannel 是Spring Integration消息通道的顶级接口：</p><pre><code class=language-java>public interface MessageChannel {
 
     /**
      * Constant for sending a message without a prescribed timeout.
@@ -305,13 +59,7 @@ MessageChannel 有两大子接口，分别是PollableChannel (可轮询)和Subsc
     boolean send(Message&lt;?&gt; message, long timeout);
 
 }
-</code></pre>
-
-<h5 id="pollablechannel">PollableChannel</h5>
-
-<p>PollableChannel 具备轮询获得消息的能力。</p>
-
-<pre><code class="language-java">public interface PollableChannel extends MessageChannel {
+</code></pre><h5 id=pollablechannel>PollableChannel</h5><p>PollableChannel 具备轮询获得消息的能力。</p><pre><code class=language-java>public interface PollableChannel extends MessageChannel {
 
     /**
      * Receive a message from this channel, blocking indefinitely if necessary.
@@ -329,13 +77,7 @@ MessageChannel 有两大子接口，分别是PollableChannel (可轮询)和Subsc
     Message&lt;?&gt; receive(long timeout);
 
 }
-</code></pre>
-
-<h5 id="subscribablechannel">SubscribableChannel</h5>
-
-<p>SubscribableChannel 发送消息给订阅了MessageHanlder的订阅者</p>
-
-<pre><code class="language-java">public interface SubscribableChannel extends MessageChannel {
+</code></pre><h5 id=subscribablechannel>SubscribableChannel</h5><p>SubscribableChannel 发送消息给订阅了MessageHanlder的订阅者</p><pre><code class=language-java>public interface SubscribableChannel extends MessageChannel {
 
     /**
      * Register a message handler.
@@ -352,15 +94,7 @@ MessageChannel 有两大子接口，分别是PollableChannel (可轮询)和Subsc
     boolean unsubscribe(MessageHandler handler);
 
 }
-</code></pre>
-
-<h4 id="消息通道">消息通道</h4>
-
-<h5 id="publishsubscribechannel">PublishSubscribeChannel</h5>
-
-<p>PublishSubscribeChannel允许广播消息给所有订阅者，配置方式如下：</p>
-
-<pre><code class="language-java">/**
+</code></pre><h4 id=消息通道>消息通道</h4><h5 id=publishsubscribechannel>PublishSubscribeChannel</h5><p>PublishSubscribeChannel允许广播消息给所有订阅者，配置方式如下：</p><pre><code class=language-java>/**
  * 允许广播消息给所有订阅者，当前消息通道的id为publishSubscribeChannel
  * @return
  */
@@ -369,57 +103,27 @@ public PublishSubscribeChannel publishSubscribeChannel(){
 	PublishSubscribeChannel channel = new PublishSubscribeChannel();
 	return channel;
 }
-</code></pre>
-
-<h5 id="queuechannel">QueueChannel</h5>
-
-<p>QueueChannel允许消息接收者轮询获得消息，用一个队列(queue)接收消息，队列的容量大小可配置，配置方式如下：</p>
-
-<pre><code class="language-java">@Bean
+</code></pre><h5 id=queuechannel>QueueChannel</h5><p>QueueChannel允许消息接收者轮询获得消息，用一个队列(queue)接收消息，队列的容量大小可配置，配置方式如下：</p><pre><code class=language-java>@Bean
 public QueueChannel queueChannel(){
 	QueueChannel channel = new QueueChannel(10);//10的队列的容量
 	return channel;
 }
-</code></pre>
-
-<h5 id="prioritychannel">PriorityChannel</h5>
-
-<p>PriorityChannel可按照优先级将数据存储到队列，它依据于消息的消息头priority属性，配置方式如下：</p>
-
-<pre><code class="language-java">@Bean
+</code></pre><h5 id=prioritychannel>PriorityChannel</h5><p>PriorityChannel可按照优先级将数据存储到队列，它依据于消息的消息头priority属性，配置方式如下：</p><pre><code class=language-java>@Bean
 public PriorityChannel priorityChannel(){
 	PriorityChannel channel = new PriorityChannel(10);
 	return channel;
 }
-</code></pre>
-
-<h5 id="rendezvouschannel">RendezvousChannel</h5>
-
-<p>RendezvousChannel确保每一个接收者都接收到消息后再发送消息，配置方式如下：</p>
-
-<pre><code class="language-java">@Bean
+</code></pre><h5 id=rendezvouschannel>RendezvousChannel</h5><p>RendezvousChannel确保每一个接收者都接收到消息后再发送消息，配置方式如下：</p><pre><code class=language-java>@Bean
 public RendezvousChannel rendezvousChannel(){
 	RendezvousChannel channel = new RendezvousChannel();
 	return channel;
 }
-</code></pre>
-
-<h5 id="directchannel">DirectChannel</h5>
-
-<p>DirectChannel是Spring Integration默认的消息通道，它允许将消息发送给为一个订阅者，然后阻碍发送直到消息被接收，配置方式如下：</p>
-
-<pre><code class="language-java">@Bean
+</code></pre><h5 id=directchannel>DirectChannel</h5><p>DirectChannel是Spring Integration默认的消息通道，它允许将消息发送给为一个订阅者，然后阻碍发送直到消息被接收，配置方式如下：</p><pre><code class=language-java>@Bean
 public DirectChannel directChannel(){
 	DirectChannel channel = new DirectChannel();
 	return channel;
 }
-</code></pre>
-
-<h5 id="executorchannel">ExecutorChannel</h5>
-
-<p>ExecutorChannel可绑定一个多线程的task executor，配置方式如下：</p>
-
-<pre><code class="language-java">@Bean
+</code></pre><h5 id=executorchannel>ExecutorChannel</h5><p>ExecutorChannel可绑定一个多线程的task executor，配置方式如下：</p><pre><code class=language-java>@Bean
 public ExecutorChannel executorChannel(){
 	ExecutorChannel channel = new ExecutorChannel(executor());
 	return channel;
@@ -434,16 +138,8 @@ public Executor executor(){
 	taskExecutor.initialize();
 	return taskExecutor;
 }
-</code></pre>
-
-<h4 id="通道拦截器">通道拦截器</h4>
-
-<h5 id="channelinterceptor">ChannelInterceptor</h5>
-
-<p>Spring Integration给消息通道提供了通道拦截器(ChannelInterceptor)，用来拦截发送和接收消息的操作。
-ChannelInterceptor接口定义如下，我们只需要实现这个接口即可：</p>
-
-<pre><code class="language-java">public interface ChannelInterceptor {
+</code></pre><h4 id=通道拦截器>通道拦截器</h4><h5 id=channelinterceptor>ChannelInterceptor</h5><p>Spring Integration给消息通道提供了通道拦截器(ChannelInterceptor)，用来拦截发送和接收消息的操作。
+ChannelInterceptor接口定义如下，我们只需要实现这个接口即可：</p><pre><code class=language-java>public interface ChannelInterceptor {
 
 	Message&lt;?&gt; preSend(Message&lt;?&gt; message, MessageChannel channel);
 
@@ -458,70 +154,10 @@ ChannelInterceptor接口定义如下，我们只需要实现这个接口即可�
 	void afterReceiveCompletion(Message&lt;?&gt; message, MessageChannel channel, Exception ex);
 
 }
-</code></pre>
-
-<h3 id="message-endpoint">Message EndPoint</h3>
-
-<p>消息端点(Message EndPoint)是真正处理消息的(Message)组件，它还可以控制通道的路由。</p>
-
-<h4 id="channel-adapter">Channel Adapter</h4>
-
-<p>通道适配器(Channel Adapter)是一种连接外部系统或传输协议的端点(EndPoint)，可以分为入站(inbound)和出站(outbound)。 
+</code></pre><h3 id=message-endpoint>Message EndPoint</h3><p>消息端点(Message EndPoint)是真正处理消息的(Message)组件，它还可以控制通道的路由。</p><h4 id=channel-adapter>Channel Adapter</h4><p>通道适配器(Channel Adapter)是一种连接外部系统或传输协议的端点(EndPoint)，可以分为入站(inbound)和出站(outbound)。 
 通道适配器是单向的，入站通道适配器只支持接收消息，出站通道适配器只支持输出消息。
-Spring Integration内置了如下的适配器：</p>
-
-<pre><code class="language-bash">RabbitMQ、Feed、File、FTP/SFTP、Gemfire、HTTP、TCP/UDP、JDBC、JPA、JMS、Mail、MongoDB、Redis、RMITwitter、XMPP、WebServices(SOAP、REST)、WebSocket
-</code></pre>
-
-<h4 id="gateway">Gateway</h4>
-
-<p>消息网关(Gateway)类似于Adapter，但是提供了双向的请求/返回集成方式，也分为入站(inbound)和出站(outbound)。 Spring Integration 对响应的Adapter都提供了Gateway。</p>
-
-<h4 id="service-activator">Service Activator</h4>
-
-<p>Service Activator 可调用Spring的Bean来处理消息，并将处理后的结果输出到指定的消息通道。</p>
-
-<h4 id="router">Router</h4>
-
-<p>路由(Router) 可根据消息体内容(Payload Type Router)、消息头的值(Header Value Router) 以及定义好的接收表(Recipient List Router) 作为条件，来决定消息传递到的通道。</p>
-
-<h4 id="filter">Filter</h4>
-
-<p>过滤器(Filter) 类似于路由(Router)，不同的是过滤器不决定消息路由到哪里，而是决定消息是否可以传递给消息通道。</p>
-
-<h4 id="splitter">Splitter</h4>
-
-<p>拆分器(Splitter)将消息拆分为几个部分单独处理，拆分器处理的返回值是一个集合或者数组。</p>
-
-<h4 id="aggregator">Aggregator</h4>
-
-<p>聚合器(Aggregator)与拆分器相反，它接收一个java.util.List作为参数，将多个消息合并为一个消息。</p>
-
-<h4 id="enricher">Enricher</h4>
-
-<p>当我们从外部获得消息后，需要增加额外的消息到已有的消息中，这时就需要使用消息增强器(Enricher)。消息增强器主要有消息体 增强器(Payload Enricher)和消息头增强器(Header Enricher)两种。</p>
-
-<h4 id="transformer">Transformer</h4>
-
-<p>转换器(Transformer)是对获得的消息进行一定的转换处理(如数据格式转换)。</p>
-
-<h4 id="bridge">Bridge</h4>
-
-<p>使用连接桥(Bridge)可以简单的将两个消息通道连接起来。</p>
-
-<h2 id="快速入门">快速入门</h2>
-
-<p>阅读官方文档它是这样描述的：</p>
-
-<blockquote>
-<p>In the following &ldquo;quick start&rdquo; application you can see that the same gateway interface is used to invoke two completely different service implementations. To build and run this program you will need the spring-integration-ws and spring-integration-xml modules as described above.</p>
-</blockquote>
-
-<p>大概意思是使用这个示例，需要*spring-integration-ws*和*spring-integration-xml*两个模块，同时它使用了相同的网关接口调用了两个不同的服务实现。</p>
-
-<h3 id="编写快速启动类">编写快速启动类</h3>
-
-<pre><code class="language-java">public class Main {
+Spring Integration内置了如下的适配器：</p><pre><code class=language-bash>RabbitMQ、Feed、File、FTP/SFTP、Gemfire、HTTP、TCP/UDP、JDBC、JPA、JMS、Mail、MongoDB、Redis、RMITwitter、XMPP、WebServices(SOAP、REST)、WebSocket
+</code></pre><h4 id=gateway>Gateway</h4><p>消息网关(Gateway)类似于Adapter，但是提供了双向的请求/返回集成方式，也分为入站(inbound)和出站(outbound)。 Spring Integration 对响应的Adapter都提供了Gateway。</p><h4 id=service-activator>Service Activator</h4><p>Service Activator 可调用Spring的Bean来处理消息，并将处理后的结果输出到指定的消息通道。</p><h4 id=router>Router</h4><p>路由(Router) 可根据消息体内容(Payload Type Router)、消息头的值(Header Value Router) 以及定义好的接收表(Recipient List Router) 作为条件，来决定消息传递到的通道。</p><h4 id=filter>Filter</h4><p>过滤器(Filter) 类似于路由(Router)，不同的是过滤器不决定消息路由到哪里，而是决定消息是否可以传递给消息通道。</p><h4 id=splitter>Splitter</h4><p>拆分器(Splitter)将消息拆分为几个部分单独处理，拆分器处理的返回值是一个集合或者数组。</p><h4 id=aggregator>Aggregator</h4><p>聚合器(Aggregator)与拆分器相反，它接收一个java.util.List作为参数，将多个消息合并为一个消息。</p><h4 id=enricher>Enricher</h4><p>当我们从外部获得消息后，需要增加额外的消息到已有的消息中，这时就需要使用消息增强器(Enricher)。消息增强器主要有消息体 增强器(Payload Enricher)和消息头增强器(Header Enricher)两种。</p><h4 id=transformer>Transformer</h4><p>转换器(Transformer)是对获得的消息进行一定的转换处理(如数据格式转换)。</p><h4 id=bridge>Bridge</h4><p>使用连接桥(Bridge)可以简单的将两个消息通道连接起来。</p><h2 id=快速入门>快速入门</h2><p>阅读官方文档它是这样描述的：</p><blockquote><p>In the following &ldquo;quick start&rdquo; application you can see that the same gateway interface is used to invoke two completely different service implementations. To build and run this program you will need the spring-integration-ws and spring-integration-xml modules as described above.</p></blockquote><p>大概意思是使用这个示例，需要*spring-integration-ws*和*spring-integration-xml*两个模块，同时它使用了相同的网关接口调用了两个不同的服务实现。</p><h3 id=编写快速启动类>编写快速启动类</h3><pre><code class=language-java>public class Main {
 
         public static void main(String... args) throws Exception {
                 ApplicationContext ctx =
@@ -535,20 +171,12 @@ Spring Integration内置了如下的适配器：</p>
                 System.out.println(converter.fahrenheitToCelcius(68.0f));
         }
  }
-</code></pre>
-
-<h3 id="编写接口类">编写接口类</h3>
-
-<pre><code class="language-java">public interface TempConverter {
+</code></pre><h3 id=编写接口类>编写接口类</h3><pre><code class=language-java>public interface TempConverter {
 
         float fahrenheitToCelcius(float fahren);
 
 }
-</code></pre>
-
-<h3 id="编写xml">编写xml</h3>
-
-<pre><code class="language-xml">&lt;!-- Simple Service --&gt;
+</code></pre><h3 id=编写xml>编写xml</h3><pre><code class=language-xml>&lt;!-- Simple Service --&gt;
 &lt;!-- 网关:simpleGateway --&gt;
 &lt;int:gateway id=&quot;simpleGateway&quot;
         service-interface=&quot;foo.TempConverter&quot;
@@ -573,17 +201,7 @@ Spring Integration内置了如下的适配器：</p>
                 uri=&quot;https://www.w3schools.com/xml/tempconvert.asmx&quot;/&gt;
         &lt;int-xml:xpath-transformer
                 xpath-expression=&quot;/*[local-name()='FahrenheitToCelsiusResponse']/*[local-name()='FahrenheitToCelsiusResult']&quot;/&gt;&lt;/int:chain&gt;
-</code></pre>
-
-<p>咦，嫌弃，和我们想用的内容有差距啊，,既然用SpringBoot那就得跟上节奏，JavaBean配置，接着往下看</p>
-
-<blockquote>
-<p>And here is the same application (web service part) using the Java DSL (and Spring Boot). You will need the spring-boot-starter-integration dependency or spring-integration-java-dsl directly if you don’t use Spring Boot. If you use Spring Integration starting version 5.0, you don’t need any additional dependencies - the Java DSL is included to the core project</p>
-</blockquote>
-
-<p>进入正题了，大意是使用*JavaBean*配置或者*spring boot*的示例，如果不实用Spring Boot那么就需要咱们手动加入*spring-boot-starter-integration*或者*spring-integration-java-dsl*所依赖的模块，如果使用的是5.0及以上的版本，那么你不需要手动引入依赖，Java DSL已经包含在其中</p>
-
-<pre><code class="language-java">@Configuration
+</code></pre><p>咦，嫌弃，和我们想用的内容有差距啊，,既然用SpringBoot那就得跟上节奏，JavaBean配置，接着往下看</p><blockquote><p>And here is the same application (web service part) using the Java DSL (and Spring Boot). You will need the spring-boot-starter-integration dependency or spring-integration-java-dsl directly if you don’t use Spring Boot. If you use Spring Integration starting version 5.0, you don’t need any additional dependencies - the Java DSL is included to the core project</p></blockquote><p>进入正题了，大意是使用*JavaBean*配置或者*spring boot*的示例，如果不实用Spring Boot那么就需要咱们手动加入*spring-boot-starter-integration*或者*spring-integration-java-dsl*所依赖的模块，如果使用的是5.0及以上的版本，那么你不需要手动引入依赖，Java DSL已经包含在其中</p><pre><code class=language-java>@Configuration
 @SpringBootApplication
 @IntegrationComponentScan
 public class Application {
@@ -620,15 +238,7 @@ public class Application {
   }
 
 }
-</code></pre>
-
-<h2 id="开始使用">开始使用</h2>
-
-<p>翻阅了一遍官网的samples，根本没找到http方式关于SpringBoot的示例，没事，咱们活学活用，参考其他模块，直接上代码</p>
-
-<h3 id="pom中加入依赖">pom中加入依赖</h3>
-
-<pre><code class="language-xml">&lt;dependencies&gt;
+</code></pre><h2 id=开始使用>开始使用</h2><p>翻阅了一遍官网的samples，根本没找到http方式关于SpringBoot的示例，没事，咱们活学活用，参考其他模块，直接上代码</p><h3 id=pom中加入依赖>pom中加入依赖</h3><pre><code class=language-xml>&lt;dependencies&gt;
 	&lt;dependency&gt;
 		&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
 		&lt;artifactId&gt;spring-boot-starter-integration&lt;/artifactId&gt;
@@ -654,11 +264,7 @@ public class Application {
 		&lt;scope&gt;test&lt;/scope&gt;
 	&lt;/dependency&gt;
 &lt;/dependencies&gt;
-</code></pre>
-
-<h3 id="编写测试类">编写测试类</h3>
-
-<pre><code class="language-java">@Slf4j
+</code></pre><h3 id=编写测试类>编写测试类</h3><pre><code class=language-java>@Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class ApplicationTest {
@@ -710,336 +316,9 @@ public class ApplicationTest {
 		}
 	}
 }
-</code></pre>
-
-<h3 id="启动测试类">启动测试类</h3>
-
-<pre><code class="language-bash">[2019-09-30 22:11:54.977] [main] [DEBUG] [fun.vyse.cloud.test.ApplicationTest     :34  ] - info:{&quot;login&quot;:&quot;homeant&quot;,&quot;id&quot;:28803295,&quot;node_id&quot;:&quot;MDQ6VXNlcjI4ODAzMjk1&quot;,&quot;avatar_url&quot;:&quot;https://avatars0.githubusercontent.com/u/28803295?v=4&quot;,&quot;gravatar_id&quot;:&quot;&quot;,&quot;url&quot;:&quot;https://api.github.com/users/homeant&quot;,&quot;html_url&quot;:&quot;https://github.com/homeant&quot;,&quot;followers_url&quot;:&quot;https://api.github.com/users/homeant/followers&quot;,&quot;following_url&quot;:&quot;https://api.github.com/users/homeant/following{/other_user}&quot;,&quot;gists_url&quot;:&quot;https://api.github.com/users/homeant/gists{/gist_id}&quot;,&quot;starred_url&quot;:&quot;https://api.github.com/users/homeant/starred{/owner}{/repo}&quot;,&quot;subscriptions_url&quot;:&quot;https://api.github.com/users/homeant/subscriptions&quot;,&quot;organizations_url&quot;:&quot;https://api.github.com/users/homeant/orgs&quot;,&quot;repos_url&quot;:&quot;https://api.github.com/users/homeant/repos&quot;,&quot;events_url&quot;:&quot;https://api.github.com/users/homeant/events{/privacy}&quot;,&quot;received_events_url&quot;:&quot;https://api.github.com/users/homeant/received_events&quot;,&quot;type&quot;:&quot;User&quot;,&quot;site_admin&quot;:false,&quot;name&quot;:&quot;俊晨&quot;,&quot;company&quot;:null,&quot;blog&quot;:&quot;https://tianhui.xin&quot;,&quot;location&quot;:&quot;China-BeiJing&quot;,&quot;email&quot;:null,&quot;hireable&quot;:null,&quot;bio&quot;:&quot;高山仰止，景行行止。虽不能至，心向往之&quot;,&quot;public_repos&quot;:15,&quot;public_gists&quot;:0,&quot;followers&quot;:3,&quot;following&quot;:3,&quot;created_at&quot;:&quot;2017-05-19T08:53:17Z&quot;,&quot;updated_at&quot;:&quot;2019-09-27T06:10:27Z&quot;}
+</code></pre><h3 id=启动测试类>启动测试类</h3><pre><code class=language-bash>[2019-09-30 22:11:54.977] [main] [DEBUG] [fun.vyse.cloud.test.ApplicationTest     :34  ] - info:{&quot;login&quot;:&quot;homeant&quot;,&quot;id&quot;:28803295,&quot;node_id&quot;:&quot;MDQ6VXNlcjI4ODAzMjk1&quot;,&quot;avatar_url&quot;:&quot;https://avatars0.githubusercontent.com/u/28803295?v=4&quot;,&quot;gravatar_id&quot;:&quot;&quot;,&quot;url&quot;:&quot;https://api.github.com/users/homeant&quot;,&quot;html_url&quot;:&quot;https://github.com/homeant&quot;,&quot;followers_url&quot;:&quot;https://api.github.com/users/homeant/followers&quot;,&quot;following_url&quot;:&quot;https://api.github.com/users/homeant/following{/other_user}&quot;,&quot;gists_url&quot;:&quot;https://api.github.com/users/homeant/gists{/gist_id}&quot;,&quot;starred_url&quot;:&quot;https://api.github.com/users/homeant/starred{/owner}{/repo}&quot;,&quot;subscriptions_url&quot;:&quot;https://api.github.com/users/homeant/subscriptions&quot;,&quot;organizations_url&quot;:&quot;https://api.github.com/users/homeant/orgs&quot;,&quot;repos_url&quot;:&quot;https://api.github.com/users/homeant/repos&quot;,&quot;events_url&quot;:&quot;https://api.github.com/users/homeant/events{/privacy}&quot;,&quot;received_events_url&quot;:&quot;https://api.github.com/users/homeant/received_events&quot;,&quot;type&quot;:&quot;User&quot;,&quot;site_admin&quot;:false,&quot;name&quot;:&quot;俊晨&quot;,&quot;company&quot;:null,&quot;blog&quot;:&quot;https://tianhui.xin&quot;,&quot;location&quot;:&quot;China-BeiJing&quot;,&quot;email&quot;:null,&quot;hireable&quot;:null,&quot;bio&quot;:&quot;高山仰止，景行行止。虽不能至，心向往之&quot;,&quot;public_repos&quot;:15,&quot;public_gists&quot;:0,&quot;followers&quot;:3,&quot;following&quot;:3,&quot;created_at&quot;:&quot;2017-05-19T08:53:17Z&quot;,&quot;updated_at&quot;:&quot;2019-09-27T06:10:27Z&quot;}
 [2019-09-30 22:11:55.971] [main] [DEBUG] [fun.vyse.cloud.test.ApplicationTest     :35  ] - userInfo:UserInfo(login=homeant, id=28803295, node_id=MDQ6VXNlcjI4ODAzMjk1, avatar_url=https://avatars0.githubusercontent.com/u/28803295?v=4, gravatar_id=, url=https://api.github.com/users/homeant, html_url=https://github.com/homeant, followers_url=https://api.github.com/users/homeant/followers, following_url=https://api.github.com/users/homeant/following{/other_user}, gists_url=https://api.github.com/users/homeant/gists{/gist_id}, starred_url=https://api.github.com/users/homeant/starred{/owner}{/repo}, subscriptions_url=https://api.github.com/users/homeant/subscriptions, organizations_url=https://api.github.com/users/homeant/orgs, repos_url=https://api.github.com/users/homeant/repos, events_url=https://api.github.com/users/homeant/events{/privacy}, received_events_url=https://api.github.com/users/homeant/received_events, type=User, site_admin=false, name=俊晨, company=null, blog=https://tianhui.xin, location=China-BeiJing, email=null, hireable=null, bio=高山仰止，景行行止。虽不能至，心向往之, public_repos=15, public_gists=0, followers=3, following=3, created_at=2017-05-19T08:53:17Z, updated_at=2019-09-27T06:10:27Z)
-</code></pre>
-
-<p>参考文档</p>
-
-<ul>
-<li><p><a href="https://github.com/SpringSource/spring-integration-samples">spring-integration-samples</a></p></li>
-
-<li><p><a href="https://blog.csdn.net/qq_27808011/article/details/80108622">spring-integration初探</a></p></li>
-
-<li><p><a href="https://docs.spring.io/spring-integration/reference/html/index.html">spring doc</a></p></li>
-</ul>
-                        </div>
-                        
-                        
-                        
-                            
-<div id="gitalk-comments"></div>
-<link href="//unpkg.com/gitalk/dist/gitalk.css" rel="stylesheet">
-<script src="//unpkg.com/gitalk/dist/gitalk.min.js"></script>
-<script src="https://tianhui.xin/js/md5.min.js"></script>
-<script type="application/javascript">
-    const gitalk = new Gitalk({
-        clientID: '6c2478e5c574adadad50',
-        clientSecret: '0aecf2c4c0d2f26b9e277f1a6c45f27b617e4e4a',
-        repo: 'comment.tianhui.xin',
-        owner: 'homeant',
-        admin: ['homeant'],
-        id: md5("https:\/\/tianhui.xin\/blog\/2019\/09\/30\/springboot.use.springintegration\/"),      
-        distractionFreeMode: true  
-    })
-    gitalk.render('gitalk-comments')
-</script>
-
-                        
-                    </div>
-                    
-
-                    
-
-                    
-
-                    <div class="col-md-3">
-
-                        
-
-                        
-
-<div class="panel panel-default sidebar-menu">
-
-    <div class="panel-heading">
-      <h3 class="panel-title">搜索</h3>
-    </div>
-
-    <div class="panel-body">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" role="search">
-            <div class="input-group">
-                <input type="search" name="q" class="form-control" placeholder="搜索">
-                <input type="hidden" name="sitesearch" value="https://tianhui.xin/">
-                <span class="input-group-btn">
-                    <button type="submit" class="btn btn-template-main"><i class="fa fa-search"></i></button>
-                </span>
-            </div>
-        </form>
-    </div>
-</div>
-
-
-
-
-
-
-
-<div class="panel panel-default sidebar-menu">
-
-    <div class="panel-heading">
-      <h3 class="panel-title">分类</h3>
-    </div>
-
-    <div class="panel-body">
-        <ul class="nav nav-pills nav-stacked">
-            
-            <li><a href="https://tianhui.xin/categories/%e5%ad%a6%e6%97%a0%e6%ad%a2%e5%a2%83">学无止境 (14)</a>
-            </li>
-            
-            <li><a href="https://tianhui.xin/categories/%e6%85%a2%e7%94%9f%e6%b4%bb">慢生活 (2)</a>
-            </li>
-            
-        </ul>
-    </div>
-</div>
-
-
-
-
-
-
-
-
-<div class="panel sidebar-menu">
-    <div class="panel-heading">
-      <h3 class="panel-title">标签</h3>
-    </div>
-
-    <div class="panel-body">
-        <ul class="tag-cloud">
-            
-            <li><a href="https://tianhui.xin/tags/activiti"><i class="fa fa-tags"></i> activiti</a>
-            </li>
-            
-            <li><a href="https://tianhui.xin/tags/docker"><i class="fa fa-tags"></i> docker</a>
-            </li>
-            
-            <li><a href="https://tianhui.xin/tags/idea"><i class="fa fa-tags"></i> idea</a>
-            </li>
-            
-            <li><a href="https://tianhui.xin/tags/id%e7%94%9f%e6%88%90"><i class="fa fa-tags"></i> id生成</a>
-            </li>
-            
-            <li><a href="https://tianhui.xin/tags/java"><i class="fa fa-tags"></i> java</a>
-            </li>
-            
-            <li><a href="https://tianhui.xin/tags/javascript"><i class="fa fa-tags"></i> javascript</a>
-            </li>
-            
-            <li><a href="https://tianhui.xin/tags/kafka"><i class="fa fa-tags"></i> kafka</a>
-            </li>
-            
-            <li><a href="https://tianhui.xin/tags/linux"><i class="fa fa-tags"></i> linux</a>
-            </li>
-            
-            <li><a href="https://tianhui.xin/tags/nginx"><i class="fa fa-tags"></i> nginx</a>
-            </li>
-            
-            <li><a href="https://tianhui.xin/tags/sentinel"><i class="fa fa-tags"></i> sentinel</a>
-            </li>
-            
-            <li><a href="https://tianhui.xin/tags/spring"><i class="fa fa-tags"></i> spring</a>
-            </li>
-            
-            <li><a href="https://tianhui.xin/tags/spring-integration"><i class="fa fa-tags"></i> spring-integration</a>
-            </li>
-            
-            <li><a href="https://tianhui.xin/tags/springboot"><i class="fa fa-tags"></i> springboot</a>
-            </li>
-            
-            <li><a href="https://tianhui.xin/tags/vue"><i class="fa fa-tags"></i> vue</a>
-            </li>
-            
-            <li><a href="https://tianhui.xin/tags/vue/cli"><i class="fa fa-tags"></i> vue/cli</a>
-            </li>
-            
-            <li><a href="https://tianhui.xin/tags/webpack-chain"><i class="fa fa-tags"></i> webpack-chain</a>
-            </li>
-            
-            <li><a href="https://tianhui.xin/tags/webpack-cli/init"><i class="fa fa-tags"></i> webpack-cli/init</a>
-            </li>
-            
-            <li><a href="https://tianhui.xin/tags/webpack4"><i class="fa fa-tags"></i> webpack4</a>
-            </li>
-            
-            <li><a href="https://tianhui.xin/tags/zookeeper"><i class="fa fa-tags"></i> zookeeper</a>
-            </li>
-            
-            <li><a href="https://tianhui.xin/tags/%e7%94%9f%e6%b4%bb%e9%9a%8f%e7%ac%94"><i class="fa fa-tags"></i> 生活随笔</a>
-            </li>
-            
-            <li><a href="https://tianhui.xin/tags/%e8%ae%a2%e5%8d%95%e7%94%9f%e6%88%90"><i class="fa fa-tags"></i> 订单生成</a>
-            </li>
-            
-        </ul>
-    </div>
-</div>
-
-
-
-
-
-
-                        
-
-                    </div>
-                    
-
-                    
-
-                </div>
-                
-
-            </div>
-            
-        </div>
-        
-
-        <footer id="footer">
-    <div class="container">
-
-        
-        <div class="col-md-4 col-sm-6">
-            <h4>关于我</h4>
-
-            <p><p>网名：一笑奈何。</p>
-                  <p>职业：全栈软件工程师、Java劝退师</p>
-                  <p>Email：homeanter@163.com</p>
-                  <h4>微信</h4>
-                  <img src="/img/wechat.png" style="margin:0 50px;border-radius: 15px;border: 2px solid #ffffff;"></p>
-
-
-            <hr class="hidden-md hidden-lg hidden-sm">
-
-        </div>
-        
-        
-
-        <div class="col-md-4 col-sm-6">
-
-             
-            <h4>最新文章</h4>
-
-            <div class="blog-entries">
-                
-                <div class="item same-height-row clearfix">
-                    
-                    
-                    <div class="name same-height-always">
-                        <h5><a href="https://tianhui.xin/blog/2019/10/31/linuxofusenginx/">linux 安装nginx</a></h5>
-                    </div>
-                </div>
-                
-                <div class="item same-height-row clearfix">
-                    
-                    
-                    <div class="name same-height-always">
-                        <h5><a href="https://tianhui.xin/blog/2019/10/30/generatorid/">基于数据库的主键_订单号生成策略</a></h5>
-                    </div>
-                </div>
-                
-                <div class="item same-height-row clearfix">
-                    
-                    
-                    <div class="name same-height-always">
-                        <h5><a href="https://tianhui.xin/blog/2019/10/29/dockercommand/">docker命令大全</a></h5>
-                    </div>
-                </div>
-                
-            </div>
-
-            <hr class="hidden-md hidden-lg">
-             
-
-        </div>
-        
-
-          
-         
-        <div class="col-md-4 col-sm-6">
-            <h4>友情连接</h4>
-            <ul class="links-list">
-                
-                <li class="links-item">
-                    <a href="https://github.com/homeant">github</a>
-                </li>
-                
-                <li class="links-item">
-                    <a href="http://xujin.org/">玹霖志</a>
-                </li>
-                
-            </ul>
-            <hr class="hidden-md hidden-lg hidden-sm">
-        </div>
-         
-    </div>
-    
-</footer>
-
-
-
-
-
-
-
-<div id="copyright">
-    <div class="container">
-        <div class="col-md-12">
-            
-            <p class="pull-left">Copyright © tianhui.xin <a href='//tianhui.xin'>怪咖晨</a> All Rights Reserved. 备案号：京ICP备16046477号-1</p>
-            
-            <p class="pull-right">
-                本站访客数<span id="busuanzi_value_site_uv">999</span>人次
-            </p>
-        </div>
-    </div>
-</div>
-
-
-
-
-
-    </div>
-    
-
-    
-<script src="//code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/Counter-Up/1.0/jquery.counterup.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-parallax/1.1.3/jquery-parallax.js"></script>
-
-<script src='https://tianhui.xin/js/front.js?v=17119111711'></script>
-
-
-<script src="https://tianhui.xin/js/owl.carousel.min.js"></script>
-
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-<script src="https://tianhui.xin/js/canvas-nest.js" script(src=path type="text/javascript" color="47,135,193" opacity='0.7' zIndex="-1" count="199"></script>
-
-
-    <script src="https://cdn.bootcss.com/highlight.js/9.15.9/highlight.min.js"></script>
-    <script src="https://cdn.bootcss.com/highlight.js/9.15.9/languages/java.min.js"></script>
-    <script src="https://cdn.bootcss.com/highlight.js/9.15.9/languages/javascript.min.js"></script>
-    <script type="application/javascript">
-        hljs.initHighlightingOnLoad();
-    </script>
-  </body>
-</html>
+</code></pre><p>参考文档</p><ul><li><p><a href=https://github.com/SpringSource/spring-integration-samples>spring-integration-samples</a></p></li><li><p><a href=https://blog.csdn.net/qq_27808011/article/details/80108622>spring-integration初探</a></p></li><li><p><a href=https://docs.spring.io/spring-integration/reference/html/index.html>spring doc</a></p></li></ul></div><div id=gitalk-comments></div><link href=//unpkg.com/gitalk/dist/gitalk.css rel=stylesheet><script src=//unpkg.com/gitalk/dist/gitalk.min.js></script><script src=https://tianhui.xin/js/md5.min.js></script><script type=application/javascript>const gitalk=new Gitalk({clientID:'6c2478e5c574adadad50',clientSecret:'0aecf2c4c0d2f26b9e277f1a6c45f27b617e4e4a',repo:'comment.tianhui.xin',owner:'homeant',admin:['homeant'],id:md5("https:\/\/tianhui.xin\/blog\/2019\/09\/30\/springboot.use.springintegration\/"),distractionFreeMode:true})
+gitalk.render('gitalk-comments')</script></div><div class=col-md-3><div class="panel panel-default sidebar-menu"><div class=panel-heading><h3 class=panel-title>搜索</h3></div><div class=panel-body><form action=//google.com/search method=get accept-charset=utf-8 role=search><div class=input-group><input type=search name=q class=form-control placeholder=搜索>
+<input type=hidden name=sitesearch value=https://tianhui.xin/>
+<span class=input-group-btn><button type=submit class="btn btn-template-main"><i class="fa fa-search"></i></button></span></div></form></div></div><div class="panel panel-default sidebar-menu"><div class=panel-heading><h3 class=panel-title>分类</h3></div><div class=panel-body><ul class="nav nav-pills nav-stacked"><li><a href=https://tianhui.xin/categories/%e5%ad%a6%e6%97%a0%e6%ad%a2%e5%a2%83>学无止境 (14)</a></li><li><a href=https://tianhui.xin/categories/%e6%85%a2%e7%94%9f%e6%b4%bb>慢生活 (2)</a></li></ul></div></div><div class="panel sidebar-menu"><div class=panel-heading><h3 class=panel-title>标签</h3></div><div class=panel-body><ul class=tag-cloud><li><a href=https://tianhui.xin/tags/activiti><i class="fa fa-tags"></i>activiti</a></li><li><a href=https://tianhui.xin/tags/docker><i class="fa fa-tags"></i>docker</a></li><li><a href=https://tianhui.xin/tags/idea><i class="fa fa-tags"></i>idea</a></li><li><a href=https://tianhui.xin/tags/id%e7%94%9f%e6%88%90><i class="fa fa-tags"></i>id生成</a></li><li><a href=https://tianhui.xin/tags/java><i class="fa fa-tags"></i>java</a></li><li><a href=https://tianhui.xin/tags/javascript><i class="fa fa-tags"></i>javascript</a></li><li><a href=https://tianhui.xin/tags/kafka><i class="fa fa-tags"></i>kafka</a></li><li><a href=https://tianhui.xin/tags/linux><i class="fa fa-tags"></i>linux</a></li><li><a href=https://tianhui.xin/tags/nginx><i class="fa fa-tags"></i>nginx</a></li><li><a href=https://tianhui.xin/tags/sentinel><i class="fa fa-tags"></i>sentinel</a></li><li><a href=https://tianhui.xin/tags/spring><i class="fa fa-tags"></i>spring</a></li><li><a href=https://tianhui.xin/tags/spring-integration><i class="fa fa-tags"></i>spring-integration</a></li><li><a href=https://tianhui.xin/tags/springboot><i class="fa fa-tags"></i>springboot</a></li><li><a href=https://tianhui.xin/tags/vue><i class="fa fa-tags"></i>vue</a></li><li><a href=https://tianhui.xin/tags/vue/cli><i class="fa fa-tags"></i>vue/cli</a></li><li><a href=https://tianhui.xin/tags/webpack-chain><i class="fa fa-tags"></i>webpack-chain</a></li><li><a href=https://tianhui.xin/tags/webpack-cli/init><i class="fa fa-tags"></i>webpack-cli/init</a></li><li><a href=https://tianhui.xin/tags/webpack4><i class="fa fa-tags"></i>webpack4</a></li><li><a href=https://tianhui.xin/tags/zookeeper><i class="fa fa-tags"></i>zookeeper</a></li><li><a href=https://tianhui.xin/tags/%e7%94%9f%e6%b4%bb%e9%9a%8f%e7%ac%94><i class="fa fa-tags"></i>生活随笔</a></li><li><a href=https://tianhui.xin/tags/%e8%ae%a2%e5%8d%95%e7%94%9f%e6%88%90><i class="fa fa-tags"></i>订单生成</a></li></ul></div></div></div></div></div></div><footer id=footer><div class=container><div class="col-md-4 col-sm-6"><h4>关于我</h4><p><p>网名：一笑奈何。</p><p>职业：全栈软件工程师、Java劝退师</p><p>Email：homeanter@163.com</p><h4>微信</h4><img src=/img/wechat.png style="margin:0 50px;border-radius:15px;border:2px solid #fff"></p><hr class="hidden-md hidden-lg hidden-sm"></div><div class="col-md-4 col-sm-6"><h4>最新文章</h4><div class=blog-entries><div class="item same-height-row clearfix"><div class="name same-height-always"><h5><a href=https://tianhui.xin/blog/2019/10/31/linuxofusenginx/>linux 安装nginx</a></h5></div></div><div class="item same-height-row clearfix"><div class="name same-height-always"><h5><a href=https://tianhui.xin/blog/2019/10/30/generatorid/>基于数据库的主键_订单号生成策略</a></h5></div></div><div class="item same-height-row clearfix"><div class="name same-height-always"><h5><a href=https://tianhui.xin/blog/2019/10/29/dockercommand/>docker命令大全</a></h5></div></div></div><hr class="hidden-md hidden-lg"></div><div class="col-md-4 col-sm-6"><h4>友情连接</h4><ul class=links-list><li class=links-item><a href=https://github.com/homeant>github</a></li><li class=links-item><a href=http://xujin.org/>玹霖志</a></li></ul><hr class="hidden-md hidden-lg hidden-sm"></div></div></footer><div id=copyright><div class=container><div class=col-md-12><p class=pull-left>Copyright © tianhui.xin <a href=//tianhui.xin>怪咖晨</a> All Rights Reserved. 备案号：京ICP备16046477号-1</p><p class=pull-right>本站访客数<span id=busuanzi_value_site_uv>999</span>人次</p></div></div></div></div><script src=//code.jquery.com/jquery-3.1.1.min.js integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin=anonymous></script><script src=//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script><script src=//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js></script><script src=//cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js></script><script src=//cdnjs.cloudflare.com/ajax/libs/Counter-Up/1.0/jquery.counterup.min.js></script><script src=//cdnjs.cloudflare.com/ajax/libs/jquery-parallax/1.1.3/jquery-parallax.js></script><script src="https://tianhui.xin/js/front.js?v=17119111706"></script><script src=https://tianhui.xin/js/owl.carousel.min.js></script><script async src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js></script><script src=https://tianhui.xin/js/canvas-nest.js script(src=path type=text/javascript color=47,135,193 opacity=0.7 zindex=-1 count=199></script><script src=https://cdn.bootcss.com/highlight.js/9.15.9/highlight.min.js></script><script src=https://cdn.bootcss.com/highlight.js/9.15.9/languages/java.min.js></script><script src=https://cdn.bootcss.com/highlight.js/9.15.9/languages/javascript.min.js></script><script type=application/javascript>hljs.initHighlightingOnLoad();</script></body></html>

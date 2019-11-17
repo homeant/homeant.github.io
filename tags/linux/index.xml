@@ -1,50 +1,8 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>linux on 怪咖晨</title>
-    <link>https://tianhui.xin/tags/linux/</link>
-    <description>Recent content in linux on 怪咖晨</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>zh_CN</language>
-    <lastBuildDate>Thu, 31 Oct 2019 21:49:20 +0000</lastBuildDate>
-    
-	<atom:link href="https://tianhui.xin/tags/linux/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    <item>
-      <title>linux 安装nginx</title>
-      <link>https://tianhui.xin/blog/2019/10/31/linuxofusenginx/</link>
-      <pubDate>Thu, 31 Oct 2019 21:49:20 +0000</pubDate>
-      
-      <guid>https://tianhui.xin/blog/2019/10/31/linuxofusenginx/</guid>
-      <description>&lt;p&gt;Nginx（发音同engine x）是异步框架的网页服务器，也可以用作反向代理、负载平衡器和HTTP缓存。2019年3月11日，Nginx公司被F5 Networks以6.7亿美元收购。&lt;/p&gt;
-
-&lt;p&gt;在很多情况下，我们都需要在linux服务中安装nginx,今天我为大家带来，如何在linux系统中正确的安装nginx。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>kafka 环境搭建</title>
-      <link>https://tianhui.xin/blog/2018/10/22/kafka/</link>
-      <pubDate>Mon, 22 Oct 2018 11:00:00 +0000</pubDate>
-      
-      <guid>https://tianhui.xin/blog/2018/10/22/kafka/</guid>
-      <description> 安装 下载kafka curl -L -O https://mirrors.cnnic.cn/apache/kafka/2.0.0/kafka_2.12-2.0.0.tgz  解压 tar -xvf kafka_2.12-2.0.0.tgz -C /usr/local/kafka  配置zookeeper zookeeper安装
-配置zookeeper vi config/server.properties  找到zookeeper.connect，并将值修改为zookeeper的地址，如
-zookeeper.connect=localhost:2181  启动kafka /usr/local/kafka/bin/kafka-server-start.sh /usr/local/kafka/config/server.properties  查看kafka是否启动 netstat -tunlp|egrep &amp;quot;(2181|9092)&amp;quot;  单机测试 启动两个xshell客户端分别作为生产者和消费者
- 生产者测试
-./kafka-console-producer.sh --broker-list localhost:9092 --topic test &amp;gt; hello world!  消费者测试
-./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --from-beginning   注意: 早期的kafka版本，消费者参数用的是&amp;ndash;zookeeper，填写的值是zookeeper的地址，在我们今天教程中的版本参数应该是 &amp;ndash;bootstrap-server,填写的是kafka的broker地址
-查看topic ./kafka-topics.sh --list --zookeeper localhost:2181  </description>
-    </item>
-    
-    <item>
-      <title>zookeeper 集群环境搭建</title>
-      <link>https://tianhui.xin/blog/2018/10/03/zookeeper.cluster/</link>
-      <pubDate>Wed, 03 Oct 2018 21:00:00 +0000</pubDate>
-      
-      <guid>https://tianhui.xin/blog/2018/10/03/zookeeper.cluster/</guid>
-      <description>zookeeper 集群环境安装和搭建 选择自己的安装目录,下载 zookeeper并解压 wget http://mirrors.hust.edu.cn/apache/zookeeper/zookeeper-3.4.10/zookeeper-3.4.10.tar.gz tar -xvzf zookeeper-3.4.10.tar.gz  重命名 mv zookeeper-3.4.10 zookeeper  配置调整 cd zookeeper/conf mv zoo_sample.cfg zoo.cfg vi zoo.cfg ## 修改以下内容或者新增 dataDir=/usr/local/zookeeper/data dataLogDir=/usr/local/zookeeper/log server.1=host1:8888:9999 server.2=host2:8888:9999 server.3=host3:8888:9999 ## 主机名:用于zookeeper 集群间数据同步传输:用于zookeeper 的选举机制 -------------------------------------------  创建文件夹 cd zookeeper mkdir data mkdir log  根据dataDir配置myid ## 注意，这里三条服务器不一样 ## 比如我配置的三个server，myid里面写的X就是server.X=ip:8888:9999 中ip所对应的X ## 直接在文件中写对对应的x即可 echo x &amp;gt; myid ## 或者 vi myid  配置完成后，同步给其他节点，并修改配置文件myid中的值 启动服务器 cd zookeeper/bin ./zkServer.sh start &amp;amp; ## 输出：Starting zookeeper .</description>
-    </item>
-    
-  </channel>
-</rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>linux on 怪咖晨</title><link>https://tianhui.xin/tags/linux/</link><description>Recent content in linux on 怪咖晨</description><generator>Hugo -- gohugo.io</generator><language>zh_CN</language><lastBuildDate>Thu, 31 Oct 2019 21:49:20 +0000</lastBuildDate><atom:link href="https://tianhui.xin/tags/linux/index.xml" rel="self" type="application/rss+xml"/><item><title>linux 安装nginx</title><link>https://tianhui.xin/blog/2019/10/31/linuxofusenginx/</link><pubDate>Thu, 31 Oct 2019 21:49:20 +0000</pubDate><guid>https://tianhui.xin/blog/2019/10/31/linuxofusenginx/</guid><description>&lt;p&gt;Nginx（发音同engine x）是异步框架的网页服务器，也可以用作反向代理、负载平衡器和HTTP缓存。2019年3月11日，Nginx公司被F5 Networks以6.7亿美元收购。&lt;/p&gt;
+&lt;p&gt;在很多情况下，我们都需要在linux服务中安装nginx,今天我为大家带来，如何在linux系统中正确的安装nginx。&lt;/p&gt;</description></item><item><title>kafka 环境搭建</title><link>https://tianhui.xin/blog/2018/10/22/kafka/</link><pubDate>Mon, 22 Oct 2018 11:00:00 +0000</pubDate><guid>https://tianhui.xin/blog/2018/10/22/kafka/</guid><description> 安装 下载kafka curl -L -O https://mirrors.cnnic.cn/apache/kafka/2.0.0/kafka_2.12-2.0.0.tgz 解压 tar -xvf kafka_2.12-2.0.0.tgz -C /usr/local/kafka 配置zookeeper zookeeper安装
+配置zookeeper vi config/server.properties 找到zookeeper.connect，并将值修改为zookeeper的地址，如
+zookeeper.connect=localhost:2181 启动kafka /usr/local/kafka/bin/kafka-server-start.sh /usr/local/kafka/config/server.properties 查看kafka是否启动 netstat -tunlp|egrep &amp;quot;(2181|9092)&amp;quot; 单机测试 启动两个xshell客户端分别作为生产者和消费者
+生产者测试
+./kafka-console-producer.sh --broker-list localhost:9092 --topic test &amp;gt; hello world! 消费者测试
+./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --from-beginning 注意: 早期的kafka版本，消费者参数用的是&amp;ndash;zookeeper，填写的值是zookeeper的地址，在我们今天教程中的版本参数应该是 &amp;ndash;bootstrap-server,填写的是kafka的broker地址
+查看topic ./kafka-topics.sh --list --zookeeper localhost:2181</description></item><item><title>zookeeper 集群环境搭建</title><link>https://tianhui.xin/blog/2018/10/03/zookeeper.cluster/</link><pubDate>Wed, 03 Oct 2018 21:00:00 +0000</pubDate><guid>https://tianhui.xin/blog/2018/10/03/zookeeper.cluster/</guid><description>zookeeper 集群环境安装和搭建 选择自己的安装目录,下载 zookeeper并解压 wget http://mirrors.hust.edu.cn/apache/zookeeper/zookeeper-3.4.10/zookeeper-3.4.10.tar.gz tar -xvzf zookeeper-3.4.10.tar.gz 重命名 mv zookeeper-3.4.10 zookeeper 配置调整 cd zookeeper/conf mv zoo_sample.cfg zoo.cfg vi zoo.cfg ## 修改以下内容或者新增 dataDir=/usr/local/zookeeper/data dataLogDir=/usr/local/zookeeper/log server.1=host1:8888:9999 server.2=host2:8888:9999 server.3=host3:8888:9999 ## 主机名:用于zookeeper 集群间数据同步传输:用于zookeeper 的选举机制 ------------------------------------------- 创建文件夹 cd zookeeper mkdir data mkdir log 根据dataDir配置myid ## 注意，这里三条服务器不一样 ## 比如我配置的三个server，myid里面写的X就是server.X=ip:8888:9999 中ip所对应的X ## 直接在文件中写对对应的x即可 echo x &amp;gt; myid ## 或者 vi myid 配置完成后，同步给其他节点，并修改配置文件myid中的值 启动服务器 cd zookeeper/bin ./zkServer.sh start &amp;amp; ## 输出：Starting zookeeper .</description></item></channel></rss>
