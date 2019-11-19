@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>kafka on 怪咖晨</title><link>https://tianhui.xin/tags/kafka/</link><description>Recent content in kafka on 怪咖晨</description><generator>Hugo -- gohugo.io</generator><language>zh_CN</language><lastBuildDate>Mon, 22 Oct 2018 11:00:00 +0000</lastBuildDate><atom:link href="https://tianhui.xin/tags/kafka/index.xml" rel="self" type="application/rss+xml"/><item><title>kafka 环境搭建</title><link>https://tianhui.xin/blog/2018/10/22/kafka/</link><pubDate>Mon, 22 Oct 2018 11:00:00 +0000</pubDate><guid>https://tianhui.xin/blog/2018/10/22/kafka/</guid><description> 安装 下载kafka curl -L -O https://mirrors.cnnic.cn/apache/kafka/2.0.0/kafka_2.12-2.0.0.tgz 解压 tar -xvf kafka_2.12-2.0.0.tgz -C /usr/local/kafka 配置zookeeper zookeeper安装
-配置zookeeper vi config/server.properties 找到zookeeper.connect，并将值修改为zookeeper的地址，如
-zookeeper.connect=localhost:2181 启动kafka /usr/local/kafka/bin/kafka-server-start.sh /usr/local/kafka/config/server.properties 查看kafka是否启动 netstat -tunlp|egrep &amp;quot;(2181|9092)&amp;quot; 单机测试 启动两个xshell客户端分别作为生产者和消费者
-生产者测试
-./kafka-console-producer.sh --broker-list localhost:9092 --topic test &amp;gt; hello world! 消费者测试
-./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --from-beginning 注意: 早期的kafka版本，消费者参数用的是&amp;ndash;zookeeper，填写的值是zookeeper的地址，在我们今天教程中的版本参数应该是 &amp;ndash;bootstrap-server,填写的是kafka的broker地址
-查看topic ./kafka-topics.sh --list --zookeeper localhost:2181</description></item></channel></rss>
