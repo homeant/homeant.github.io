@@ -73,7 +73,6 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
     steps:
       - name: checkout
         uses: actions/checkout@master
@@ -107,7 +106,6 @@ jobs:
           eval $(ssh-agent)
           ssh-add &quot;$SSH_PATH/id_rsa&quot;
           ssh-keyscan -t rsa $HOST &gt;&gt; &quot;$SSH_PATH/known_hosts&quot;
-          ls
           cd public
           tar -cf $PACKAGE_NAME *
           scp $PACKAGE_NAME $USER@$HOST:$HOME_PATH
