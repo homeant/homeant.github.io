@@ -1,7 +1,7 @@
-html{
+/*html{
   -webkit-filter: grayscale(100%);
   filter: grayscale(100%);
-}
+}*/
 .clearfix:before,
 .clearfix:after,
 .navbar:before,
