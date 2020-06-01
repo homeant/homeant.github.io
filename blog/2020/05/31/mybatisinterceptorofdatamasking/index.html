@@ -5,7 +5,7 @@
 <i class="fa fa-align-justify"></i></button></div></div><div class="navbar-collapse collapse" id=navigation><ul class="nav navbar-nav navbar-right"><li class=dropdown><a href=/>首页</a></li><li class="dropdown active"><a href=/blog/>博客</a></li><li class=dropdown><a href=/about/>关于我</a></li></ul></div><div class="collapse clearfix" id=search><form class=navbar-form role=search><div class=input-group><input type=text class=form-control placeholder=Search>
 <span class=input-group-btn><button type=submit class="btn btn-template-main"><i class="fa fa-search"></i></button></span></div></form></div></div></div></div></header><div id=heading-breadcrumbs><div class=container><div class=row><div class=col-md-12><h1>Mybatis Interceptor 实现数据脱敏</h1></div></div></div></div><div id=content><div class=container><div class=row><div class=col-md-9 id=blog-post><p class="text-muted text-uppercase mb-small text-right">由<a href=#>homeant</a> |
 2020-05-31 10:03
-浏览<span id=busuanzi_value_page_pv>99</span>次</p><div id=post-content class=article><p>拦截器的一个作用就是我们可以拦截某些方法的调用，我们可以选择在这些被拦截的方法执行前后加上某些逻辑，也可以在执行这些被拦截的方法时执行自己的逻辑而不再执行被拦截的方法。
+浏览<span id=busuanzi_value_page_pv>99</span>次</p><div id=post-content class=article><p>拦截器的一个作用就是我们可以拦截某些方法的调用，我们可以选择在这些被拦截的方法执行前后加上某些逻辑。
 那么如果使用Mybatis对数据进行拦截，做一些满足自己需求的东西呢。今天我们就用这个实现一个数据的脱敏功能。</p><h2 id=interceptor接口>Interceptor接口</h2><p>对于拦截器<code>Mybatis</code>为我们提供了一个<code>Interceptor</code>接口，通过实现该接口就可以定义我们自己的拦截器。首先我们先来看一下这个接口的定义：</p><pre><code class=language-java>package org.apache.ibatis.plugin;
 
 import java.util.Properties;
@@ -91,8 +91,7 @@ public class DataMaskingInterceptor implements Interceptor {
 
    
 }
-</code></pre><p>解释代码中为啥要使用<code>DataShieldHelper</code>来实现脱敏登记，我们在项目开发过程中，经常会用到Java对象复用的情况，那么如果在某个字段上加上脱敏注解，会出现实现问题，我们不能对拦截器去判断哪些查询需要脱敏哪些不需要，那么怎么才能实现需要
-时才对数据进行脱敏，某些情况不需要呢，此时<code>ThreadLocal</code>就能帮助到我们，<code>ThreadLoca</code>l提供了线程内存储变量的能力，这些变量不同之处在于每一个线程读取的变量是对应的互相独立的。通过get和set方法就可以得到当前线程对应的值。</p><pre><code class=language-java>/**
+</code></pre><p>解释代码中为啥要使用<code>DataShieldHelper</code>来实现脱敏登记，我们在项目开发过程中，经常会用到Java对象复用的情况，那么如果在某个字段上加上脱敏注解，会出现实现问题，我们不能对拦截器去判断哪些查询需要脱敏哪些不需要，那么怎么才能实现需要时才对数据进行脱敏，某些情况不需要呢，此时<code>ThreadLocal</code>就能帮助到我们，<code>ThreadLoca</code>l提供了线程内存储变量的能力，这些变量不同之处在于每一个线程读取的变量是对应的互相独立的。通过get和set方法就可以得到当前线程对应的值。</p><pre><code class=language-java>/**
 /* 线程工具类 主要用于登记脱敏操作
 **/
 public class DataShieldHelper {
