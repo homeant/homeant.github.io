@@ -19,43 +19,10 @@
 
 .highlight pre{
     border: 1px dashed #38A7BB;
-    border-radius: 0px;
-}
-
-.highlight table{
-    text-align: left;
-}
-
-.highlight table td:first-child pre{
-    border-top-left-radius: 6px;
-    border-bottom-left-radius: 6px;
-    border-right-width: 0;
-}
-
-.highlight table td:nth-child(2) pre{
-    border-left-width: 0;
-}
-
-.highlight table td:last-child pre{
-    border-top-right-radius: 6px;
-    border-bottom-right-radius: 6px;
-}
-
-.highlight table td:first-child pre code{
-    white-space: nowrap;
-    text-align: right;
-}
-
-.highlight table td:first-child pre code span{
-    padding: 0 !important;
-    margin: 0 !important;
-    display: block;
-}
-
-.highlight > pre{
-    border: 1px dashed #38A7BB;
     border-radius: 6px;
+    overflow: auto;
 }
+
 
 
 

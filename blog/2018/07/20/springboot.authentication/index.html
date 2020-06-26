@@ -1,4 +1,4 @@
-<!doctype html><html lang=zh_cn><head><meta charset=utf-8><meta name=robots content="all,follow"><meta name=googlebot content="index,follow,snippet,archive"><meta name=viewport content="width=device-width,initial-scale=1"><title>springBoot系列 - 集成JWT实现接口权限认证</title><meta name=author content="homeant"><meta name=keywords content="怪咖晨,个人博客,Java,springboot"><meta name=description content="一个Java程序员的碎碎念"><link href="//fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,500,700,800" rel=stylesheet type=text/css><link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css><link rel=stylesheet href=//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link href="/css/animate.css?v=1593101917" rel=stylesheet><link href="/css/style.default.css?v=1593101917" rel=stylesheet id=theme-stylesheet><link href="/css/custom.css?v=1593101917" rel=stylesheet><!--[if lt IE 9]><script src=https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js></script><script src=https://oss.maxcdn.com/respond/1.4.2/respond.min.js></script><![endif]--><link rel="shortcut icon" href=/img/favicon.png type=image/x-icon><link rel=apple-touch-icon href=/img/favicon.png><link href="/css/owl.carousel.css?v=1593101917" rel=stylesheet><link href="/css/owl.theme.css?v=1593101917" rel=stylesheet><link rel=alternate href=https://homeant.github.io/index.xml type=application/rss+xml title=怪咖晨><meta property="og:locale" content="zh_CN"><meta property="og:site_name" content="怪咖晨"><meta property="og:title" content="springBoot系列 - 集成JWT实现接口权限认证"><meta property="og:type" content="article"><meta property="og:url" content="https://homeant.github.io/blog/2018/07/20/springboot.authentication/"><meta property="og:description" content="一个Java程序员的碎碎念"><meta property="og:image" content="https://image.tianhui.xin/liveLearn/5/api-security.jpg"><meta property="og:image:type" content="image/jpg"><meta property="og:updated_time" content="2018-07-20T21:00:00Z"><meta property="article:section" content="学无止境"><meta property="article:tag" content="springboot"><meta property="article:tag" content="Java"><meta property="article:published_time" content="2018-07-20T21:00:00Z"><meta property="article:modified_time" content="2018-07-20T21:00:00Z"><meta property="og:updated_time" content="2018-07-20T21:00:00Z"><meta property="article:section" content="学无止境"><meta property="article:tag" content="springboot"><meta property="article:tag" content="Java"><meta property="article:published_time" content="2018-07-20T21:00:00Z"><meta property="article:modified_time" content="2018-07-20T21:00:00Z"><meta name=twitter:card content="summary_large_image"><meta name=twitter:site content="@guaika"><meta name=twitter:title content="springBoot系列 - 集成JWT实现接口权限认证"><meta name=twitter:image content="https://image.tianhui.xin/liveLearn/5/api-security.jpg"><meta name=twitter:description content="一个Java程序员的碎碎念"></head><body><div id=all><header><div class=navbar-affixed-top data-spy=affix data-offset-top=200><div class="navbar navbar-default yamm" role=navigation id=navbar><div class=container><div class=navbar-header><a class="navbar-brand home" href=https://homeant.github.io/><img src=https://homeant.github.io/img/logo.png alt="springBoot系列 - 集成JWT实现接口权限认证 logo" class="hidden-xs hidden-sm">
+<!doctype html><html lang=zh_cn><head><meta charset=utf-8><meta name=robots content="all,follow"><meta name=googlebot content="index,follow,snippet,archive"><meta name=viewport content="width=device-width,initial-scale=1"><title>springBoot系列 - 集成JWT实现接口权限认证</title><meta name=author content="homeant"><meta name=keywords content="怪咖晨,个人博客,Java,springboot"><meta name=description content="一个Java程序员的碎碎念"><link href="//fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,500,700,800" rel=stylesheet type=text/css><link rel=stylesheet href=//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css><link rel=stylesheet href=//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link href="/css/animate.css?v=1593150963" rel=stylesheet><link href="/css/style.default.css?v=1593150963" rel=stylesheet id=theme-stylesheet><link href="/css/custom.css?v=1593150963" rel=stylesheet><!--[if lt IE 9]><script src=https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js></script><script src=https://oss.maxcdn.com/respond/1.4.2/respond.min.js></script><![endif]--><link rel="shortcut icon" href=/img/favicon.png type=image/x-icon><link rel=apple-touch-icon href=/img/favicon.png><link href="/css/owl.carousel.css?v=1593150963" rel=stylesheet><link href="/css/owl.theme.css?v=1593150963" rel=stylesheet><link rel=alternate href=https://homeant.github.io/index.xml type=application/rss+xml title=怪咖晨><meta property="og:locale" content="zh_CN"><meta property="og:site_name" content="怪咖晨"><meta property="og:title" content="springBoot系列 - 集成JWT实现接口权限认证"><meta property="og:type" content="article"><meta property="og:url" content="https://homeant.github.io/blog/2018/07/20/springboot.authentication/"><meta property="og:description" content="一个Java程序员的碎碎念"><meta property="og:image" content="https://image.tianhui.xin/liveLearn/5/api-security.jpg"><meta property="og:image:type" content="image/jpg"><meta property="og:updated_time" content="2018-07-20T21:00:00Z"><meta property="article:section" content="学无止境"><meta property="article:tag" content="springboot"><meta property="article:tag" content="Java"><meta property="article:published_time" content="2018-07-20T21:00:00Z"><meta property="article:modified_time" content="2018-07-20T21:00:00Z"><meta property="og:updated_time" content="2018-07-20T21:00:00Z"><meta property="article:section" content="学无止境"><meta property="article:tag" content="springboot"><meta property="article:tag" content="Java"><meta property="article:published_time" content="2018-07-20T21:00:00Z"><meta property="article:modified_time" content="2018-07-20T21:00:00Z"><meta name=twitter:card content="summary_large_image"><meta name=twitter:site content="@guaika"><meta name=twitter:title content="springBoot系列 - 集成JWT实现接口权限认证"><meta name=twitter:image content="https://image.tianhui.xin/liveLearn/5/api-security.jpg"><meta name=twitter:description content="一个Java程序员的碎碎念"></head><body><div id=all><header><div class=navbar-affixed-top data-spy=affix data-offset-top=200><div class="navbar navbar-default yamm" role=navigation id=navbar><div class=container><div class=navbar-header><a class="navbar-brand home" href=https://homeant.github.io/><img src=https://homeant.github.io/img/logo.png alt="springBoot系列 - 集成JWT实现接口权限认证 logo" class="hidden-xs hidden-sm">
 <img src=https://homeant.github.io/img/logo.png alt="springBoot系列 - 集成JWT实现接口权限认证 logo" class="visible-xs visible-sm">
 <span class=sr-only>springBoot系列 - 集成JWT实现接口权限认证 - 跳到主页</span></a><div class=navbar-buttons><button type=button class="navbar-toggle btn-template-main" data-toggle=collapse data-target=#navigation>
 <span class=sr-only>切换导航</span>
@@ -6,90 +6,27 @@
 <span class=input-group-btn><button type=submit class="btn btn-template-main"><i class="fa fa-search"></i></button></span></div></form></div></div></div></div></header><div id=heading-breadcrumbs><div class=container><div class=row><div class=col-md-12><h1>springBoot系列 - 集成JWT实现接口权限认证</h1></div></div></div></div><div id=content><div class=container><div class=row><div class=col-md-9 id=blog-post><p class="text-muted text-uppercase mb-small text-right">由<a href=#>homeant</a> |
 2018-07-20 21:00
 浏览<span id=busuanzi_value_page_pv>99</span>次</p><div id=post-content class=article><p>springBoot系列 - 集成JWT实现接口权限认证</p><p>一般来讲，对于RESTful API都会有认证(Authentication)和授权(Authorization)过程，保证API的安全性。</p><p><strong>Authentication vs. Authorization</strong></p><p>Authentication指的是确定这个用户的身份，Authorization是确定该用户拥有什么操作权限。</p><p><strong>认证方式一般有三种</strong></p><h4 id=basic-authentication><strong>Basic Authentication</strong></h4><p>这种方式是直接将用户名和密码放到Header中，使用Authorization: Basic Zm9vOmJhcg==，使用最简单但是最不安全。</p><h4 id=token认证><strong>TOKEN认证</strong></h4><p>这种方式也是再HTTP头中，使用Authorization: Bearer ，使用最广泛的TOKEN是JWT，通过签名过的TOKEN。</p><h4 id=oauth20><strong>OAuth2.0</strong></h4><p>这种方式安全等级最高，但是也是最复杂的。如果不是大型API平台或者需要给第三方APP使用的，没必要整这么复杂。
-一般项目中的RESTful API使用JWT来做认证就足够了。</p><h2 id=什么是jwt>什么是JWT</h2><p>Json web token (JWT), 是为了在网络应用环境间传递声明而执行的一种基于JSON的开放标准（(RFC 7519).该token被设计为紧凑且安全的， 特别适用于分布式站点的单点登录（SSO）场景。JWT的声明一般被用来在身份提供者和服务提供者间传递被认证的用户身份信息， 以便于从资源服务器获取资源，也可以增加一些额外的其它业务逻辑所必须的声明信息，该token也可直接被用于认证，也可被加密。</p><p>JWT官网：<a href=https://jwt.io/>https://jwt.io/</a></p><p>JWT是由三段信息构成的，将这三段信息文本用.链接一起就构成了Jwt字符串。就像这样:</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9<span style=color:#000;font-weight:700>.</span><span style=color:teal>eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ</span>
-</code></pre></td></tr></table></div></div><h3 id=jwt的构成>JWT的构成</h3><p>第一部分我们称它为头部（header),第二部分我们称其为载荷（payload, 类似于飞机上承载的物品)，第三部分是签证（signature)。</p><p><strong>header</strong></p><p>jwt的头部承载两部分信息：</p><ul><li>声明类型，这里是jwt</li><li>声明加密的算法 通常直接使用 HMAC SHA256</li></ul><p>这里的加密算法是单向函数散列算法，常见的有MD5、SHA、HAMC。这里使用基于密钥的Hash算法HMAC生成散列值。</p><ul><li>MD5 message-digest algorithm 5 （信息-摘要算法）缩写，广泛用于加密和解密技术，常用于文件校验。校验？不管文件多大，经过MD5后都能生成唯一的MD5值</li><li>SHA (Secure Hash Algorithm，安全散列算法），数字签名等密码学应用中重要的工具，安全性高于MD5</li><li>HMAC (Hash Message Authentication Code，散列消息鉴别码，基于密钥的Hash算法的认证协议。用公开函数和密钥产生一个固定长度的值作为认证标识，用这个标识鉴别消息的完整性。</li></ul><p>常用于接口签名验证完整的头部就像下面这样的JSON：</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+一般项目中的RESTful API使用JWT来做认证就足够了。</p><h2 id=什么是jwt>什么是JWT</h2><p>Json web token (JWT), 是为了在网络应用环境间传递声明而执行的一种基于JSON的开放标准（(RFC 7519).该token被设计为紧凑且安全的， 特别适用于分布式站点的单点登录（SSO）场景。JWT的声明一般被用来在身份提供者和服务提供者间传递被认证的用户身份信息， 以便于从资源服务器获取资源，也可以增加一些额外的其它业务逻辑所必须的声明信息，该token也可直接被用于认证，也可被加密。</p><p>JWT官网：<a href=https://jwt.io/>https://jwt.io/</a></p><p>JWT是由三段信息构成的，将这三段信息文本用.链接一起就构成了Jwt字符串。就像这样:</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9<span style=color:#000;font-weight:700>.</span><span style=color:teal>eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ</span>
+</code></pre></div><h3 id=jwt的构成>JWT的构成</h3><p>第一部分我们称它为头部（header),第二部分我们称其为载荷（payload, 类似于飞机上承载的物品)，第三部分是签证（signature)。</p><p><strong>header</strong></p><p>jwt的头部承载两部分信息：</p><ul><li>声明类型，这里是jwt</li><li>声明加密的算法 通常直接使用 HMAC SHA256</li></ul><p>这里的加密算法是单向函数散列算法，常见的有MD5、SHA、HAMC。这里使用基于密钥的Hash算法HMAC生成散列值。</p><ul><li>MD5 message-digest algorithm 5 （信息-摘要算法）缩写，广泛用于加密和解密技术，常用于文件校验。校验？不管文件多大，经过MD5后都能生成唯一的MD5值</li><li>SHA (Secure Hash Algorithm，安全散列算法），数字签名等密码学应用中重要的工具，安全性高于MD5</li><li>HMAC (Hash Message Authentication Code，散列消息鉴别码，基于密钥的Hash算法的认证协议。用公开函数和密钥产生一个固定长度的值作为认证标识，用这个标识鉴别消息的完整性。</li></ul><p>常用于接口签名验证完整的头部就像下面这样的JSON：</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
 <span style=color:#a61717;background-color:#e3d2d2>&#39;typ&#39;:</span> <span style=color:#a61717;background-color:#e3d2d2>&#39;JWT&#39;,</span>
 <span style=color:#a61717;background-color:#e3d2d2>&#39;alg&#39;:</span> <span style=color:#a61717;background-color:#e3d2d2>&#39;HS256&#39;</span>
 }
-</code></pre></td></tr></table></div></div><p>然后将头部进行base64加密（该加密是可以对称解密的),构成了第一部分</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java>eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9
-</code></pre></td></tr></table></div></div><p><strong>playload</strong></p><p>载荷就是存放有效信息的地方，这些有效信息包含三个部分：</p><ul><li>标准中注册的声明</li><li>公共的声明</li><li>私有的声明</li></ul><p>标准中注册的声明 (建议但不强制使用) ：</p><ul><li>iss: jwt签发者</li><li>sub: jwt所面向的用户</li><li>aud: 接收jwt的一方</li><li>exp: jwt的过期时间，这个过期时间必须要大于签发时间</li><li>nbf: 定义在什么时间之前，该jwt都是不可用的.</li><li>iat: jwt的签发时间</li><li>jti: jwt的唯一身份标识，主要用来作为一次性token,从而回避重放攻击。</li></ul><p>公共的声明：</p><p>公共的声明可以添加任何的信息，一般添加用户的相关信息或其他业务需要的必要信息.但不建议添加敏感信息，因为该部分在客户端可解密</p><p>私有的声明：</p><p>私有声明是提供者和消费者所共同定义的声明，一般不建议存放敏感信息，因为base64是对称解密的，意味着该部分信息可以归类为明文信息。</p><p>定义一个payload:</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+</code></pre></div><p>然后将头部进行base64加密（该加密是可以对称解密的),构成了第一部分</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java>eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9
+</code></pre></div><p><strong>playload</strong></p><p>载荷就是存放有效信息的地方，这些有效信息包含三个部分：</p><ul><li>标准中注册的声明</li><li>公共的声明</li><li>私有的声明</li></ul><p>标准中注册的声明 (建议但不强制使用) ：</p><ul><li>iss: jwt签发者</li><li>sub: jwt所面向的用户</li><li>aud: 接收jwt的一方</li><li>exp: jwt的过期时间，这个过期时间必须要大于签发时间</li><li>nbf: 定义在什么时间之前，该jwt都是不可用的.</li><li>iat: jwt的签发时间</li><li>jti: jwt的唯一身份标识，主要用来作为一次性token,从而回避重放攻击。</li></ul><p>公共的声明：</p><p>公共的声明可以添加任何的信息，一般添加用户的相关信息或其他业务需要的必要信息.但不建议添加敏感信息，因为该部分在客户端可解密</p><p>私有的声明：</p><p>私有声明是提供者和消费者所共同定义的声明，一般不建议存放敏感信息，因为base64是对称解密的，意味着该部分信息可以归类为明文信息。</p><p>定义一个payload:</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
 <span style=color:navy>&#34;sub&#34;</span>: <span style=color:#d14>&#34;1234567890&#34;</span>,
 <span style=color:navy>&#34;name&#34;</span>: <span style=color:#d14>&#34;John Doe&#34;</span>,
 <span style=color:navy>&#34;admin&#34;</span>: <span style=color:#000;font-weight:700>true</span>
 }
-</code></pre></td></tr></table></div></div><p>然后将其进行base64加密，得到Jwt的第二部分：</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java>eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9
-</code></pre></td></tr></table></div></div><p><strong>signature</strong></p><p>jwt的第三部分是一个签证信息，这个签证信息由三部分组成：</p><ul><li>header (base64后的)</li><li>payload (base64后的)</li><li>secret</li></ul><p>这个部分需要base64加密后的header和base64加密后的payload使用.连接组成的字符串， 然后通过header中声明的加密方式进行加盐secret组合加密，然后就构成了jwt的第三部分。</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript><span style=color:#998;font-style:italic>// javascript
+</code></pre></div><p>然后将其进行base64加密，得到Jwt的第二部分：</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java>eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9
+</code></pre></div><p><strong>signature</strong></p><p>jwt的第三部分是一个签证信息，这个签证信息由三部分组成：</p><ul><li>header (base64后的)</li><li>payload (base64后的)</li><li>secret</li></ul><p>这个部分需要base64加密后的header和base64加密后的payload使用.连接组成的字符串， 然后通过header中声明的加密方式进行加盐secret组合加密，然后就构成了jwt的第三部分。</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript><span style=color:#998;font-style:italic>// javascript
 </span><span style=color:#998;font-style:italic></span><span style=color:#000;font-weight:700>var</span> encodedString <span style=color:#000;font-weight:700>=</span> base64UrlEncode(header) <span style=color:#000;font-weight:700>+</span> <span style=color:#d14>&#39;.&#39;</span> <span style=color:#000;font-weight:700>+</span> base64UrlEncode(payload);
 <span style=color:#000;font-weight:700>var</span> signature <span style=color:#000;font-weight:700>=</span> HMACSHA256(encodedString, <span style=color:#d14>&#39;secret&#39;</span>); <span style=color:#998;font-style:italic>// TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ
-</span></code></pre></td></tr></table></div></div><p>将这三部分用.连接成一个完整的字符串,构成了最终的jwt:</p><p>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ</p><p>==注意==：secret是保存在服务器端的，jwt的签发生成也是在服务器端的，secret就是用来进行jwt的签发和jwt的验证， 所以，它就是你服务端的私钥，在任何场景都不应该流露出去。一旦客户端得知这个secret, 那就意味着客户端是可以自我签发jwt了。</p><h2 id=如何应用>如何应用</h2><p>一般是在请求头里加入Authorization，并加上Bearer标注：</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript>fetch(<span style=color:#d14>&#39;api/user/1&#39;</span>, {
+</span></code></pre></div><p>将这三部分用.连接成一个完整的字符串,构成了最终的jwt:</p><p>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ</p><p>==注意==：secret是保存在服务器端的，jwt的签发生成也是在服务器端的，secret就是用来进行jwt的签发和jwt的验证， 所以，它就是你服务端的私钥，在任何场景都不应该流露出去。一旦客户端得知这个secret, 那就意味着客户端是可以自我签发jwt了。</p><h2 id=如何应用>如何应用</h2><p>一般是在请求头里加入Authorization，并加上Bearer标注：</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript>fetch(<span style=color:#d14>&#39;api/user/1&#39;</span>, {
     headers<span style=color:#000;font-weight:700>:</span> {
         <span style=color:#d14>&#39;Authorization&#39;</span><span style=color:#000;font-weight:700>:</span> <span style=color:#d14>&#39;Bearer &#39;</span> <span style=color:#000;font-weight:700>+</span> token
     }
 })
-</code></pre></td></tr></table></div></div><p>服务器负责解析这个HTTP头来做用户认证和授权处理。大致流程如下：</p><p><img src=http://image.tianhui.xin/liveLearn/5/jwt20.png alt=流程></p><h2 id=安全相关>安全相关</h2><p>JWT协议本身不具备安全传输功能，所以必须借助于SSL/TLS的安全通道，所以建议如下：</p><ol><li>不应该在jwt的payload部分存放敏感信息，因为该部分是客户端可解密的部分。</li><li>保护好secret私钥，该私钥非常重要。</li><li>如果可以，请使用https协议</li></ol><h1 id=和springboot集成>和SpringBoot集成</h1><p>简要的说明下我们为什么要用JWT，因为我们要实现完全的前后端分离，所以不可能使用session，cookie的方式进行鉴权， 所以JWT就被派上了用场，可以通过一个加密密钥来进行前后端的鉴权。</p><p><strong>程序逻辑</strong></p><ol><li>我们POST用户名与密码到/login进行登入，如果成功返回一个加密token，失败的话直接返回401错误。</li><li>之后用户访问每一个需要权限的网址请求必须在header中添加Authorization字段，例如Authorization: token，token为密钥。</li><li>后台会进行token的校验，如果不通过直接返回401。</li></ol><p><strong>这里我讲一下如何在SpringBoot中使用JWT来做接口权限认证，安全框架依旧使用Shiro，JWT的实现使用 jjwt</strong></p><h3 id=添加maven依赖>添加Maven依赖</h3><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">41
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">42
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">43
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-xml data-lang=xml><span style=color:navy>&lt;dependency&gt;</span> 
+</code></pre></div><p>服务器负责解析这个HTTP头来做用户认证和授权处理。大致流程如下：</p><p><img src=http://image.tianhui.xin/liveLearn/5/jwt20.png alt=流程></p><h2 id=安全相关>安全相关</h2><p>JWT协议本身不具备安全传输功能，所以必须借助于SSL/TLS的安全通道，所以建议如下：</p><ol><li>不应该在jwt的payload部分存放敏感信息，因为该部分是客户端可解密的部分。</li><li>保护好secret私钥，该私钥非常重要。</li><li>如果可以，请使用https协议</li></ol><h1 id=和springboot集成>和SpringBoot集成</h1><p>简要的说明下我们为什么要用JWT，因为我们要实现完全的前后端分离，所以不可能使用session，cookie的方式进行鉴权， 所以JWT就被派上了用场，可以通过一个加密密钥来进行前后端的鉴权。</p><p><strong>程序逻辑</strong></p><ol><li>我们POST用户名与密码到/login进行登入，如果成功返回一个加密token，失败的话直接返回401错误。</li><li>之后用户访问每一个需要权限的网址请求必须在header中添加Authorization字段，例如Authorization: token，token为密钥。</li><li>后台会进行token的校验，如果不通过直接返回401。</li></ol><p><strong>这里我讲一下如何在SpringBoot中使用JWT来做接口权限认证，安全框架依旧使用Shiro，JWT的实现使用 jjwt</strong></p><h3 id=添加maven依赖>添加Maven依赖</h3><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-xml data-lang=xml><span style=color:navy>&lt;dependency&gt;</span> 
 	<span style=color:navy>&lt;groupId&gt;</span>org.springframework.boot<span style=color:navy>&lt;/groupId&gt;</span>  
 	<span style=color:navy>&lt;artifactId&gt;</span>spring-boot-starter-web<span style=color:navy>&lt;/artifactId&gt;</span>  
 	<span style=color:navy>&lt;exclusions&gt;</span> 
@@ -132,20 +69,7 @@
 	  <span style=color:navy>&lt;/exclusion&gt;</span> 
 	<span style=color:navy>&lt;/exclusions&gt;</span> 
 <span style=color:navy>&lt;/dependency&gt;</span> 
-</code></pre></td></tr></table></div></div><h3 id=创建用户service>创建用户Service</h3><p>这个在shiro一节讲过如果创建角色权限表，添加用户Service来执行查找用户操作，这里就不多讲具体实现了，只列出关键代码：</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#998;font-style:italic>/**
+</code></pre></div><h3 id=创建用户service>创建用户Service</h3><p>这个在shiro一节讲过如果创建角色权限表，添加用户Service来执行查找用户操作，这里就不多讲具体实现了，只列出关键代码：</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#998;font-style:italic>/**
 </span><span style=color:#998;font-style:italic>* 通过名称查找用户
 </span><span style=color:#998;font-style:italic>*
 </span><span style=color:#998;font-style:italic>* @param username
@@ -158,29 +82,7 @@
     <span style=color:#000;font-weight:700>}</span>
     <span style=color:#000;font-weight:700>return</span> managerInfo<span style=color:#000;font-weight:700>;</span>
 <span style=color:#000;font-weight:700>}</span>
-</code></pre></td></tr></table></div></div><h3 id=用户信息类>用户信息类：</h3><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#000;font-weight:700>public</span> <span style=color:#000;font-weight:700>class</span> <span style=color:#458;font-weight:700>ManagerInfo</span> <span style=color:#000;font-weight:700>implements</span> Serializable <span style=color:#000;font-weight:700>{</span>
+</code></pre></div><h3 id=用户信息类>用户信息类：</h3><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#000;font-weight:700>public</span> <span style=color:#000;font-weight:700>class</span> <span style=color:#458;font-weight:700>ManagerInfo</span> <span style=color:#000;font-weight:700>implements</span> Serializable <span style=color:#000;font-weight:700>{</span>
     <span style=color:#000;font-weight:700>private</span> <span style=color:#000;font-weight:700>static</span> <span style=color:#000;font-weight:700>final</span> <span style=color:#458;font-weight:700>long</span> serialVersionUID <span style=color:#000;font-weight:700>=</span> 1L<span style=color:#000;font-weight:700>;</span>
     <span style=color:#998;font-style:italic>/**
 </span><span style=color:#998;font-style:italic>    * 主键ID
@@ -202,66 +104,7 @@
 </span><span style=color:#998;font-style:italic>    * 一个管理员具有多个角色
 </span><span style=color:#998;font-style:italic>    */</span>
     <span style=color:#000;font-weight:700>private</span> List<span style=color:#000;font-weight:700>&lt;</span>SysRole<span style=color:#000;font-weight:700>&gt;</span> roles<span style=color:#000;font-weight:700>;</span>
-</code></pre></td></tr></table></div></div><h3 id=jwt工具类>JWT工具类</h3><p>我们写一个简单的JWT加密，校验工具，并且使用用户自己的密码充当加密密钥， 这样保证了token 即使被他人截获也无法破解。并且我们在token中附带了username信息，并且设置密钥5分钟就会过期。</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">41
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">42
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">43
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">44
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">45
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">46
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">47
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">48
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">49
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">50
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">51
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">52
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">53
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">54
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">55
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">56
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">57
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">58
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">59
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#000;font-weight:700>public</span> <span style=color:#000;font-weight:700>class</span> <span style=color:#458;font-weight:700>JWTUtil</span> <span style=color:#000;font-weight:700>{</span>
+</code></pre></div><h3 id=jwt工具类>JWT工具类</h3><p>我们写一个简单的JWT加密，校验工具，并且使用用户自己的密码充当加密密钥， 这样保证了token 即使被他人截获也无法破解。并且我们在token中附带了username信息，并且设置密钥5分钟就会过期。</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#000;font-weight:700>public</span> <span style=color:#000;font-weight:700>class</span> <span style=color:#458;font-weight:700>JWTUtil</span> <span style=color:#000;font-weight:700>{</span>
     <span style=color:#998;font-style:italic>// 过期时间5分钟
 </span><span style=color:#998;font-style:italic></span>    <span style=color:#000;font-weight:700>private</span> <span style=color:#000;font-weight:700>static</span> <span style=color:#000;font-weight:700>final</span> <span style=color:#458;font-weight:700>long</span> EXPIRE_TIME <span style=color:#000;font-weight:700>=</span> 5 <span style=color:#000;font-weight:700>*</span> 60 <span style=color:#000;font-weight:700>*</span> 1000<span style=color:#000;font-weight:700>;</span>
 
@@ -320,39 +163,7 @@
         <span style=color:#000;font-weight:700>}</span>
     <span style=color:#000;font-weight:700>}</span>
 <span style=color:#000;font-weight:700>}</span>
-</code></pre></td></tr></table></div></div><h3 id=编写登录接口>编写登录接口</h3><p>为了让用户登录的时候获取到正确的JWT Token，需要实现登录接口，这里我编写一个LoginController.java：</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java>RestController
+</code></pre></div><h3 id=编写登录接口>编写登录接口</h3><p>为了让用户登录的时候获取到正确的JWT Token，需要实现登录接口，这里我编写一个LoginController.java：</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java>RestController
 <span style=color:#000;font-weight:700>public</span> <span style=color:#000;font-weight:700>class</span> <span style=color:#458;font-weight:700>LoginController</span> <span style=color:#000;font-weight:700>{</span>
     <span style=color:#000;font-weight:700>private</span> <span style=color:#000;font-weight:700>static</span> <span style=color:#000;font-weight:700>final</span> Logger _logger <span style=color:#000;font-weight:700>=</span> LoggerFactory<span style=color:#000;font-weight:700>.</span><span style=color:teal>getLogger</span><span style=color:#000;font-weight:700>(</span>LoginController<span style=color:#000;font-weight:700>.</span><span style=color:teal>class</span><span style=color:#000;font-weight:700>);</span>
     <span style=color:#3c5d5d;font-weight:700>@Resource</span>
@@ -384,39 +195,7 @@
         <span style=color:#000;font-weight:700>return</span> <span style=color:#000;font-weight:700>new</span> BaseResponse<span style=color:#000;font-weight:700>(</span><span style=color:#000;font-weight:700>false</span><span style=color:#000;font-weight:700>,</span> <span style=color:#d14>&#34;Unauthorized&#34;</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000;font-weight:700>null</span><span style=color:#000;font-weight:700>);</span>
     <span style=color:#000;font-weight:700>}</span>
 <span style=color:#000;font-weight:700>}</span>
-</code></pre></td></tr></table></div></div><p>注意上面登录的时候，我会从数据库中把这个用户取出来，密码加盐算MD5值比较，通过之后再用密码作为密钥来签名生成JWT。</p><h3 id=编写restful接口>编写RESTful接口</h3><p>先编写一个通用的接口返回类：</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#998;font-style:italic>/**
+</code></pre></div><p>注意上面登录的时候，我会从数据库中把这个用户取出来，密码加盐算MD5值比较，通过之后再用密码作为密钥来签名生成JWT。</p><h3 id=编写restful接口>编写RESTful接口</h3><p>先编写一个通用的接口返回类：</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#998;font-style:italic>/**
 </span><span style=color:#998;font-style:italic>* API接口的基础返回类
 </span><span style=color:#998;font-style:italic>*
 </span><span style=color:#998;font-style:italic>* @author XiongNeng
@@ -448,48 +227,7 @@
         <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>data</span> <span style=color:#000;font-weight:700>=</span> data<span style=color:#000;font-weight:700>;</span>
     <span style=color:#000;font-weight:700>}</span>
 <span style=color:#000;font-weight:700>}</span>
-</code></pre></td></tr></table></div></div><p>通过SpringMVC实现RESTful接口，这里我只写一个示例方法：</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">41
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#3c5d5d;font-weight:700>@RestController</span>
+</code></pre></div><p>通过SpringMVC实现RESTful接口，这里我只写一个示例方法：</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#3c5d5d;font-weight:700>@RestController</span>
 <span style=color:#3c5d5d;font-weight:700>@RequestMapping</span><span style=color:#000;font-weight:700>(</span>value <span style=color:#000;font-weight:700>=</span> <span style=color:#d14>&#34;/api/v1&#34;</span><span style=color:#000;font-weight:700>)</span>
 <span style=color:#000;font-weight:700>public</span> <span style=color:#000;font-weight:700>class</span> <span style=color:#458;font-weight:700>PublicController</span> <span style=color:#000;font-weight:700>{</span>
 
@@ -530,16 +268,7 @@
         <span style=color:#000;font-weight:700>}</span>
     <span style=color:#000;font-weight:700>}</span>
 <span style=color:#000;font-weight:700>}</span>
-</code></pre></td></tr></table></div></div><h3 id=自定义异常>自定义异常</h3><p>为了实现我自己能够手动抛出异常，我自己写了一个<code>UnauthorizedException.java</code></p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">9
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#000;font-weight:700>public</span> <span style=color:#000;font-weight:700>class</span> <span style=color:#458;font-weight:700>UnauthorizedException</span> <span style=color:#000;font-weight:700>extends</span> RuntimeException <span style=color:#000;font-weight:700>{</span>
+</code></pre></div><h3 id=自定义异常>自定义异常</h3><p>为了实现我自己能够手动抛出异常，我自己写了一个<code>UnauthorizedException.java</code></p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#000;font-weight:700>public</span> <span style=color:#000;font-weight:700>class</span> <span style=color:#458;font-weight:700>UnauthorizedException</span> <span style=color:#000;font-weight:700>extends</span> RuntimeException <span style=color:#000;font-weight:700>{</span>
     <span style=color:#000;font-weight:700>public</span> <span style=color:#900;font-weight:700>UnauthorizedException</span><span style=color:#000;font-weight:700>(</span>String msg<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
         <span style=color:#000;font-weight:700>super</span><span style=color:#000;font-weight:700>(</span>msg<span style=color:#000;font-weight:700>);</span>
     <span style=color:#000;font-weight:700>}</span>
@@ -548,39 +277,7 @@
         <span style=color:#000;font-weight:700>super</span><span style=color:#000;font-weight:700>();</span>
     <span style=color:#000;font-weight:700>}</span>
 <span style=color:#000;font-weight:700>}</span>
-</code></pre></td></tr></table></div></div><h3 id=处理框架异常>处理框架异常</h3><p>之前说过restful要统一返回的格式，所以我们也要全局处理Spring Boot的抛出异常。利用@RestControllerAdvice能很好的实现。 注意这个统一异常处理器只对认证过的用户调用接口中的异常有作用，对AuthenticationException没有用</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#3c5d5d;font-weight:700>@RestControllerAdvice</span>
+</code></pre></div><h3 id=处理框架异常>处理框架异常</h3><p>之前说过restful要统一返回的格式，所以我们也要全局处理Spring Boot的抛出异常。利用@RestControllerAdvice能很好的实现。 注意这个统一异常处理器只对认证过的用户调用接口中的异常有作用，对AuthenticationException没有用</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#3c5d5d;font-weight:700>@RestControllerAdvice</span>
 <span style=color:#000;font-weight:700>public</span> <span style=color:#000;font-weight:700>class</span> <span style=color:#458;font-weight:700>ExceptionController</span> <span style=color:#000;font-weight:700>{</span>
 
     <span style=color:#998;font-style:italic>// 捕捉shiro的异常
@@ -612,26 +309,7 @@
         <span style=color:#000;font-weight:700>return</span> HttpStatus<span style=color:#000;font-weight:700>.</span><span style=color:teal>valueOf</span><span style=color:#000;font-weight:700>(</span>statusCode<span style=color:#000;font-weight:700>);</span>
     <span style=color:#000;font-weight:700>}</span>
 <span style=color:#000;font-weight:700>}</span>
-</code></pre></td></tr></table></div></div><h3 id=配置shiro>配置Shiro</h3><p>大家可以先看下官方的<a href=http://shiro.apache.org/spring.html>Spring-Shiro</a>整合教程，有个初步的了解。 不过既然我们用了SpringBoot，那我们肯定要争取零配置文件。</p><p><strong>实现JWTToken</strong></p><p>JWTToken差不多就是Shiro用户名密码的载体。因为我们是前后端分离，服务器无需保存用户状态，所以不需要RememberMe这类功能， 我们简单的实现下AuthenticationToken接口即可。因为token自己已经包含了用户名等信息，所以这里我就弄了一个字段。 如果你喜欢钻研，可以看看官方的UsernamePasswordToken是如何实现的。</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#000;font-weight:700>public</span> <span style=color:#000;font-weight:700>class</span> <span style=color:#458;font-weight:700>JWTToken</span> <span style=color:#000;font-weight:700>implements</span> AuthenticationToken <span style=color:#000;font-weight:700>{</span>
+</code></pre></div><h3 id=配置shiro>配置Shiro</h3><p>大家可以先看下官方的<a href=http://shiro.apache.org/spring.html>Spring-Shiro</a>整合教程，有个初步的了解。 不过既然我们用了SpringBoot，那我们肯定要争取零配置文件。</p><p><strong>实现JWTToken</strong></p><p>JWTToken差不多就是Shiro用户名密码的载体。因为我们是前后端分离，服务器无需保存用户状态，所以不需要RememberMe这类功能， 我们简单的实现下AuthenticationToken接口即可。因为token自己已经包含了用户名等信息，所以这里我就弄了一个字段。 如果你喜欢钻研，可以看看官方的UsernamePasswordToken是如何实现的。</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#000;font-weight:700>public</span> <span style=color:#000;font-weight:700>class</span> <span style=color:#458;font-weight:700>JWTToken</span> <span style=color:#000;font-weight:700>implements</span> AuthenticationToken <span style=color:#000;font-weight:700>{</span>
 
     <span style=color:#998;font-style:italic>// 密钥
 </span><span style=color:#998;font-style:italic></span>    <span style=color:#000;font-weight:700>private</span> String token<span style=color:#000;font-weight:700>;</span>
@@ -650,109 +328,7 @@
         <span style=color:#000;font-weight:700>return</span> token<span style=color:#000;font-weight:700>;</span>
     <span style=color:#000;font-weight:700>}</span>
 <span style=color:#000;font-weight:700>}</span>
-</code></pre></td></tr></table></div></div><p><strong>实现Realm</strong></p><p>realm的用于处理用户是否合法的这一块，需要我们自己实现。</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 22
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 23
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 24
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 25
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 26
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 27
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 28
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 29
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 30
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 31
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 32
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 33
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 34
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 35
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 36
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 37
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 38
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 39
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 40
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 41
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 42
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 43
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 44
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 45
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 46
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 47
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 48
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 49
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 50
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 51
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 52
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 53
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 54
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 55
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 56
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 57
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 58
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 59
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 60
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 61
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 62
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 63
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 64
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 65
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 66
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 67
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 68
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 69
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 70
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 71
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 72
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 73
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 74
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 75
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 76
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 77
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 78
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 79
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 80
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 81
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 82
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 83
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 84
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 85
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 86
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 87
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 88
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 89
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 90
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 91
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 92
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 93
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 94
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 95
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 96
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 97
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 98
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 99
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">100
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">101
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">102
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#998;font-style:italic>/**
+</code></pre></div><p><strong>实现Realm</strong></p><p>realm的用于处理用户是否合法的这一块，需要我们自己实现。</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#998;font-style:italic>/**
 </span><span style=color:#998;font-style:italic> * Description  : 身份校验核心类
 </span><span style=color:#998;font-style:italic> */</span>
 
@@ -854,87 +430,7 @@
     <span style=color:#000;font-weight:700>}</span>
 
 <span style=color:#000;font-weight:700>}</span>
-</code></pre></td></tr></table></div></div><p>在<code>doGetAuthenticationInfo</code>中用户可以自定义抛出很多异常，详情见文档。</p><p><strong>重写Filter</strong></p><p>所有的请求都会先经过Filter，所以我们继承官方的BasicHttpAuthenticationFilter，并且重写鉴权的方法， 另外通过重写preHandle，实现跨越访问。</p><p>代码的执行流程<code>preHandle</code>-><code>isAccessAllowed</code>-><code>isLoginAttempt</code>-><code>executeLogin</code></p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">41
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">42
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">43
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">44
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">45
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">46
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">47
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">48
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">49
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">50
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">51
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">52
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">53
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">54
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">55
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">56
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">57
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">58
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">59
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">60
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">61
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">62
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">63
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">64
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">65
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">66
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">67
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">68
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">69
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">70
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">71
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">72
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">73
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">74
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">75
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">76
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">77
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">78
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">79
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">80
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#000;font-weight:700>public</span> <span style=color:#000;font-weight:700>class</span> <span style=color:#458;font-weight:700>JWTFilter</span> <span style=color:#000;font-weight:700>extends</span> BasicHttpAuthenticationFilter <span style=color:#000;font-weight:700>{</span>
+</code></pre></div><p>在<code>doGetAuthenticationInfo</code>中用户可以自定义抛出很多异常，详情见文档。</p><p><strong>重写Filter</strong></p><p>所有的请求都会先经过Filter，所以我们继承官方的BasicHttpAuthenticationFilter，并且重写鉴权的方法， 另外通过重写preHandle，实现跨越访问。</p><p>代码的执行流程<code>preHandle</code>-><code>isAccessAllowed</code>-><code>isLoginAttempt</code>-><code>executeLogin</code></p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#000;font-weight:700>public</span> <span style=color:#000;font-weight:700>class</span> <span style=color:#458;font-weight:700>JWTFilter</span> <span style=color:#000;font-weight:700>extends</span> BasicHttpAuthenticationFilter <span style=color:#000;font-weight:700>{</span>
 
     <span style=color:#000;font-weight:700>private</span> Logger LOGGER <span style=color:#000;font-weight:700>=</span> LoggerFactory<span style=color:#000;font-weight:700>.</span><span style=color:teal>getLogger</span><span style=color:#000;font-weight:700>(</span><span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>getClass</span><span style=color:#000;font-weight:700>());</span>
 
@@ -1014,98 +510,7 @@
         <span style=color:#000;font-weight:700>}</span>
     <span style=color:#000;font-weight:700>}</span>
 <span style=color:#000;font-weight:700>}</span>
-</code></pre></td></tr></table></div></div><p><strong>编写ShiroConfig配置类</strong></p><p>这里我还增加了EhCache缓存管理支持，不需要每次都调用数据库做授权。</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">41
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">42
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">43
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">44
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">45
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">46
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">47
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">48
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">49
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">50
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">51
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">52
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">53
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">54
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">55
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">56
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">57
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">58
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">59
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">60
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">61
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">62
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">63
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">64
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">65
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">66
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">67
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">68
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">69
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">70
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">71
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">72
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">73
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">74
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">75
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">76
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">77
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">78
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">79
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">80
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">81
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">82
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">83
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">84
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">85
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">86
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">87
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">88
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">89
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">90
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">91
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#3c5d5d;font-weight:700>@Configuration</span>
+</code></pre></div><p><strong>编写ShiroConfig配置类</strong></p><p>这里我还增加了EhCache缓存管理支持，不需要每次都调用数据库做授权。</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#3c5d5d;font-weight:700>@Configuration</span>
 <span style=color:#3c5d5d;font-weight:700>@Order</span><span style=color:#000;font-weight:700>(</span>1<span style=color:#000;font-weight:700>)</span>
 <span style=color:#000;font-weight:700>public</span> <span style=color:#000;font-weight:700>class</span> <span style=color:#458;font-weight:700>ShiroConfig</span> <span style=color:#000;font-weight:700>{</span>
     <span style=color:#998;font-style:italic>/**
@@ -1196,7 +601,7 @@
     <span style=color:#000;font-weight:700>}</span>
 
 <span style=color:#000;font-weight:700>}</span>
-</code></pre></td></tr></table></div></div><p>里面URL规则自己参考文档<a href=http://shiro.apache.org/web.html>http://shiro.apache.org/web.html</a> ，这个在shiro那篇说的很清楚了。</p><h2 id=运行验证>运行验证</h2><p>最后是将代码跑起来验证这一切是否正常。</p><p>启动SpringBoot后，先通过POST请求登录拿到token</p><p><img src=http://image.tianhui.xin/liveLearn/5/jwt21.png alt=登录拿到token></p><p>然后在调用入网接口的时候在header中带上这个token认证：</p><p><img src=http://image.tianhui.xin/liveLearn/5/jwt22.png alt=token认证></p><p>如果token认证不正确会报异常：</p><p><img src=http://image.tianhui.xin/liveLearn/5/jwt23.png alt=token异常></p><p>如果使用普通用户登录，认证正确但是授权访问接口失败，会返回如下的未授权结果：</p><p><img src=http://image.tianhui.xin/liveLearn/5/jwt24.png alt=授权访问接口失败></p><h2 id=参考文章>参考文章</h2><ul><li><p><a href=http://blog.restcase.com/restful-api-authentication-basics/>RESTful API Authentication Basics</a></p></li><li><p><a href=https://www.jianshu.com/p/576dbf44b2ae>什么是 JWT – JSON WEB TOKEN</a></p></li><li><p><a href=https://juejin.im/post/59f1b2766fb9a0450e755993>Shiro+JWT+Spring Boot Restful简易教程</a></p></li></ul><h2 id=github源码>GitHub源码</h2><p><a href=https://github.com/yidao620c/SpringBootBucket/tree/master/springboot-jwt>springboot-jwt</a></p></div><div id=gitalk-comments></div><link href=//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css rel=stylesheet><script src=//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js></script><script src=https://homeant.github.io/js/md5.min.js></script><script type=application/javascript>const gitalk=new Gitalk({clientID:'6c2478e5c574adadad50',clientSecret:'0aecf2c4c0d2f26b9e277f1a6c45f27b617e4e4a',repo:'comment.tianhui.xin',owner:'homeant',admin:['homeant'],id:md5("https:\/\/homeant.github.io\/blog\/2018\/07\/20\/springboot.authentication\/"),distractionFreeMode:true})
+</code></pre></div><p>里面URL规则自己参考文档<a href=http://shiro.apache.org/web.html>http://shiro.apache.org/web.html</a> ，这个在shiro那篇说的很清楚了。</p><h2 id=运行验证>运行验证</h2><p>最后是将代码跑起来验证这一切是否正常。</p><p>启动SpringBoot后，先通过POST请求登录拿到token</p><p><img src=http://image.tianhui.xin/liveLearn/5/jwt21.png alt=登录拿到token></p><p>然后在调用入网接口的时候在header中带上这个token认证：</p><p><img src=http://image.tianhui.xin/liveLearn/5/jwt22.png alt=token认证></p><p>如果token认证不正确会报异常：</p><p><img src=http://image.tianhui.xin/liveLearn/5/jwt23.png alt=token异常></p><p>如果使用普通用户登录，认证正确但是授权访问接口失败，会返回如下的未授权结果：</p><p><img src=http://image.tianhui.xin/liveLearn/5/jwt24.png alt=授权访问接口失败></p><h2 id=参考文章>参考文章</h2><ul><li><p><a href=http://blog.restcase.com/restful-api-authentication-basics/>RESTful API Authentication Basics</a></p></li><li><p><a href=https://www.jianshu.com/p/576dbf44b2ae>什么是 JWT – JSON WEB TOKEN</a></p></li><li><p><a href=https://juejin.im/post/59f1b2766fb9a0450e755993>Shiro+JWT+Spring Boot Restful简易教程</a></p></li></ul><h2 id=github源码>GitHub源码</h2><p><a href=https://github.com/yidao620c/SpringBootBucket/tree/master/springboot-jwt>springboot-jwt</a></p></div><div id=gitalk-comments></div><link href=//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css rel=stylesheet><script src=//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js></script><script src=https://homeant.github.io/js/md5.min.js></script><script type=application/javascript>const gitalk=new Gitalk({clientID:'6c2478e5c574adadad50',clientSecret:'0aecf2c4c0d2f26b9e277f1a6c45f27b617e4e4a',repo:'comment.tianhui.xin',owner:'homeant',admin:['homeant'],id:md5("https:\/\/homeant.github.io\/blog\/2018\/07\/20\/springboot.authentication\/"),distractionFreeMode:true})
 gitalk.render('gitalk-comments')</script></div><div class=col-md-3><div class="panel panel-default sidebar-menu"><div class=panel-heading><h3 class=panel-title>搜索</h3></div><div class=panel-body><form action=//google.com/search method=get accept-charset=utf-8 role=search><div class=input-group><input type=search name=q class=form-control placeholder=搜索>
 <input type=hidden name=sitesearch value=https://homeant.github.io/>
-<span class=input-group-btn><button type=submit class="btn btn-template-main"><i class="fa fa-search"></i></button></span></div></form></div></div><div class="panel panel-default sidebar-menu"><div class=panel-heading><h3 class=panel-title>分类</h3></div><div class=panel-body><ul class="nav nav-pills nav-stacked"><li><a href=https://homeant.github.io/categories/%e5%ad%a6%e6%97%a0%e6%ad%a2%e5%a2%83>学无止境 (19)</a></li><li><a href=https://homeant.github.io/categories/%e6%85%a2%e7%94%9f%e6%b4%bb>慢生活 (2)</a></li></ul></div></div><div class="panel sidebar-menu"><div class=panel-heading><h3 class=panel-title>标签</h3></div><div class=panel-body><ul class=tag-cloud><li><a href=https://homeant.github.io/tags/activiti><i class="fa fa-tags"></i>activiti</a></li><li><a href=https://homeant.github.io/tags/docker><i class="fa fa-tags"></i>docker</a></li><li><a href=https://homeant.github.io/tags/githubaction><i class="fa fa-tags"></i>githubaction</a></li><li><a href=https://homeant.github.io/tags/githubpages><i class="fa fa-tags"></i>githubpages</a></li><li><a href=https://homeant.github.io/tags/hugo><i class="fa fa-tags"></i>hugo</a></li><li><a href=https://homeant.github.io/tags/idea><i class="fa fa-tags"></i>idea</a></li><li><a href=https://homeant.github.io/tags/id%e7%94%9f%e6%88%90><i class="fa fa-tags"></i>id生成</a></li><li><a href=https://homeant.github.io/tags/java><i class="fa fa-tags"></i>java</a></li><li><a href=https://homeant.github.io/tags/javascript><i class="fa fa-tags"></i>javascript</a></li><li><a href=https://homeant.github.io/tags/kafka><i class="fa fa-tags"></i>kafka</a></li><li><a href=https://homeant.github.io/tags/linux><i class="fa fa-tags"></i>linux</a></li><li><a href=https://homeant.github.io/tags/mybatis><i class="fa fa-tags"></i>mybatis</a></li><li><a href=https://homeant.github.io/tags/nginx><i class="fa fa-tags"></i>nginx</a></li><li><a href=https://homeant.github.io/tags/redis><i class="fa fa-tags"></i>redis</a></li><li><a href=https://homeant.github.io/tags/sentinel><i class="fa fa-tags"></i>sentinel</a></li><li><a href=https://homeant.github.io/tags/spring><i class="fa fa-tags"></i>spring</a></li><li><a href=https://homeant.github.io/tags/spring-integration><i class="fa fa-tags"></i>spring-integration</a></li><li><a href=https://homeant.github.io/tags/springboot><i class="fa fa-tags"></i>springboot</a></li><li><a href=https://homeant.github.io/tags/vue><i class="fa fa-tags"></i>vue</a></li><li><a href=https://homeant.github.io/tags/vue/cli><i class="fa fa-tags"></i>vue/cli</a></li><li><a href=https://homeant.github.io/tags/webpack-chain><i class="fa fa-tags"></i>webpack-chain</a></li><li><a href=https://homeant.github.io/tags/webpack-cli/init><i class="fa fa-tags"></i>webpack-cli/init</a></li><li><a href=https://homeant.github.io/tags/webpack4><i class="fa fa-tags"></i>webpack4</a></li><li><a href=https://homeant.github.io/tags/zookeeper><i class="fa fa-tags"></i>zookeeper</a></li><li><a href=https://homeant.github.io/tags/%e7%94%9f%e6%b4%bb%e9%9a%8f%e7%ac%94><i class="fa fa-tags"></i>生活随笔</a></li><li><a href=https://homeant.github.io/tags/%e8%ae%a2%e5%8d%95%e7%94%9f%e6%88%90><i class="fa fa-tags"></i>订单生成</a></li></ul></div></div></div></div></div></div><footer id=footer><div class=container><div class="col-md-4 col-sm-6"><h4>关于我</h4><hr class="hidden-md hidden-lg hidden-sm"></div><div class="col-md-4 col-sm-6"><h4>最新文章</h4><div class=blog-entries><div class="item same-height-row clearfix"><div class="name same-height-always"><h5><a href=https://homeant.github.io/blog/2020/06/21/mapstruct/>一见倾心之初遇MapStruct</a></h5></div></div><div class="item same-height-row clearfix"><div class="name same-height-always"><h5><a href=https://homeant.github.io/blog/2020/05/31/mybatisinterceptorofdatamasking/>Mybatis Interceptor 实现数据脱敏</a></h5></div></div><div class="item same-height-row clearfix"><div class="name same-height-always"><h5><a href=https://homeant.github.io/blog/2020/04/04/distributedlockuseredis/>优雅的使用Java分布式锁</a></h5></div></div></div><hr class="hidden-md hidden-lg"></div><div class="col-md-4 col-sm-6"><h4>友情连接</h4><ul class=links-list><li class=links-item><a href=https://github.com/homeant>github</a></li><li class=links-item><a href=http://xujin.org/>玹霖志</a></li></ul><hr class="hidden-md hidden-lg hidden-sm"></div></div></footer><div id=copyright><div class=container><div class=col-md-12><p class=pull-left>© 2009-2020 tianhui.xin 版权所有 ICP证：<a href=http://www.beian.miit.gov.cn target=_blank>京16046477</a></p><p class=pull-right>本站访客数<span id=busuanzi_value_site_uv>999</span>人次</p></div></div></div></div><script src=//code.jquery.com/jquery-3.1.1.min.js integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin=anonymous></script><script src=//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script><script src=//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js></script><script src=//cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js></script><script src=//cdnjs.cloudflare.com/ajax/libs/Counter-Up/1.0/jquery.counterup.min.js></script><script src=//cdnjs.cloudflare.com/ajax/libs/jquery-parallax/1.1.3/jquery-parallax.js></script><script src="https://homeant.github.io/js/front.js?v=25069062516"></script><script src=https://homeant.github.io/js/owl.carousel.min.js></script><script async src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js></script><script src=https://homeant.github.io/js/love-click.js type=text/javascript></script></body></html>
+<span class=input-group-btn><button type=submit class="btn btn-template-main"><i class="fa fa-search"></i></button></span></div></form></div></div><div class="panel panel-default sidebar-menu"><div class=panel-heading><h3 class=panel-title>分类</h3></div><div class=panel-body><ul class="nav nav-pills nav-stacked"><li><a href=https://homeant.github.io/categories/%e5%ad%a6%e6%97%a0%e6%ad%a2%e5%a2%83>学无止境 (19)</a></li><li><a href=https://homeant.github.io/categories/%e6%85%a2%e7%94%9f%e6%b4%bb>慢生活 (2)</a></li></ul></div></div><div class="panel sidebar-menu"><div class=panel-heading><h3 class=panel-title>标签</h3></div><div class=panel-body><ul class=tag-cloud><li><a href=https://homeant.github.io/tags/activiti><i class="fa fa-tags"></i>activiti</a></li><li><a href=https://homeant.github.io/tags/docker><i class="fa fa-tags"></i>docker</a></li><li><a href=https://homeant.github.io/tags/githubaction><i class="fa fa-tags"></i>githubaction</a></li><li><a href=https://homeant.github.io/tags/githubpages><i class="fa fa-tags"></i>githubpages</a></li><li><a href=https://homeant.github.io/tags/hugo><i class="fa fa-tags"></i>hugo</a></li><li><a href=https://homeant.github.io/tags/idea><i class="fa fa-tags"></i>idea</a></li><li><a href=https://homeant.github.io/tags/id%e7%94%9f%e6%88%90><i class="fa fa-tags"></i>id生成</a></li><li><a href=https://homeant.github.io/tags/java><i class="fa fa-tags"></i>java</a></li><li><a href=https://homeant.github.io/tags/javascript><i class="fa fa-tags"></i>javascript</a></li><li><a href=https://homeant.github.io/tags/kafka><i class="fa fa-tags"></i>kafka</a></li><li><a href=https://homeant.github.io/tags/linux><i class="fa fa-tags"></i>linux</a></li><li><a href=https://homeant.github.io/tags/mybatis><i class="fa fa-tags"></i>mybatis</a></li><li><a href=https://homeant.github.io/tags/nginx><i class="fa fa-tags"></i>nginx</a></li><li><a href=https://homeant.github.io/tags/redis><i class="fa fa-tags"></i>redis</a></li><li><a href=https://homeant.github.io/tags/sentinel><i class="fa fa-tags"></i>sentinel</a></li><li><a href=https://homeant.github.io/tags/spring><i class="fa fa-tags"></i>spring</a></li><li><a href=https://homeant.github.io/tags/spring-integration><i class="fa fa-tags"></i>spring-integration</a></li><li><a href=https://homeant.github.io/tags/springboot><i class="fa fa-tags"></i>springboot</a></li><li><a href=https://homeant.github.io/tags/vue><i class="fa fa-tags"></i>vue</a></li><li><a href=https://homeant.github.io/tags/vue/cli><i class="fa fa-tags"></i>vue/cli</a></li><li><a href=https://homeant.github.io/tags/webpack-chain><i class="fa fa-tags"></i>webpack-chain</a></li><li><a href=https://homeant.github.io/tags/webpack-cli/init><i class="fa fa-tags"></i>webpack-cli/init</a></li><li><a href=https://homeant.github.io/tags/webpack4><i class="fa fa-tags"></i>webpack4</a></li><li><a href=https://homeant.github.io/tags/zookeeper><i class="fa fa-tags"></i>zookeeper</a></li><li><a href=https://homeant.github.io/tags/%e7%94%9f%e6%b4%bb%e9%9a%8f%e7%ac%94><i class="fa fa-tags"></i>生活随笔</a></li><li><a href=https://homeant.github.io/tags/%e8%ae%a2%e5%8d%95%e7%94%9f%e6%88%90><i class="fa fa-tags"></i>订单生成</a></li></ul></div></div></div></div></div></div><footer id=footer><div class=container><div class="col-md-4 col-sm-6"><h4>关于我</h4><hr class="hidden-md hidden-lg hidden-sm"></div><div class="col-md-4 col-sm-6"><h4>最新文章</h4><div class=blog-entries><div class="item same-height-row clearfix"><div class="name same-height-always"><h5><a href=https://homeant.github.io/blog/2020/06/21/mapstruct/>一见倾心之初遇MapStruct</a></h5></div></div><div class="item same-height-row clearfix"><div class="name same-height-always"><h5><a href=https://homeant.github.io/blog/2020/05/31/mybatisinterceptorofdatamasking/>Mybatis Interceptor 实现数据脱敏</a></h5></div></div><div class="item same-height-row clearfix"><div class="name same-height-always"><h5><a href=https://homeant.github.io/blog/2020/04/04/distributedlockuseredis/>优雅的使用Java分布式锁</a></h5></div></div></div><hr class="hidden-md hidden-lg"></div><div class="col-md-4 col-sm-6"><h4>友情连接</h4><ul class=links-list><li class=links-item><a href=https://github.com/homeant>github</a></li><li class=links-item><a href=http://xujin.org/>玹霖志</a></li></ul><hr class="hidden-md hidden-lg hidden-sm"></div></div></footer><div id=copyright><div class=container><div class=col-md-12><p class=pull-left>© 2009-2020 tianhui.xin 版权所有 ICP证：<a href=http://www.beian.miit.gov.cn target=_blank>京16046477</a></p><p class=pull-right>本站访客数<span id=busuanzi_value_site_uv>999</span>人次</p></div></div></div></div><script src=//code.jquery.com/jquery-3.1.1.min.js integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin=anonymous></script><script src=//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script><script src=//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js></script><script src=//cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js></script><script src=//cdnjs.cloudflare.com/ajax/libs/Counter-Up/1.0/jquery.counterup.min.js></script><script src=//cdnjs.cloudflare.com/ajax/libs/jquery-parallax/1.1.3/jquery-parallax.js></script><script src="https://homeant.github.io/js/front.js?v=26069062605"></script><script src=https://homeant.github.io/js/owl.carousel.min.js></script><script async src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js></script><script src=https://homeant.github.io/js/love-click.js type=text/javascript></script></body></html>
