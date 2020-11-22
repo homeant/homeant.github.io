@@ -17,9 +17,21 @@ var initSearch = () => {
       container: "#search-hits",
       templates: {
         item: (hit) => {
-          var {title, permalink} = hit;
-          if (title) {
-            console.log(hit);
+          var {title, permalink, author, tags, summary, date, kind} = hit;
+          if (title && kind == "page") {
+            if (window.location.pathname.indexOf("/search") == 0) {
+              return `<div class="single-blog-post mb-5">
+    <a class="post-title" href="${permalink}"><h3>${title}</h3></a>
+    <div class="post-meta">
+        <div class="post-date"><i class="ti-timer"></i>${getDateStr(date * 1e3)}</div>
+        ${author ? `<a class="post-author" href="#">${author}</a>` : ""}
+    </div>    
+    <div class="post-content">${summary}</div>
+    <div class="post-tools">
+        <a class="btn btn-primary mt-3" href="${permalink}">\u9605\u8BFB\u66F4\u591A</a>
+    </div>
+</div>`;
+            }
             return `<a href="${permalink}" target="_blank">${title}</a>`;
           }
           return null;
@@ -30,6 +42,10 @@ var initSearch = () => {
   ]);
   search.start();
 };
+function getDateStr(time) {
+  var data = new Date(time);
+  return data.getFullYear() + "-" + (+data.getMonth() + 1) + "-" + data.getDate();
+}
 $(function() {
   if ($("#search-box").length > 0) {
     initSearch();
