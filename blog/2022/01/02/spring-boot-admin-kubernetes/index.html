@@ -1,0 +1,278 @@
+<!doctype html><html lang=zh><head><meta charset=utf-8><title>Spring Boot Admin On Kubernetes</title><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta name=keywords content="怪咖晨,黄天辉,个人博客,Java,spring cloud,Huangtianhui,huangtianhui,Spring Boot Admin,Kubernetes"><meta name=description content="一个Java程序员的碎碎念"><meta name=author content="huangtianhui"><meta name=generator content="Hugo 0.78.1"><link rel=stylesheet href=https://tianhui.xin/plugins/bootstrap/bootstrap.min.css><link rel=stylesheet href=https://tianhui.xin/plugins/themify-icons/themify-icons.css><link rel=stylesheet href=https://tianhui.xin/plugins/slick/slick.css><link href=https://tianhui.xin/css/animate.min.css rel=stylesheet media=screen><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/instantsearch.css@7.3.1/themes/algolia-min.css integrity="sha256-HB49n/BZjuqiCtQQf49OdZn63XuKFaxcIHWf0HNKte8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/instantsearch.css@7.3.1/themes/reset-min.css integrity="sha256-t2ATOGCtAIZNnzER679jwcFcKYfLlw01gli6F6oszk8=" crossorigin=anonymous><link href=https://tianhui.xin/css/style.min.471245402f8ffe37e98b65939de282e4.css rel=stylesheet media=screen><link rel="shortcut icon" href=https://tianhui.xin/images/favicon.png type=image/x-icon><link rel=icon href=https://tianhui.xin/images/favicon.png type=image/x-icon><meta property="og:image" content="https://image.tianhui.xin/spring/boot/admin/spring-boot-admin-on-kubernetes.png?x-oss-process=style/make"><meta property="og:title" content="Spring Boot Admin On Kubernetes"><meta property="og:description" content="在目前的部署模式下，通过会将Spring Boot项目部署在Kubernetes容器中；
+今天，我们就来细说一下，如何使用Spring Boot Admin监控在Kubernetes上运行的Spring Boot应用程序。"><meta property="og:type" content="article"><meta property="og:url" content="https://tianhui.xin/blog/2022/01/02/spring-boot-admin-kubernetes/"><meta property="article:published_time" content="2022-01-02T22:00:00+00:00"><meta property="article:modified_time" content="2022-01-02T22:00:00+00:00"></head><body><div class=preloader></div><header class=header-area><div class=main-header-area><div class=container><nav class="navbar navbar-expand-lg navbar-light bg-transparent"><a class=nav-brand href=https://tianhui.xin/><img width=158px src=https://tianhui.xin/images/logo.png></a>
+<button class=navbar-toggler type=button data-toggle=collapse data-target=#navigation aria-expanded=false aria-label="Toggle navigation">
+<i class=ti-menu></i></button><div class="collapse navbar-collapse" id=navigation><div class=navbar-close data-toggle=collapse data-target=#navigation><button class=navbar-toggler type=button>
+<i class=ti-close></i></button></div><div class=navbar-warp><ul class="navbar-nav mx-auto"><li class=nav-item><a class=nav-link href=https://tianhui.xin/>首页</a></li><li class=nav-item><a class=nav-link href=https://tianhui.xin/blog>博客</a></li><li class=nav-item><a class=nav-link href=https://tianhui.xin/categories/%E5%AD%A6%E6%97%A0%E6%AD%A2%E5%A2%83/>学无止境</a></li><li class=nav-item><a class=nav-link href=https://tianhui.xin/about>关于我</a></li><li class=nav-item><a class=nav-link href=https://tianhui.xin/search>搜索</a></li></ul><a href=//github.com/homeant class="btn btn-sm btn-primary ml-3">关注我</a></div></div></nav></div></div></header><div class="banner-area bg-img" style=background-image:url(https://tianhui.xin/images/banner.png)><div class=container><div class="row justify-content-center"><div class="col-12 col-sm-9 col-xl-6"><div class="banner-content text-center"><h2>怪咖晨</h2><p>多年软件开发经验</p><p>致力于微服务、DDD实践</p></div></div></div></div></div><section class=section><div class=container><div class=row><div class="col-lg-10 mx-auto"><h2>Spring Boot Admin On Kubernetes</h2><div class=content><p>在目前的部署模式下，通过会将<code>Spring Boot</code>项目部署在<code>Kubernetes</code>容器中；
+今天，我们就来细说一下，如何使用<code>Spring Boot Admin</code>监控在<code>Kubernetes</code>上运行的<code>Spring Boot</code>应用程序。</p><p><code>kubernetes</code>下部署的架构往往是这样的：
+服务<code>employee-service</code>部署在命名空间a中，<code>department-service</code>部署在命名空间b中，而<code>organization-service</code>部署在命名空间c中，
+<code>Spring Boot Admin</code>也使用<code>Spring Boot</code>启动，并默认部署在命名空间中。
+此时，我们就可以通过<code>kubernetes</code>的<code>Api</code>对服务进行管理和监控。
+PS：图是我抄的😜</p><p><img src="https://image.tianhui.xin/spring/boot/admin/spring-boot-admin-on-kubernetes.png?x-oss-process=style/make" alt></p><h3 id=启动spring-boot-admin-server>启动Spring Boot Admin Server</h3><h4 id=引入相关依赖>引入相关依赖</h4><p>在SBA中，已经集成了<code>kubernetes</code>,如果需要通过<code>kubernetes</code>来发现服务，我们还需要把<code>kubernetes-client</code>包加入到项目中，<code>SpringCloud</code>已经为我们提供了<code>spring-cloud-starter-kubernetes-client</code></p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10>10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11>11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12>12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13>13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14>14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15>15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16>16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17>17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18>18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19>19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20>20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21>21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22>22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23>23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24>24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25>25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26>26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27>27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28>28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29>29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30>30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31>31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32>32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33>33
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34>34
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35>35
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36>36
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37>37
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38>38
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39>39
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40>40
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41>41
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42>42
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=43>43
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=44>44
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=45>45
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=46>46
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=47>47
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=48>48
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-xml data-lang=xml><span style=color:#999;font-weight:700;font-style:italic>&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34; ?&gt;</span>
+<span style=color:navy>&lt;project&gt;</span>
+  <span style=color:navy>&lt;properties&gt;</span>
+    <span style=color:navy>&lt;spring-boot.version&gt;</span>2.6.1<span style=color:navy>&lt;/spring-boot.version&gt;</span>
+    <span style=color:navy>&lt;spring-cloud.version&gt;</span>2021.0.0<span style=color:navy>&lt;/spring-cloud.version&gt;</span>
+    <span style=color:#998;font-style:italic>&lt;!-- SBA 的最新版本 实际情况 和 spring boot 的版本号应该一致，目前没有发现不兼容的情况  --&gt;</span>
+    <span style=color:navy>&lt;spring-boot-admin.version&gt;</span>2.5.5<span style=color:navy>&lt;/spring-boot-admin.version&gt;</span>
+  <span style=color:navy>&lt;/properties&gt;</span>
+  <span style=color:navy>&lt;dependencyManagement&gt;</span>
+    <span style=color:navy>&lt;dependencies&gt;</span>
+      <span style=color:navy>&lt;dependency&gt;</span>
+        <span style=color:navy>&lt;groupId&gt;</span>org.springframework.boot<span style=color:navy>&lt;/groupId&gt;</span>
+        <span style=color:navy>&lt;artifactId&gt;</span>spring-boot-dependencies<span style=color:navy>&lt;/artifactId&gt;</span>
+        <span style=color:navy>&lt;version&gt;</span>${spring-boot.version}<span style=color:navy>&lt;/version&gt;</span>
+        <span style=color:navy>&lt;type&gt;</span>pom<span style=color:navy>&lt;/type&gt;</span>
+        <span style=color:navy>&lt;scope&gt;</span>import<span style=color:navy>&lt;/scope&gt;</span>
+      <span style=color:navy>&lt;/dependency&gt;</span>
+      <span style=color:navy>&lt;dependency&gt;</span>
+        <span style=color:navy>&lt;groupId&gt;</span>de.codecentric<span style=color:navy>&lt;/groupId&gt;</span>
+        <span style=color:navy>&lt;artifactId&gt;</span>spring-boot-admin-dependencies<span style=color:navy>&lt;/artifactId&gt;</span>
+        <span style=color:navy>&lt;version&gt;</span>${spring-boot-admin.version}<span style=color:navy>&lt;/version&gt;</span>
+        <span style=color:navy>&lt;type&gt;</span>pom<span style=color:navy>&lt;/type&gt;</span>
+        <span style=color:navy>&lt;scope&gt;</span>import<span style=color:navy>&lt;/scope&gt;</span>
+      <span style=color:navy>&lt;/dependency&gt;</span>
+      <span style=color:navy>&lt;dependency&gt;</span>
+        <span style=color:navy>&lt;groupId&gt;</span>org.springframework.cloud<span style=color:navy>&lt;/groupId&gt;</span>
+        <span style=color:navy>&lt;artifactId&gt;</span>spring-cloud-dependencies<span style=color:navy>&lt;/artifactId&gt;</span>
+        <span style=color:navy>&lt;version&gt;</span>${spring-cloud.version}<span style=color:navy>&lt;/version&gt;</span>
+        <span style=color:navy>&lt;type&gt;</span>pom<span style=color:navy>&lt;/type&gt;</span>
+        <span style=color:navy>&lt;scope&gt;</span>import<span style=color:navy>&lt;/scope&gt;</span>
+      <span style=color:navy>&lt;/dependency&gt;</span>
+    <span style=color:navy>&lt;/dependencies&gt;</span>
+  <span style=color:navy>&lt;/dependencyManagement&gt;</span>
+  <span style=color:navy>&lt;dependencies&gt;</span>
+    <span style=color:navy>&lt;dependency&gt;</span>
+      <span style=color:navy>&lt;groupId&gt;</span>de.codecentric<span style=color:navy>&lt;/groupId&gt;</span>
+      <span style=color:navy>&lt;artifactId&gt;</span>spring-boot-admin-server-cloud<span style=color:navy>&lt;/artifactId&gt;</span>
+    <span style=color:navy>&lt;/dependency&gt;</span>
+    <span style=color:navy>&lt;dependency&gt;</span>
+      <span style=color:navy>&lt;groupId&gt;</span>de.codecentric<span style=color:navy>&lt;/groupId&gt;</span>
+      <span style=color:navy>&lt;artifactId&gt;</span>spring-boot-admin-server-ui<span style=color:navy>&lt;/artifactId&gt;</span>
+    <span style=color:navy>&lt;/dependency&gt;</span>
+    <span style=color:navy>&lt;dependency&gt;</span>
+      <span style=color:navy>&lt;groupId&gt;</span>org.springframework.cloud<span style=color:navy>&lt;/groupId&gt;</span>
+      <span style=color:navy>&lt;artifactId&gt;</span>spring-cloud-starter-kubernetes-client<span style=color:navy>&lt;/artifactId&gt;</span>
+    <span style=color:navy>&lt;/dependency&gt;</span>
+  <span style=color:navy>&lt;/dependencies&gt;</span>
+<span style=color:navy>&lt;/project&gt;</span>
+</code></pre></td></tr></table></div></div><h4 id=启动类配置>启动类配置</h4><ul><li><code>@EnableAdminServer</code> 启用<code>SBA Server</code>服务</li><li><code>EnableDiscoveryClient</code> 启用服务发现的能力</li><li><code>EnableScheduling</code> 启用定时任务，这个很关键，不然你会发现启动的服务，无法在<code>SBA</code>中显示</li></ul><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1>1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2>2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3>3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4>4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5>5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6>6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7>7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8>8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9>9
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#3c5d5d;font-weight:700>@SpringBootApplication</span>
+<span style=color:#3c5d5d;font-weight:700>@EnableAdminServer</span> <span style=color:#998;font-style:italic>// 启用 SBA Server 服务
+</span><span style=color:#998;font-style:italic></span><span style=color:#3c5d5d;font-weight:700>@EnableDiscoveryClient</span> <span style=color:#998;font-style:italic>// 启用服务发现
+</span><span style=color:#998;font-style:italic></span><span style=color:#3c5d5d;font-weight:700>@EnableScheduling</span> <span style=color:#998;font-style:italic>// 启用定时器
+</span><span style=color:#998;font-style:italic></span><span style=color:#000;font-weight:700>public</span> <span style=color:#000;font-weight:700>class</span> <span style=color:#458;font-weight:700>OpsAdminCloudServerApplication</span> <span style=color:#000;font-weight:700>{</span>
+	<span style=color:#000;font-weight:700>public</span> <span style=color:#000;font-weight:700>static</span> <span style=color:#458;font-weight:700>void</span> <span style=color:#900;font-weight:700>main</span><span style=color:#000;font-weight:700>(</span>String<span style=color:#000;font-weight:700>[]</span> args<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+		SpringApplication<span style=color:#000;font-weight:700>.</span><span style=color:teal>run</span><span style=color:#000;font-weight:700>(</span>OpsAdminCloudServerApplication<span style=color:#000;font-weight:700>.</span><span style=color:teal>class</span><span style=color:#000;font-weight:700>,</span> args<span style=color:#000;font-weight:700>);</span>
+	<span style=color:#000;font-weight:700>}</span>
+<span style=color:#000;font-weight:700>}</span>
+</code></pre></td></tr></table></div></div><h4 id=spring-boot-admin-server-配置>Spring Boot Admin Server 配置</h4><p>既然我们使用<code>kubernetes</code>来发现服务，那么我们就需要对<code>kubernetes</code>的属性进行配置</p><ul><li><code>spring.cloud.kubernetes.discovery.service-labels</code> 通过 <code>Services</code> 的 <code>meta</code> 中匹配对应的标记，不满足的则会被排除</li><li><code>spring.cloud.kubernetes.discovery.primary-port-name</code> 当给 <code>NodePort</code> 指定多个多个端口时，通过<code>name</code>来确认使用哪个端口作为主端口</li><li><code>spring.cloud.kubernetes.client.namespace</code> 指定服务所在的命名空间</li><li><code>spring.cloud.kubernetes.discovery.all-namespaces</code> 当然，如果你不想指定命名空间，也可以设置该属性为true，程序会找到所有命名空间下满足<code>service-labels</code>的实例</li><li><code>spring.boot.admin.discovery.converter.management-context-path</code> 如果实例的<code>actuator</code>地址被修改，需要配置该属性，默认值 <code>/actuator</code>；
+该配置为全局配置，假设每个服务都有自己的<code>context-path</code>,需要编辑<code>kubernetes</code>文件，<code>metadata.labels</code>中配置<code>management.context-path</code></li><li><code>spring.boot.admin.discovery.converter.health-endpoint-path</code> 如果实例的<code>health</code>地址被修改，需要配置该属性，默认值 <code>/health</code>；
+该配置为全局配置，如果每个服务都有自己的健康检查,需要编辑<code>kubernetes</code>文件，<code>metadata.labels</code>中配置<code>health.path</code></li></ul><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10>10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11>11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12>12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13>13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14>14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15>15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16>16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17>17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18>18
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yml data-lang=yml><span style=color:navy>spring</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:navy>cloud</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:navy>kubernetes</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:navy>discovery</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:navy>service-labels</span>:<span style=color:#bbb> </span><span style=color:#998;font-style:italic># 通过 Services 的 meta 中匹配对应的标记，不满足的则会被排除</span><span style=color:#bbb>
+</span><span style=color:#bbb>          </span><span style=color:navy>spa-admin</span>:<span style=color:#bbb> </span>enabled<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:navy>primary-port-name</span>:<span style=color:#bbb> </span>http<span style=color:#bbb> </span><span style=color:#998;font-style:italic># nodePort 指定多个多个端口时，通过name来确认使用哪个端口请求</span><span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:navy>client</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:navy>namespace</span>:<span style=color:#bbb> </span>production<span style=color:#bbb> </span><span style=color:#998;font-style:italic># 指定命名空间</span><span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:navy>boot</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:navy>application</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:navy>name</span>:<span style=color:#bbb> </span>spring-boot-admin-kubernetes<span style=color:#bbb> </span><span style=color:#998;font-style:italic># 服务名</span><span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:navy>admin</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:navy>context-path</span>:<span style=color:#bbb> </span>admin<span style=color:#bbb> </span><span style=color:#998;font-style:italic># Spring Boot Admin 的 页面或 api 的路径前缀</span><span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:navy>discovery</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:navy>converter</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>          </span><span style=color:navy>management-context-path</span>:<span style=color:#bbb> </span>/actuator<span style=color:#bbb> </span><span style=color:#998;font-style:italic># 访问实例 的 Spring Boot actuator 的根路径</span><span style=color:#bbb>
+</span><span style=color:#bbb>          </span><span style=color:navy>health-endpoint-path</span>:<span style=color:#bbb> </span>/health<span style=color:#bbb> </span><span style=color:#998;font-style:italic># 访问实例 监控检查的地址</span><span style=color:#bbb>
+</span></code></pre></td></tr></table></div></div><h3 id=实例配置>实例配置</h3><h4 id=编写kubernetes文件>编写kubernetes文件</h4><ul><li>在<code>metadata.labels</code>属性下添加<code>spa-admin: enabled</code>，方便<code>SPA</code>过滤实例，对应<code>SPA</code>配置中的<code>spring.cloud.kubernetes.discovery.service-labels</code></li><li>在<code>spec.ports</code>中配置端口信息，<code>name</code>的值为<code>http</code>，对应<code>SPA</code>配置中的<code>spring.cloud.kubernetes.discovery.primary-port-name</code></li></ul><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10>10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11>11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12>12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13>13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14>14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15>15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16>16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17>17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18>18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19>19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20>20
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yml data-lang=yml><span style=color:navy>kind</span>:<span style=color:#bbb> </span>Service<span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:navy>apiVersion</span>:<span style=color:#bbb> </span>v1<span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:navy>metadata</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:navy>name</span>:<span style=color:#bbb> </span>admin-user-server<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:navy>namespace</span>:<span style=color:#bbb> </span>production<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:navy>labels</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:navy>name</span>:<span style=color:#bbb> </span>sadmin-user-server<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:navy>app</span>:<span style=color:#bbb> </span>admin-user-server<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:navy>version</span>:<span style=color:#bbb> </span>production<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:navy>spa-admin</span>:<span style=color:#bbb> </span>enabled<span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:navy>spec</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:navy>type</span>:<span style=color:#bbb> </span>NodePort<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:navy>ports</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span>- <span style=color:navy>protocol</span>:<span style=color:#bbb> </span>TCP<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:navy>name</span>:<span style=color:#bbb> </span>http<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:navy>targetPort</span>:<span style=color:#bbb> </span><span style=color:#099>8080</span><span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:navy>port</span>:<span style=color:#bbb> </span><span style=color:#099>8080</span><span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:navy>nodePort</span>:<span style=color:#bbb> </span><span style=color:#099>32000</span><span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:navy>selector</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:navy>app</span>:<span style=color:#bbb> </span>admin-user-server<span style=color:#bbb>
+</span></code></pre></td></tr></table></div></div><h4 id=加入相关依赖>加入相关依赖</h4><ul><li>添加<code>spring-boot-starter-actuator</code>，给实例赋予<code>actuator</code>能力</li><li>通过<code>spring-boot-maven-plugin</code>插件，可以为<code>actuator</code>的<code>info</code>接口提供更多的信息</li></ul><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10>10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11>11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12>12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13>13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14>14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15>15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16>16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17>17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18>18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19>19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20>20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21>21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22>22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23>23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24>24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25>25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26>26
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-xml data-lang=xml>
+<span style=color:navy>&lt;project</span> <span style=color:navy>&gt;</span>
+  <span style=color:navy>&lt;dependencies&gt;</span>
+    <span style=color:navy>&lt;dependency&gt;</span>
+      <span style=color:navy>&lt;groupId&gt;</span>org.springframework.boot<span style=color:navy>&lt;/groupId&gt;</span>
+      <span style=color:navy>&lt;artifactId&gt;</span>spring-boot-starter-web<span style=color:navy>&lt;/artifactId&gt;</span>
+    <span style=color:navy>&lt;/dependency&gt;</span>
+    <span style=color:navy>&lt;dependency&gt;</span>
+      <span style=color:navy>&lt;groupId&gt;</span>org.springframework.boot<span style=color:navy>&lt;/groupId&gt;</span>
+      <span style=color:navy>&lt;artifactId&gt;</span>spring-boot-starter-actuator<span style=color:navy>&lt;/artifactId&gt;</span>
+    <span style=color:navy>&lt;/dependency&gt;</span>
+  <span style=color:navy>&lt;/dependencies&gt;</span>
+  <span style=color:navy>&lt;build&gt;</span>
+    <span style=color:navy>&lt;plugin&gt;</span>
+      <span style=color:navy>&lt;groupId&gt;</span>org.springframework.boot<span style=color:navy>&lt;/groupId&gt;</span>
+      <span style=color:navy>&lt;artifactId&gt;</span>spring-boot-maven-plugin<span style=color:navy>&lt;/artifactId&gt;</span>
+      <span style=color:navy>&lt;executions&gt;</span>
+        <span style=color:navy>&lt;execution&gt;</span>
+          <span style=color:navy>&lt;goals&gt;</span>
+            <span style=color:navy>&lt;goal&gt;</span>build-info<span style=color:navy>&lt;/goal&gt;</span>
+          <span style=color:navy>&lt;/goals&gt;</span>
+        <span style=color:navy>&lt;/execution&gt;</span>
+      <span style=color:navy>&lt;/executions&gt;</span>
+    <span style=color:navy>&lt;/plugin&gt;</span>
+  <span style=color:navy>&lt;/build&gt;</span>
+<span style=color:navy>&lt;/project&gt;</span>
+</code></pre></td></tr></table></div></div><h4 id=配置actuator>配置actuator</h4><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10>10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11>11
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yml data-lang=yml><span style=color:navy>spring</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:navy>application</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:navy>name</span>:<span style=color:#bbb> </span>admin-user-server<span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:navy>management</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:navy>endpoints</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:navy>web</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:navy>exposure</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:navy>include</span>:<span style=color:#bbb> </span><span style=color:#d14>&#34;*&#34;</span><span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:navy>endpoint</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:navy>health</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:navy>show-details</span>:<span style=color:#bbb> </span>ALWAYS<span style=color:#bbb>
+</span></code></pre></td></tr></table></div></div><h3 id=效果图>效果图</h3><p><img src="https://image.tianhui.xin/spring/boot/admin/1641218000488.jpg?x-oss-process=style/make" alt></p><h3 id=写在最后>写在最后</h3><p>码字不易，因个人能力有限，难免有疏漏和错误之处，如发现bug或者有更好的建议，欢迎批评指正，不吝感激</p></div></div></div></div><div class=container><div class=row><div class="col-lg-10 mx-auto"><div id=gitalk-comments></div><link href=//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css rel=stylesheet><script src=//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js></script><script type=application/javascript>const gitalk=new Gitalk({clientID:'6c2478e5c574adadad50',clientSecret:'0aecf2c4c0d2f26b9e277f1a6c45f27b617e4e4a',repo:'comment.tianhui.xin',owner:'homeant',admin:['homeant'],id:'e4e4bb50b00a9c8a38410beb2a0b5f0e',distractionFreeMode:true})
+gitalk.render('gitalk-comments')</script></div></div></div></section><footer class="bg-light section pb-0"><div class=container><div class=row><div class="col-md-3 col-sm-6 mb-5"><h3 class=mb-4>个人链接</h3><ul class="list-unstyled footer-list"><li><a href=https://tianhui.xin/about>关于我</a></li><li><a href=//github.com/homeant>GitHub</a></li></ul></div><div class="col-md-3 col-sm-6 mb-5"><h3 class=mb-4>最新文章</h3><ul class="list-unstyled footer-list"><li><a href=https://tianhui.xin/blog/2022/01/02/spring-boot-admin-kubernetes/>Spring Boot Admin On Kubernetes</a></li><li><a href=https://tianhui.xin/blog/2021/09/16/spring-conditional-annotations/>Spring Conditional详解</a></li><li><a href=https://tianhui.xin/blog/2021/04/03/mybatis_data_encryption/>mybatis对数据进行加密</a></li><li><a href=https://tianhui.xin/blog/2020/06/27/spring_cloud_nacos/>跟我学SpringCloud 之 nacos</a></li><li><a href=https://tianhui.xin/blog/2020/06/21/mapstruct/>一见倾心之初遇MapStruct</a></li></ul></div><div class="col-md-3 col-sm-6 mb-5"><h3 class=mb-4>友情链接</h3><ul class="list-unstyled footer-list"><li><a href=http://xujin.org/>玹霖志</a></li><li><a href=https://itachi.xyz/>昨夜梦 今辰你 明日思</a></li></ul></div><div class="col-md-3 col-sm-6 mb-5"><a class="d-block mb-3" href=https://tianhui.xin/><img width=158px class=img-fluid src=https://tianhui.xin/images/logo.png alt=怪咖晨></a><p class=mb-4>有智者立长志，无志者长立志。</p><ul class="list-inline social-icons"><li class=list-inline-item><a href=//github.com/homeant><i class=ti-github></i></a></li></ul></div></div><div class="border-top border-default text-center py-4 mt-4"><small class=content>© 2009-2020 <a href=//tianhui.xin>tianhui.xin</a> 版权所有 ICP证：<a href=http://www.beian.miit.gov.cn>京16046477</a></small>
+您是本站第<span id=busuanzi_value_site_uv></span>位访客</div></div></footer><script src=https://tianhui.xin/plugins/jQuery/jquery.min.js></script><script src=https://tianhui.xin/plugins/bootstrap/bootstrap.min.js></script><script src=https://tianhui.xin/plugins/slick/slick.min.js></script><script src=https://tianhui.xin/plugins/love-click.js></script><script src=https://cdn.bootcdn.net/ajax/libs/jquery.sticky/1.0.4/jquery.sticky.min.js></script><script src=https://tianhui.xin/plugins/scrollUp/scrollUp.min.js></script><script src=https://cdn.jsdelivr.net/npm/algoliasearch@4.5.1/dist/algoliasearch-lite.umd.js integrity="sha256-EXPXz4W6pQgfYY3yTpnDa3OH8/EPn16ciVsPQ/ypsjk=" crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/instantsearch.js@4.8.3/dist/instantsearch.production.min.js integrity="sha256-LAGhRRdtVoD6RLo2qDQsU2mp+XVSciKRC8XPOBWmofM=" crossorigin=anonymous></script><script src=https://tianhui.xin/js/app.c626aab600fdfdf0c064234dd1dc543b.js></script><script async src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js></script><div class=scrollUp><i class=ti-angle-up></i></div></body></html>
