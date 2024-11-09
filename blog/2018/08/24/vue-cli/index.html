@@ -1,0 +1,93 @@
+<!doctype html><html lang=zh><head><meta charset=utf-8><title>Vue CLi 3快速入门</title><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta name=keywords content="怪咖晨,个人博客,java,spring cloud,spring boot,huangtianhui,vue,@vue/cli,javascript"><meta name=description content="Vue CLi 3快速入门"><meta name=author content="huangtianhui"><meta name=generator content="Hugo 0.78.1"><link rel=stylesheet href=https://tianhui.xin/plugins/bootstrap/bootstrap.min.css><link rel=stylesheet href=https://tianhui.xin/plugins/themify-icons/themify-icons.css><link rel=stylesheet href=https://tianhui.xin/plugins/slick/slick.css><link href=https://tianhui.xin/css/animate.min.css rel=stylesheet media=screen><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/instantsearch.css@8.0.0/themes/reset-min.css integrity="sha256-2AeJLzExpZvqLUxMfcs+4DWcMwNfpnjUeAAvEtPr0wU=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/instantsearch.css@8.0.0/themes/satellite-min.css integrity="sha256-p/rGN4RGy6EDumyxF9t7LKxWGg6/MZfGhJM/asKkqvA=" crossorigin=anonymous><link href=https://tianhui.xin/css/style.min.aa098d6308cd50eb086d8a887786f77e.css rel=stylesheet media=screen><link rel="shortcut icon" href=https://tianhui.xin/images/favicon.png type=image/x-icon><link rel=icon href=https://tianhui.xin/images/favicon.png type=image/x-icon><meta property="og:image" content="https://image.tianhui.xin/Vue-CLi/12.png"><meta property="og:title" content="Vue CLi 3快速入门"><meta property="og:description" content="Vue CLi 3快速入门"><meta property="og:type" content="article"><meta property="og:url" content="https://tianhui.xin/blog/2018/08/24/vue-cli/"><meta property="article:published_time" content="2018-08-24T21:00:00+00:00"><meta property="article:modified_time" content="2018-08-24T21:00:00+00:00"></head><body><div class=preloader></div><header class=header-area><div class=main-header-area><div class=container><nav class="navbar navbar-expand-lg navbar-light bg-transparent"><a class=nav-brand href=https://tianhui.xin/><img width=66px src=https://tianhui.xin/images/logo.png alt=怪咖晨></a>
+<button class=navbar-toggler type=button data-toggle=collapse data-target=#navigation aria-expanded=false aria-label="Toggle navigation">
+<i class=ti-menu></i></button><div class="collapse navbar-collapse" id=navigation><div class=navbar-close data-toggle=collapse data-target=#navigation><button class=navbar-toggler type=button>
+<i class=ti-close></i></button></div><div class=navbar-warp><ul class="navbar-nav mx-auto"><li class=nav-item><a class=nav-link href=https://tianhui.xin/>首页</a></li><li class=nav-item><a class=nav-link href=https://tianhui.xin/blog>博客</a></li><li class=nav-item><a class=nav-link href=https://tianhui.xin/categories/%E5%AD%A6%E6%97%A0%E6%AD%A2%E5%A2%83/>学无止境</a></li><li class=nav-item><a class=nav-link href=https://tianhui.xin/about>关于我</a></li><li class=nav-item><a class=nav-link href=https://tianhui.xin/search>搜索</a></li></ul><a href=//github.com/homeant class="btn btn-sm btn-primary ml-3">关注我</a></div></div></nav></div></div></header><div class="banner-area bg-img" style=background-image:url(https://tianhui.xin/images/banner.png)><div class=container><div class="row justify-content-center"><div class="col-12 col-sm-9 col-xl-6"><div class="banner-content text-center"><h2>怪咖晨</h2><p>多年软件开发经验</p><p>致力于微服务、DDD实践</p></div></div></div></div></div><section class=section><div class=container><div class=row><div class="col-lg-10 mx-auto"><h2>Vue CLi 3快速入门</h2><div class=content><p>Vue CLi 3快速入门</p><p>2018年08月13日在开源中国收到了Vue CLi 3.0 正式版的发布，关于它的横空出世，晨在这里简单说一下，很多人在微博都在调侃Vue,说是不是更新太块了，都学不过来，下面是我搜集的几张图，</p><p><img src=https://image.tianhui.xin/Vue-CLi/1.png alt=话说这位冒充尤雨溪的同学，真调皮&mldr;></p><p><img src=https://image.tianhui.xin/Vue-CLi/2.jpg alt=不得不说，前端同学真是聪明></p><p><img src=https://image.tianhui.xin/Vue-CLi/3.png alt=前端更新太块，学不动了></p><p>解释一下，Vue这次并没有发布新版本，而是出了一个简化配置的脚手架，命名为Vue CLi 3，不过调侃小右的也是用尽了各种技能。</p><p>好了，言归正传，回归我们今日的正题，<strong>快速入门Vue CLi 3</strong>，打开官方文档我们都能看到</p><blockquote><p>Vue CLI 的包名称由 <code>vue-cli</code> 改成了 <code>@vue/cli</code>。 如果你已经全局安装了旧版本的 <code>vue-cli</code> (1.x 或 2.x)，你需要先通过 <code>npm uninstall vue-cli -g</code> 或 <code>yarn global remove vue-cli</code> 卸载它。</p></blockquote><p>安装的细节，我们这里不做过多的阐述，具体的可以查看官方文档<a href=https://cli.vuejs.org/guide/>Vue CLi 3</a></p><h1 id=创建项目>创建项目</h1><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1>1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell>vue create hello-world
+</code></pre></td></tr></table></div></div><p>刚入门，一直回车就好，🙂</p><p>目录结构是啥样子的，让我们看一下</p><p><img src=https://image.tianhui.xin/Vue-CLi/4.png alt=目录结构></p><p><code>@vue/cli</code>在这次发布中，到底更新了什么呢，首先要说的第一个东西就是简化配置文件，集中配置文件到<code>vue.config.js</code>中,文件在哪呢，木有啊，那是因为<code>@vue/cli</code>做了一些默认的配置。我们可以自己创建一个这样的文件。</p><p><code>vue inspect</code>，是脚手架提供的一个配置检查的服务，并且生成一个你很熟悉的文件</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1>1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>vue inspect &gt; output.js
+</code></pre></td></tr></table></div></div><p>那么这样，是不是很熟悉呢</p><p><img src=https://image.tianhui.xin/Vue-CLi/6.png alt=webpack配置></p><p>是的，这个webpack的一些配置项，那么我们应该怎么书写呢，语法是这样的</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10>10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11>11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12>12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13>13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14>14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15>15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16>16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17>17
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript><span style=color:#998;font-style:italic>// vue.config.js
+</span><span style=color:#998;font-style:italic></span>module.exports <span style=color:#000;font-weight:700>=</span> {
+  configureWebpack<span style=color:#000;font-weight:700>:</span> {
+    plugins<span style=color:#000;font-weight:700>:</span> [
+      <span style=color:#000;font-weight:700>new</span> MyAwesomeWebpackPlugin()
+    ]
+  },
+  chainWebpack<span style=color:#000;font-weight:700>:</span> config =&gt; {
+    <span style=color:#998;font-style:italic>// GraphQL Loader
+</span><span style=color:#998;font-style:italic></span>    config.module
+      .rule(<span style=color:#d14>&#39;graphql&#39;</span>)
+      .test(<span style=color:#009926>/\.graphql$/</span>)
+      .use(<span style=color:#d14>&#39;graphql-tag/loader&#39;</span>)
+        .loader(<span style=color:#d14>&#39;graphql-tag/loader&#39;</span>)
+        .end()
+  }
+}
+</code></pre></td></tr></table></div></div><p>那么，<code>chainWebpack</code>这是个什么东西，作者采用了<a href=https://github.com/neutrinojs/webpack-chain>webpack-chain</a>的思想，内部实现也是<code>webpack-chain</code>来实现<code>webpack</code>的配置，仔细看<code> webpack-chain</code>的文档就会看出，它是一个链式API的方式来简化配置的一个插件。</p><p>晨这边也修改过几个loader,大概分享一下代码吧</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10>10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11>11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12>12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13>13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14>14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15>15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16>16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17>17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18>18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19>19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20>20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21>21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22>22
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript>module.exports <span style=color:#000;font-weight:700>=</span> {
+	chainWebpack<span style=color:#000;font-weight:700>:</span> config =&gt; {
+	   config.module.rule(<span style=color:#d14>&#39;compile&#39;</span>)
+		   .test(<span style=color:#009926>/\.js$/</span>)
+		   .include.add(<span style=color:#d14>&#39;./examples&#39;</span>).add(<span style=color:#d14>&#39;./packages&#39;</span>).end()
+		   .use(<span style=color:#d14>&#39;babel&#39;</span>)
+		   .loader(<span style=color:#d14>&#39;babel-loader&#39;</span>)
+		   .options({
+			   presets<span style=color:#000;font-weight:700>:</span> [
+				   [<span style=color:#d14>&#39;babel-preset-es2015&#39;</span>, {modules<span style=color:#000;font-weight:700>:</span> <span style=color:#000;font-weight:700>false</span>}]
+			   ]
+		   });
+	   <span style=color:#998;font-style:italic>// https://github.com/friends-of-js/yaml-loader
+</span><span style=color:#998;font-style:italic></span>	   config.module.rule(<span style=color:#d14>&#34;yml&#34;</span>)
+		   .test(<span style=color:#009926>/\.ya?ml$/</span>)
+		   .use(<span style=color:#d14>&#39;yaml&#39;</span>)
+		   .loader(<span style=color:#d14>&#39;@friends-of-js/yaml-loader&#39;</span>)
+		   .options({
+			   useNodeEnv<span style=color:#000;font-weight:700>:</span> <span style=color:#000;font-weight:700>true</span> 
+		});
+	}
+}
+</code></pre></td></tr></table></div></div><h2 id=vue-ui>vue ui</h2><p>最后我们来介绍另一个东西，对，没错，现在要说的就是<code>vue ui</code>,它是做什么的呢？</p><ol><li>项目管理，包括创建和导入
+<img src=https://image.tianhui.xin/Vue-CLi/11.png alt=项目管理></li><li>插件管理，包括依赖管理
+<img src=https://image.tianhui.xin/Vue-CLi/7.png alt=插件管理>
+<img src=https://image.tianhui.xin/Vue-CLi/8.png alt=依赖配置>
+<img src=https://image.tianhui.xin/Vue-CLi/9.png alt=项目配置></li><li>任务启动及监控
+<img src=https://image.tianhui.xin/Vue-CLi/10.png alt="vue ui项目任务启动及监控"></li></ol><p>目前该ui属于<code>Beta</code>版本，可能会出现bug,相信社区会让其更加完善和强大。</p></div></div></div></div><div class=container><div class=row><div class="col-lg-10 mx-auto"><div id=gitalk-comments></div><link href=//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css rel=stylesheet><script src=//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js></script><script type=application/javascript>const gitalk=new Gitalk({clientID:'6c2478e5c574adadad50',clientSecret:'0aecf2c4c0d2f26b9e277f1a6c45f27b617e4e4a',repo:'comment.tianhui.xin',owner:'homeant',admin:['homeant'],id:'3035b9344d8c15fa1b977ed172ddce49',distractionFreeMode:true})
+gitalk.render('gitalk-comments')</script></div></div></div></section><footer class="bg-light section pb-0"><div class=container><div class=row><div class="col-md-3 col-sm-6 mb-5"><h3 class=mb-4>个人链接</h3><ul class="list-unstyled footer-list"><li><a href=https://tianhui.xin/about>关于我</a></li><li><a href=//github.com/homeant>GitHub</a></li></ul></div><div class="col-md-3 col-sm-6 mb-5"><h3 class=mb-4>最新文章</h3><ul class="list-unstyled footer-list"><li><a href=https://tianhui.xin/blog/2022/01/02/spring-boot-admin-kubernetes/>Spring Boot Admin On Kubernetes</a></li><li><a href=https://tianhui.xin/blog/2021/09/16/spring-conditional-annotations/>Spring Conditional详解</a></li><li><a href=https://tianhui.xin/blog/2021/04/03/mybatis_data_encryption/>mybatis对数据进行加密</a></li><li><a href=https://tianhui.xin/blog/2020/06/27/spring_cloud_nacos/>跟我学SpringCloud 之 nacos</a></li><li><a href=https://tianhui.xin/blog/2020/06/21/mapstruct/>一见倾心之初遇MapStruct</a></li><li><a href=https://tianhui.xin/blog/2020/05/31/mybatisinterceptorofdatamasking/>Mybatis Interceptor 实现数据脱敏</a></li></ul></div><div class="col-md-3 col-sm-6 mb-5"><h3 class=mb-4>友情链接</h3><ul class="list-unstyled footer-list"><li><a href=http://xujin.org/>玹霖志</a></li><li><a href=https://itachi.xyz/>昨夜梦 今辰你 明日思</a></li></ul></div><div class="col-md-3 col-sm-6 mb-5"><a class="d-block mb-3" href=https://tianhui.xin/><img width=66px class=img-fluid src=https://tianhui.xin/images/logo.png alt=怪咖晨></a><p class=mb-4>有智者立长志，无志者长立志。</p><ul class="list-inline social-icons"><li class=list-inline-item><a href=//github.com/homeant><i class=ti-github></i></a></li></ul></div></div><div class="border-top border-default text-center py-4 mt-4"><small class=content>© 2009-2020 <a href=//tianhui.xin>tianhui.xin</a> 版权所有 ICP证：<a href=http://www.beian.miit.gov.cn>京16046477</a></small>
+您是本站第<span id=busuanzi_value_site_uv></span>位访客</div></div></footer><script src=https://tianhui.xin/plugins/jQuery/jquery.min.js></script><script src=https://tianhui.xin/plugins/bootstrap/bootstrap.min.js></script><script src=https://tianhui.xin/plugins/slick/slick.min.js></script><script src=https://tianhui.xin/plugins/love-click.js></script><script src=https://cdn.bootcdn.net/ajax/libs/jquery.sticky/1.0.4/jquery.sticky.min.js></script><script src=https://tianhui.xin/plugins/scrollUp/scrollUp.min.js></script><script src=https://tianhui.xin/plugins/clipboard/clipboard.js></script><script src=https://cdn.jsdelivr.net/npm/algoliasearch@4.5.1/dist/algoliasearch-lite.umd.js integrity="sha256-EXPXz4W6pQgfYY3yTpnDa3OH8/EPn16ciVsPQ/ypsjk=" crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/instantsearch.js@4.8.3/dist/instantsearch.production.min.js integrity="sha256-LAGhRRdtVoD6RLo2qDQsU2mp+XVSciKRC8XPOBWmofM=" crossorigin=anonymous></script><script src=https://tianhui.xin/js/app.c626aab600fdfdf0c064234dd1dc543b.js></script><script src=https://tianhui.xin/js/post.2ce597fd293e38d5be795230098b93c0.js></script><script async src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js></script><div class=scrollUp><i class=ti-angle-up></i></div></body></html>

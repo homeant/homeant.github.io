@@ -1,0 +1,855 @@
+<!doctype html><html lang=zh><head><meta charset=utf-8><title>跟我学SpringCloud 之 nacos</title><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta name=keywords content="怪咖晨,个人博客,java,spring cloud,spring boot,huangtianhui,Spring cloud,nacos,Java"><meta name=description content="在spring cloud体系中,有很多的注册中心和配置中心,比如最早的eureka以及consul、ZooKeeper,配置中心有
+spring cloud config 及 携程的apollo config,今天我们要说的是阿里新秀Nacos来作为配置中心或者注册中心"><meta name=author content="huangtianhui"><meta name=generator content="Hugo 0.78.1"><link rel=stylesheet href=https://tianhui.xin/plugins/bootstrap/bootstrap.min.css><link rel=stylesheet href=https://tianhui.xin/plugins/themify-icons/themify-icons.css><link rel=stylesheet href=https://tianhui.xin/plugins/slick/slick.css><link href=https://tianhui.xin/css/animate.min.css rel=stylesheet media=screen><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/instantsearch.css@8.0.0/themes/reset-min.css integrity="sha256-2AeJLzExpZvqLUxMfcs+4DWcMwNfpnjUeAAvEtPr0wU=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/instantsearch.css@8.0.0/themes/satellite-min.css integrity="sha256-p/rGN4RGy6EDumyxF9t7LKxWGg6/MZfGhJM/asKkqvA=" crossorigin=anonymous><link href=https://tianhui.xin/css/style.min.aa098d6308cd50eb086d8a887786f77e.css rel=stylesheet media=screen><link rel="shortcut icon" href=https://tianhui.xin/images/favicon.png type=image/x-icon><link rel=icon href=https://tianhui.xin/images/favicon.png type=image/x-icon><meta property="og:image" content="https://image.tianhui.xin/spring-cloud/nacos.png?x-oss-process=style/make"><meta property="og:title" content="跟我学SpringCloud 之 nacos"><meta property="og:description" content="在spring cloud体系中,有很多的注册中心和配置中心,比如最早的eureka以及consul、ZooKeeper,配置中心有
+spring cloud config 及 携程的apollo config,今天我们要说的是阿里新秀Nacos来作为配置中心或者注册中心"><meta property="og:type" content="article"><meta property="og:url" content="https://tianhui.xin/blog/2020/06/27/spring_cloud_nacos/"><meta property="article:published_time" content="2020-06-27T12:30:52+08:00"><meta property="article:modified_time" content="2020-06-27T12:30:52+08:00"></head><body><div class=preloader></div><header class=header-area><div class=main-header-area><div class=container><nav class="navbar navbar-expand-lg navbar-light bg-transparent"><a class=nav-brand href=https://tianhui.xin/><img width=66px src=https://tianhui.xin/images/logo.png alt=怪咖晨></a>
+<button class=navbar-toggler type=button data-toggle=collapse data-target=#navigation aria-expanded=false aria-label="Toggle navigation">
+<i class=ti-menu></i></button><div class="collapse navbar-collapse" id=navigation><div class=navbar-close data-toggle=collapse data-target=#navigation><button class=navbar-toggler type=button>
+<i class=ti-close></i></button></div><div class=navbar-warp><ul class="navbar-nav mx-auto"><li class=nav-item><a class=nav-link href=https://tianhui.xin/>首页</a></li><li class=nav-item><a class=nav-link href=https://tianhui.xin/blog>博客</a></li><li class=nav-item><a class=nav-link href=https://tianhui.xin/categories/%E5%AD%A6%E6%97%A0%E6%AD%A2%E5%A2%83/>学无止境</a></li><li class=nav-item><a class=nav-link href=https://tianhui.xin/about>关于我</a></li><li class=nav-item><a class=nav-link href=https://tianhui.xin/search>搜索</a></li></ul><a href=//github.com/homeant class="btn btn-sm btn-primary ml-3">关注我</a></div></div></nav></div></div></header><div class="banner-area bg-img" style=background-image:url(https://tianhui.xin/images/banner.png)><div class=container><div class="row justify-content-center"><div class="col-12 col-sm-9 col-xl-6"><div class="banner-content text-center"><h2>怪咖晨</h2><p>多年软件开发经验</p><p>致力于微服务、DDD实践</p></div></div></div></div></div><section class=section><div class=container><div class=row><div class="col-lg-10 mx-auto"><h2>跟我学SpringCloud 之 nacos</h2><div class=content><p>在<code>spring cloud</code>体系中,有很多的注册中心和配置中心,比如最早的<code>eureka</code>以及<code>consul</code>、<code>ZooKeeper</code>,配置中心有
+<code>spring cloud config</code> 及 携程的<code>apollo config</code>,今天我们要说的是阿里新秀<code>Nacos</code>来作为配置中心或者注册中心</p><h2 id=nacos是什么>Nacos是什么</h2><blockquote><p>Nacos is committed to help you discover, configure, and manage your microservices. It provides a set of simple and useful features enabling you to realize dynamic service discovery, service configuration, service metadata and traffic management.<br>Nacos makes it easier and faster to construct, deliver and manage your microservices platform. It is the infrastructure that supports a service-centered modern application architecture with a microservices or cloud-native approach.</p></blockquote><p>Nacos 致力于帮助您发现、配置和管理微服务.Nacos 提供了一组简单易用的特性集,帮助您快速实现动态服务发现、服务配置、服务元数据及流量管理.</p><p>Nacos 帮助您更敏捷和容易地构建、交付和管理微服务平台. Nacos 是构建以<code>服务</code>为中心的现代应用架构 (例如微服务范式、云原生范式) 的服务基础设施.</p><p><a href=https://nacos.io/zh-cn/index.html>Nacos官网</a></p><h2 id=准备>准备</h2><h3 id=安装nacos-server>安装Nacos server</h3><p><a href=https://github.com/alibaba/nacos/releases>下载地址</a></p><p>动手能力强的小伙伴可以尝试自己编译,需要提前配置<code>Java</code>及<code>Maven</code></p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1>1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2>2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3>3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4>4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5>5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6>6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7>7
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>git clone https://github.com/alibaba/nacos.git
+<span style=color:#0086b3>cd</span> nacos/
+mvn -Prelease-nacos -Dmaven.test.skip<span style=color:#000;font-weight:700>=</span><span style=color:#0086b3>true</span> clean install -U  
+ls -al distribution/target/
+
+// change the <span style=color:teal>$version</span> to your actual path
+<span style=color:#0086b3>cd</span> distribution/target/nacos-server-<span style=color:teal>$version</span>/nacos/bin
+</code></pre></td></tr></table></div></div><h3 id=启动nacos-server>启动Nacos server</h3><h4 id=linuxunixmac>Linux/Unix/Mac</h4><p>启动命令(standalone代表着单机模式运行,非集群模式):</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1>1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>sh startup.sh -m standalone
+</code></pre></td></tr></table></div></div><p>如果您使用的是ubuntu系统,或者运行脚本报错提示[[符号找不到,可尝试如下运行：</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1>1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>bash startup.sh -m standalone
+</code></pre></td></tr></table></div></div><h4 id=windows>Windows</h4><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1>1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>cmd startup.cmd
+</code></pre></td></tr></table></div></div><p>你也可以直接双击<code>startup.cmd</code>运行</p><h2 id=如何在spring-cloud-中使用>如何在spring cloud 中使用</h2><h3 id=作为配置中心使用>作为配置中心使用</h3><h4 id=引入依赖>引入依赖</h4><p>为了方便管理<code>Spring cloud</code>及<code>nacos</code>版本,可以提前在父级项目中配置<code>dependencyManagement</code></p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10>10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11>11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12>12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13>13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14>14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15>15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16>16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17>17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18>18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19>19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20>20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21>21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22>22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23>23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24>24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25>25
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-xml data-lang=xml><span style=color:navy>&lt;dependencyManagement&gt;</span>
+    <span style=color:navy>&lt;dependencies&gt;</span>
+        <span style=color:navy>&lt;dependency&gt;</span>
+            <span style=color:navy>&lt;groupId&gt;</span>org.springframework.boot<span style=color:navy>&lt;/groupId&gt;</span>
+            <span style=color:navy>&lt;artifactId&gt;</span>spring-boot-dependencies<span style=color:navy>&lt;/artifactId&gt;</span>
+            <span style=color:navy>&lt;version&gt;</span>2.2.8.RELEASE<span style=color:navy>&lt;/version&gt;</span>
+            <span style=color:navy>&lt;type&gt;</span>pom<span style=color:navy>&lt;/type&gt;</span>
+            <span style=color:navy>&lt;scope&gt;</span>import<span style=color:navy>&lt;/scope&gt;</span>
+        <span style=color:navy>&lt;/dependency&gt;</span>
+        <span style=color:navy>&lt;dependency&gt;</span>
+            <span style=color:navy>&lt;groupId&gt;</span>org.springframework.cloud<span style=color:navy>&lt;/groupId&gt;</span>
+            <span style=color:navy>&lt;artifactId&gt;</span>spring-cloud-dependencies<span style=color:navy>&lt;/artifactId&gt;</span>
+            <span style=color:navy>&lt;version&gt;</span>Hoxton.SR6<span style=color:navy>&lt;/version&gt;</span>
+            <span style=color:navy>&lt;type&gt;</span>pom<span style=color:navy>&lt;/type&gt;</span>
+            <span style=color:navy>&lt;scope&gt;</span>import<span style=color:navy>&lt;/scope&gt;</span>
+        <span style=color:navy>&lt;/dependency&gt;</span>
+        <span style=color:navy>&lt;dependency&gt;</span>
+            <span style=color:navy>&lt;groupId&gt;</span>com.alibaba.cloud<span style=color:navy>&lt;/groupId&gt;</span>
+            <span style=color:navy>&lt;artifactId&gt;</span>spring-cloud-alibaba-dependencies<span style=color:navy>&lt;/artifactId&gt;</span>
+            <span style=color:navy>&lt;version&gt;</span>2.2.1.RELEASE<span style=color:navy>&lt;/version&gt;</span>
+            <span style=color:navy>&lt;type&gt;</span>pom<span style=color:navy>&lt;/type&gt;</span>
+            <span style=color:navy>&lt;scope&gt;</span>import<span style=color:navy>&lt;/scope&gt;</span>
+        <span style=color:navy>&lt;/dependency&gt;</span>
+    <span style=color:navy>&lt;/dependencies&gt;</span>
+<span style=color:navy>&lt;/dependencyManagement&gt;</span>
+</code></pre></td></tr></table></div></div><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10>10
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-xml data-lang=xml><span style=color:navy>&lt;dependencies&gt;</span>
+    <span style=color:navy>&lt;dependency&gt;</span>
+        <span style=color:navy>&lt;groupId&gt;</span>com.alibaba.cloud<span style=color:navy>&lt;/groupId&gt;</span>
+        <span style=color:navy>&lt;artifactId&gt;</span>spring-cloud-starter-alibaba-nacos-config<span style=color:navy>&lt;/artifactId&gt;</span>
+    <span style=color:navy>&lt;/dependency&gt;</span>
+    <span style=color:navy>&lt;dependency&gt;</span>
+        <span style=color:navy>&lt;groupId&gt;</span>org.springframework.boot<span style=color:navy>&lt;/groupId&gt;</span>
+        <span style=color:navy>&lt;artifactId&gt;</span>spring-boot-starter-web<span style=color:navy>&lt;/artifactId&gt;</span>
+    <span style=color:navy>&lt;/dependency&gt;</span>
+<span style=color:navy>&lt;/dependencies&gt;</span>
+</code></pre></td></tr></table></div></div><h4 id=配置nacos-server>配置nacos server</h4><p><code>application.yml</code>中添加<code>spring.application.name</code>及<code>spring.cloud.nacos.server-addr</code></p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1>1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2>2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3>3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4>4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5>5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6>6
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:navy>spring</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:navy>application</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:navy>name</span>:<span style=color:#bbb> </span>spring-boot-nacos-config<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:navy>cloud</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:navy>nacos</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:navy>server-addr</span>:<span style=color:#bbb> </span>localhost:127.0.0.1:8848<span style=color:#bbb>
+</span></code></pre></td></tr></table></div></div><ol><li><code>spring.application.name</code> 是组成nacos 配置管理<code>dataId</code>字段的一部分</li><li><code>spring.cloud.nacos.server-addr</code> nacos 的地址</li><li>完整的<code>dataId</code>在<code>spring cloud nacos</code>中为<code>${prefix}-${spring.profile.active}.${file-extension}</code><ol><li><code>prefix</code> 默认为 <code>spring.application.name</code> 的值,也可以通过配置项 <code>spring.cloud.nacos.config.prefix</code>来配置.</li><li><code>spring.profile.active</code> 即为当前环境对应的 <code>profile</code>,详情可以参考 Spring Boot文档. 注意：当 <code>spring.profile.active</code> 为空时,对应的连接符 - 也将不存在,dataId 的拼接格式变成 <code>${prefix}.${file-extension}</code></li><li><code>file-exetension</code> 为配置内容的数据格式,可以通过配置项 <code>spring.cloud.nacos.config.file-extension</code> 来配置.目前只支持 <code>properties</code> 和 <code>yaml</code> 类型,默认为<code>properties</code></li></ol></li></ol><h4 id=编写启动类>编写启动类</h4><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1>1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2>2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3>3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4>4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5>5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6>6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7>7
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#3c5d5d;font-weight:700>@SpringBootApplication</span>
+<span style=color:#000;font-weight:700>public</span> <span style=color:#000;font-weight:700>class</span> <span style=color:#458;font-weight:700>NacosConfigApplication</span> <span style=color:#000;font-weight:700>{</span>
+
+    <span style=color:#000;font-weight:700>public</span> <span style=color:#000;font-weight:700>static</span> <span style=color:#458;font-weight:700>void</span> <span style=color:#900;font-weight:700>main</span><span style=color:#000;font-weight:700>(</span>String<span style=color:#000;font-weight:700>[]</span> args<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+        SpringApplication<span style=color:#000;font-weight:700>.</span><span style=color:teal>run</span><span style=color:#000;font-weight:700>(</span>NacosConfigApplication<span style=color:#000;font-weight:700>.</span><span style=color:teal>class</span><span style=color:#000;font-weight:700>,</span> args<span style=color:#000;font-weight:700>);</span>
+    <span style=color:#000;font-weight:700>}</span>
+<span style=color:#000;font-weight:700>}</span>
+</code></pre></td></tr></table></div></div><h4 id=编写controller>编写Controller</h4><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10>10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11>11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12>12
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#3c5d5d;font-weight:700>@RestController</span>
+<span style=color:#3c5d5d;font-weight:700>@RefreshScope</span>
+<span style=color:#000;font-weight:700>public</span> <span style=color:#000;font-weight:700>class</span> <span style=color:#458;font-weight:700>IndexController</span> <span style=color:#000;font-weight:700>{</span>
+
+    <span style=color:#3c5d5d;font-weight:700>@Value</span><span style=color:#000;font-weight:700>(</span><span style=color:#d14>&#34;${nacosConfig}&#34;</span><span style=color:#000;font-weight:700>)</span>
+    <span style=color:#000;font-weight:700>private</span> String nacosCongig<span style=color:#000;font-weight:700>;</span>
+
+    <span style=color:#3c5d5d;font-weight:700>@GetMapping</span><span style=color:#000;font-weight:700>(</span><span style=color:#d14>&#34;/config&#34;</span><span style=color:#000;font-weight:700>)</span>
+    <span style=color:#000;font-weight:700>public</span> String <span style=color:#900;font-weight:700>test</span><span style=color:#000;font-weight:700>(){</span>
+        <span style=color:#000;font-weight:700>return</span> nacosCongig<span style=color:#000;font-weight:700>;</span>
+    <span style=color:#000;font-weight:700>}</span>
+<span style=color:#000;font-weight:700>}</span>
+</code></pre></td></tr></table></div></div><h4 id=添加配置>添加配置</h4><ol><li>访问<code>http://localhost:8848/nacos/</code> 用户名密码<code>nacos</code></li><li>点击左侧菜单<code>配置管理>配置列表</code>,在右侧点击<code>+</code>添加配置</li><li>在输入页填写<code>Data ID</code>为我们配置的<code>spring.application.name</code></li><li>配置格式选择为<code>Properties</code>,在配置内容添加<code>nacosConfig=hello</code></li></ol><p>如果<code>Data ID</code>填写错误,是无法获取到对应配置的</p><p><img src="https://image.tianhui.xin/spring-cloud/nacos-server-config.png?x-oss-process=style/make" alt=nacos添加配置></p><p>添加完成后,返回到配置管理,可以看到我们刚刚添加的配置</p><p><img src="https://image.tianhui.xin/spring-cloud/nacos-server-config-manager.png?x-oss-process=style/make" alt=nacos配置管理></p><h4 id=启动项目>启动项目</h4><p>访问<code>http://localhost:8080/config</code>,此时页面输出<code>hello</code>,那么恭喜你,大功告成.</p><h3 id=作为服务的注册中心使用>作为服务的注册中心使用</h3><h4 id=添加依赖>添加依赖</h4><p>添加<code>spring-cloud-starter-alibaba-nacos-discovery</code>实现服务的注册和发现</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10>10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11>11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12>12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13>13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14>14
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-xml data-lang=xml><span style=color:navy>&lt;dependencies&gt;</span>
+    <span style=color:navy>&lt;dependency&gt;</span>
+        <span style=color:navy>&lt;groupId&gt;</span>com.alibaba.cloud<span style=color:navy>&lt;/groupId&gt;</span>
+        <span style=color:navy>&lt;artifactId&gt;</span>spring-cloud-starter-alibaba-nacos-config<span style=color:navy>&lt;/artifactId&gt;</span>
+    <span style=color:navy>&lt;/dependency&gt;</span>
+    <span style=color:navy>&lt;dependency&gt;</span>
+        <span style=color:navy>&lt;groupId&gt;</span>com.alibaba.cloud<span style=color:navy>&lt;/groupId&gt;</span>
+        <span style=color:navy>&lt;artifactId&gt;</span>spring-cloud-starter-alibaba-nacos-discovery<span style=color:navy>&lt;/artifactId&gt;</span>
+    <span style=color:navy>&lt;/dependency&gt;</span>
+    <span style=color:navy>&lt;dependency&gt;</span>
+        <span style=color:navy>&lt;groupId&gt;</span>org.springframework.boot<span style=color:navy>&lt;/groupId&gt;</span>
+        <span style=color:navy>&lt;artifactId&gt;</span>spring-boot-starter-web<span style=color:navy>&lt;/artifactId&gt;</span>
+    <span style=color:navy>&lt;/dependency&gt;</span>
+<span style=color:navy>&lt;/dependencies&gt;</span>
+</code></pre></td></tr></table></div></div><h4 id=启动项目-1>启动项目</h4><p>此时,我们到<code>nacos</code>左侧菜单中点击<code>服务管理>服务列表</code>,可以看到我们刚刚启动的服务已经成功注册到了列表中</p><p><img src="https://image.tianhui.xin/spring-cloud/nacos-server-server-manager.png?x-oss-process=style/make" alt=nacos服务管理></p><h2 id=nacos-config-解读>Nacos config 解读</h2><p>那么,nacos是如何获取到配置在nacos server的配置的呢
+查看源码我们可以看到在<code>spring-cloud-starter-alibaba-nacos-config</code>模块中,nacos添加了<code>com.alibaba.cloud.nacos.NacosConfigBootstrapConfiguration</code>的自启动,
+其中<code>NacosConfigProperties</code>就是获取配置的关键,</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10>10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11>11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12>12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13>13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14>14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15>15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16>16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17>17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18>18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19>19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20>20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21>21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22>22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23>23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24>24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25>25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26>26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27>27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28>28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29>29
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#3c5d5d;font-weight:700>@Configuration</span><span style=color:#000;font-weight:700>(</span>
+    proxyBeanMethods <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>false</span>
+<span style=color:#000;font-weight:700>)</span>
+<span style=color:#3c5d5d;font-weight:700>@ConditionalOnProperty</span><span style=color:#000;font-weight:700>(</span>
+    name <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>{</span><span style=color:#d14>&#34;spring.cloud.nacos.config.enabled&#34;</span><span style=color:#000;font-weight:700>},</span>
+    matchIfMissing <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>true</span>
+<span style=color:#000;font-weight:700>)</span>
+<span style=color:#000;font-weight:700>public</span> <span style=color:#000;font-weight:700>class</span> <span style=color:#458;font-weight:700>NacosConfigBootstrapConfiguration</span> <span style=color:#000;font-weight:700>{</span>
+    <span style=color:#000;font-weight:700>public</span> <span style=color:#900;font-weight:700>NacosConfigBootstrapConfiguration</span><span style=color:#000;font-weight:700>()</span> <span style=color:#000;font-weight:700>{</span>
+    <span style=color:#000;font-weight:700>}</span>
+
+    <span style=color:#3c5d5d;font-weight:700>@Bean</span>
+    <span style=color:#3c5d5d;font-weight:700>@ConditionalOnMissingBean</span>
+    <span style=color:#000;font-weight:700>public</span> NacosConfigProperties <span style=color:#900;font-weight:700>nacosConfigProperties</span><span style=color:#000;font-weight:700>()</span> <span style=color:#000;font-weight:700>{</span>
+        <span style=color:#000;font-weight:700>return</span> <span style=color:#000;font-weight:700>new</span> NacosConfigProperties<span style=color:#000;font-weight:700>();</span>
+    <span style=color:#000;font-weight:700>}</span>
+
+    <span style=color:#3c5d5d;font-weight:700>@Bean</span>
+    <span style=color:#3c5d5d;font-weight:700>@ConditionalOnMissingBean</span>
+    <span style=color:#000;font-weight:700>public</span> NacosConfigManager <span style=color:#900;font-weight:700>nacosConfigManager</span><span style=color:#000;font-weight:700>(</span>NacosConfigProperties nacosConfigProperties<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+        <span style=color:#000;font-weight:700>return</span> <span style=color:#000;font-weight:700>new</span> NacosConfigManager<span style=color:#000;font-weight:700>(</span>nacosConfigProperties<span style=color:#000;font-weight:700>);</span>
+    <span style=color:#000;font-weight:700>}</span>
+    
+    <span style=color:#998;font-style:italic>// 获取配置 实现org.springframework.cloud.bootstrap.config.PropertySourceLocator接口
+</span><span style=color:#998;font-style:italic></span>    <span style=color:#3c5d5d;font-weight:700>@Bean</span>
+    <span style=color:#000;font-weight:700>public</span> NacosPropertySourceLocator <span style=color:#900;font-weight:700>nacosPropertySourceLocator</span><span style=color:#000;font-weight:700>(</span>NacosConfigManager nacosConfigManager<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+        <span style=color:#000;font-weight:700>return</span> <span style=color:#000;font-weight:700>new</span> NacosPropertySourceLocator<span style=color:#000;font-weight:700>(</span>nacosConfigManager<span style=color:#000;font-weight:700>);</span>
+    <span style=color:#000;font-weight:700>}</span>
+<span style=color:#000;font-weight:700>}</span>
+</code></pre></td></tr></table></div></div><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1>  1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2>  2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3>  3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4>  4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5>  5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6>  6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7>  7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8>  8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9>  9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10> 10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11> 11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12> 12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13> 13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14> 14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15> 15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16> 16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17> 17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18> 18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19> 19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20> 20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21> 21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22> 22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23> 23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24> 24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25> 25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26> 26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27> 27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28> 28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29> 29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30> 30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31> 31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32> 32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33> 33
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34> 34
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35> 35
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36> 36
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37> 37
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38> 38
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39> 39
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40> 40
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41> 41
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42> 42
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=43> 43
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=44> 44
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=45> 45
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=46> 46
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=47> 47
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=48> 48
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=49> 49
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=50> 50
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=51> 51
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=52> 52
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=53> 53
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=54> 54
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=55> 55
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=56> 56
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=57> 57
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=58> 58
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=59> 59
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=60> 60
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=61> 61
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=62> 62
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=63> 63
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=64> 64
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=65> 65
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=66> 66
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=67> 67
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=68> 68
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=69> 69
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=70> 70
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=71> 71
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=72> 72
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=73> 73
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=74> 74
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=75> 75
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=76> 76
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=77> 77
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=78> 78
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=79> 79
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=80> 80
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=81> 81
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=82> 82
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=83> 83
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=84> 84
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=85> 85
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=86> 86
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=87> 87
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=88> 88
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=89> 89
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=90> 90
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=91> 91
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=92> 92
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=93> 93
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=94> 94
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=95> 95
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=96> 96
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=97> 97
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=98> 98
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=99> 99
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=100>100
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=101>101
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=102>102
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=103>103
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=104>104
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=105>105
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=106>106
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=107>107
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=108>108
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=109>109
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=110>110
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=111>111
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=112>112
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=113>113
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=114>114
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=115>115
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=116>116
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=117>117
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=118>118
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=119>119
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=120>120
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=121>121
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=122>122
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=123>123
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=124>124
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=125>125
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=126>126
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=127>127
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=128>128
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=129>129
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=130>130
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=131>131
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=132>132
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=133>133
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=134>134
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=135>135
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=136>136
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=137>137
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=138>138
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=139>139
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=140>140
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=141>141
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=142>142
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=143>143
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=144>144
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#3c5d5d;font-weight:700>@Order</span><span style=color:#000;font-weight:700>(</span>0<span style=color:#000;font-weight:700>)</span> <span style=color:#998;font-style:italic>// 设置启动顺序
+</span><span style=color:#998;font-style:italic></span><span style=color:#000;font-weight:700>public</span> <span style=color:#000;font-weight:700>class</span> <span style=color:#458;font-weight:700>NacosPropertySourceLocator</span> <span style=color:#000;font-weight:700>implements</span> PropertySourceLocator <span style=color:#000;font-weight:700>{</span>
+    <span style=color:#000;font-weight:700>private</span> <span style=color:#000;font-weight:700>static</span> <span style=color:#000;font-weight:700>final</span> Logger log <span style=color:#000;font-weight:700>=</span> LoggerFactory<span style=color:#000;font-weight:700>.</span><span style=color:teal>getLogger</span><span style=color:#000;font-weight:700>(</span>NacosPropertySourceLocator<span style=color:#000;font-weight:700>.</span><span style=color:teal>class</span><span style=color:#000;font-weight:700>);</span>
+    <span style=color:#000;font-weight:700>private</span> <span style=color:#000;font-weight:700>static</span> <span style=color:#000;font-weight:700>final</span> String NACOS_PROPERTY_SOURCE_NAME <span style=color:#000;font-weight:700>=</span> <span style=color:#d14>&#34;NACOS&#34;</span><span style=color:#000;font-weight:700>;</span>
+    <span style=color:#000;font-weight:700>private</span> <span style=color:#000;font-weight:700>static</span> <span style=color:#000;font-weight:700>final</span> String SEP1 <span style=color:#000;font-weight:700>=</span> <span style=color:#d14>&#34;-&#34;</span><span style=color:#000;font-weight:700>;</span>
+    <span style=color:#000;font-weight:700>private</span> <span style=color:#000;font-weight:700>static</span> <span style=color:#000;font-weight:700>final</span> String DOT <span style=color:#000;font-weight:700>=</span> <span style=color:#d14>&#34;.&#34;</span><span style=color:#000;font-weight:700>;</span>
+    <span style=color:#000;font-weight:700>private</span> NacosPropertySourceBuilder nacosPropertySourceBuilder<span style=color:#000;font-weight:700>;</span>
+    <span style=color:#000;font-weight:700>private</span> NacosConfigProperties nacosConfigProperties<span style=color:#000;font-weight:700>;</span>
+    <span style=color:#000;font-weight:700>private</span> NacosConfigManager nacosConfigManager<span style=color:#000;font-weight:700>;</span>
+
+    <span style=color:#998;font-style:italic>/** @deprecated */</span>
+    <span style=color:#3c5d5d;font-weight:700>@Deprecated</span>
+    <span style=color:#000;font-weight:700>public</span> <span style=color:#900;font-weight:700>NacosPropertySourceLocator</span><span style=color:#000;font-weight:700>(</span>NacosConfigProperties nacosConfigProperties<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+        <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>nacosConfigProperties</span> <span style=color:#000;font-weight:700>=</span> nacosConfigProperties<span style=color:#000;font-weight:700>;</span>
+    <span style=color:#000;font-weight:700>}</span>
+
+    <span style=color:#000;font-weight:700>public</span> <span style=color:#900;font-weight:700>NacosPropertySourceLocator</span><span style=color:#000;font-weight:700>(</span>NacosConfigManager nacosConfigManager<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+        <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>nacosConfigManager</span> <span style=color:#000;font-weight:700>=</span> nacosConfigManager<span style=color:#000;font-weight:700>;</span>
+        <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>nacosConfigProperties</span> <span style=color:#000;font-weight:700>=</span> nacosConfigManager<span style=color:#000;font-weight:700>.</span><span style=color:teal>getNacosConfigProperties</span><span style=color:#000;font-weight:700>();</span>
+    <span style=color:#000;font-weight:700>}</span>
+    
+    <span style=color:#998;font-style:italic>// spring cloud 会执行此方法
+</span><span style=color:#998;font-style:italic></span>    <span style=color:#000;font-weight:700>public</span> PropertySource<span style=color:#000;font-weight:700>&lt;?&gt;</span> locate<span style=color:#000;font-weight:700>(</span>Environment env<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+        <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>nacosConfigProperties</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>setEnvironment</span><span style=color:#000;font-weight:700>(</span>env<span style=color:#000;font-weight:700>);</span>
+        <span style=color:#998;font-style:italic>// 获取配置中心
+</span><span style=color:#998;font-style:italic></span>        ConfigService configService <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>nacosConfigManager</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>getConfigService</span><span style=color:#000;font-weight:700>();</span>
+        <span style=color:#000;font-weight:700>if</span> <span style=color:#000;font-weight:700>(</span><span style=color:#000;font-weight:700>null</span> <span style=color:#000;font-weight:700>==</span> configService<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+            log<span style=color:#000;font-weight:700>.</span><span style=color:teal>warn</span><span style=color:#000;font-weight:700>(</span><span style=color:#d14>&#34;no instance of config service found, can&#39;t load config from nacos&#34;</span><span style=color:#000;font-weight:700>);</span>
+            <span style=color:#000;font-weight:700>return</span> <span style=color:#000;font-weight:700>null</span><span style=color:#000;font-weight:700>;</span>
+        <span style=color:#000;font-weight:700>}</span> <span style=color:#000;font-weight:700>else</span> <span style=color:#000;font-weight:700>{</span>
+            <span style=color:#458;font-weight:700>long</span> timeout <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>(</span><span style=color:#458;font-weight:700>long</span><span style=color:#000;font-weight:700>)</span><span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>nacosConfigProperties</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>getTimeout</span><span style=color:#000;font-weight:700>();</span>
+            <span style=color:#998;font-style:italic>// 获取配置的构造器 有 通过loadNacosData方法获取配置信息
+</span><span style=color:#998;font-style:italic></span>            <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>nacosPropertySourceBuilder</span> <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>new</span> NacosPropertySourceBuilder<span style=color:#000;font-weight:700>(</span>configService<span style=color:#000;font-weight:700>,</span> timeout<span style=color:#000;font-weight:700>);</span>
+            String name <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>nacosConfigProperties</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>getName</span><span style=color:#000;font-weight:700>();</span>
+            String dataIdPrefix <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>nacosConfigProperties</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>getPrefix</span><span style=color:#000;font-weight:700>();</span>
+            <span style=color:#998;font-style:italic>// datdId 前缀,没有就用spring.application.name
+</span><span style=color:#998;font-style:italic></span>            <span style=color:#000;font-weight:700>if</span> <span style=color:#000;font-weight:700>(</span>StringUtils<span style=color:#000;font-weight:700>.</span><span style=color:teal>isEmpty</span><span style=color:#000;font-weight:700>(</span>dataIdPrefix<span style=color:#000;font-weight:700>))</span> <span style=color:#000;font-weight:700>{</span>
+                dataIdPrefix <span style=color:#000;font-weight:700>=</span> name<span style=color:#000;font-weight:700>;</span>
+            <span style=color:#000;font-weight:700>}</span>
+
+            <span style=color:#000;font-weight:700>if</span> <span style=color:#000;font-weight:700>(</span>StringUtils<span style=color:#000;font-weight:700>.</span><span style=color:teal>isEmpty</span><span style=color:#000;font-weight:700>(</span>dataIdPrefix<span style=color:#000;font-weight:700>))</span> <span style=color:#000;font-weight:700>{</span>
+                dataIdPrefix <span style=color:#000;font-weight:700>=</span> env<span style=color:#000;font-weight:700>.</span><span style=color:teal>getProperty</span><span style=color:#000;font-weight:700>(</span><span style=color:#d14>&#34;spring.application.name&#34;</span><span style=color:#000;font-weight:700>);</span>
+            <span style=color:#000;font-weight:700>}</span>
+            
+            <span style=color:#998;font-style:italic>// 声明nacos配置来源
+</span><span style=color:#998;font-style:italic></span>            CompositePropertySource composite <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>new</span> CompositePropertySource<span style=color:#000;font-weight:700>(</span><span style=color:#d14>&#34;NACOS&#34;</span><span style=color:#000;font-weight:700>);</span>
+            <span style=color:#998;font-style:italic>// 获取公共的配置 通过 spring.cloud.nacos.config.sharedConfigs 配置
+</span><span style=color:#998;font-style:italic></span>            <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>loadSharedConfiguration</span><span style=color:#000;font-weight:700>(</span>composite<span style=color:#000;font-weight:700>);</span>
+            <span style=color:#998;font-style:italic>// 获取扩展的配置 通过 spring.cloud.nacos.config.extensionConfigs 配置
+</span><span style=color:#998;font-style:italic></span>            <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>loadExtConfiguration</span><span style=color:#000;font-weight:700>(</span>composite<span style=color:#000;font-weight:700>);</span>
+            <span style=color:#998;font-style:italic>// 获取单前服务的配置
+</span><span style=color:#998;font-style:italic></span>            <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>loadApplicationConfiguration</span><span style=color:#000;font-weight:700>(</span>composite<span style=color:#000;font-weight:700>,</span> dataIdPrefix<span style=color:#000;font-weight:700>,</span> <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>nacosConfigProperties</span><span style=color:#000;font-weight:700>,</span> env<span style=color:#000;font-weight:700>);</span>
+            <span style=color:#000;font-weight:700>return</span> composite<span style=color:#000;font-weight:700>;</span>
+        <span style=color:#000;font-weight:700>}</span>
+    <span style=color:#000;font-weight:700>}</span>
+
+    <span style=color:#000;font-weight:700>private</span> <span style=color:#458;font-weight:700>void</span> <span style=color:#900;font-weight:700>loadSharedConfiguration</span><span style=color:#000;font-weight:700>(</span>CompositePropertySource compositePropertySource<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+        List<span style=color:#000;font-weight:700>&lt;</span>Config<span style=color:#000;font-weight:700>&gt;</span> sharedConfigs <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>nacosConfigProperties</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>getSharedConfigs</span><span style=color:#000;font-weight:700>();</span>
+        <span style=color:#000;font-weight:700>if</span> <span style=color:#000;font-weight:700>(!</span>CollectionUtils<span style=color:#000;font-weight:700>.</span><span style=color:teal>isEmpty</span><span style=color:#000;font-weight:700>(</span>sharedConfigs<span style=color:#000;font-weight:700>))</span> <span style=color:#000;font-weight:700>{</span>
+            <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>checkConfiguration</span><span style=color:#000;font-weight:700>(</span>sharedConfigs<span style=color:#000;font-weight:700>,</span> <span style=color:#d14>&#34;shared-configs&#34;</span><span style=color:#000;font-weight:700>);</span>
+            <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>loadNacosConfiguration</span><span style=color:#000;font-weight:700>(</span>compositePropertySource<span style=color:#000;font-weight:700>,</span> sharedConfigs<span style=color:#000;font-weight:700>);</span>
+        <span style=color:#000;font-weight:700>}</span>
+
+    <span style=color:#000;font-weight:700>}</span>
+
+    <span style=color:#000;font-weight:700>private</span> <span style=color:#458;font-weight:700>void</span> <span style=color:#900;font-weight:700>loadExtConfiguration</span><span style=color:#000;font-weight:700>(</span>CompositePropertySource compositePropertySource<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+        List<span style=color:#000;font-weight:700>&lt;</span>Config<span style=color:#000;font-weight:700>&gt;</span> extConfigs <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>nacosConfigProperties</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>getExtensionConfigs</span><span style=color:#000;font-weight:700>();</span>
+        <span style=color:#000;font-weight:700>if</span> <span style=color:#000;font-weight:700>(!</span>CollectionUtils<span style=color:#000;font-weight:700>.</span><span style=color:teal>isEmpty</span><span style=color:#000;font-weight:700>(</span>extConfigs<span style=color:#000;font-weight:700>))</span> <span style=color:#000;font-weight:700>{</span>
+            <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>checkConfiguration</span><span style=color:#000;font-weight:700>(</span>extConfigs<span style=color:#000;font-weight:700>,</span> <span style=color:#d14>&#34;extension-configs&#34;</span><span style=color:#000;font-weight:700>);</span>
+            <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>loadNacosConfiguration</span><span style=color:#000;font-weight:700>(</span>compositePropertySource<span style=color:#000;font-weight:700>,</span> extConfigs<span style=color:#000;font-weight:700>);</span>
+        <span style=color:#000;font-weight:700>}</span>
+
+    <span style=color:#000;font-weight:700>}</span>
+
+    <span style=color:#000;font-weight:700>private</span> <span style=color:#458;font-weight:700>void</span> <span style=color:#900;font-weight:700>loadApplicationConfiguration</span><span style=color:#000;font-weight:700>(</span>CompositePropertySource compositePropertySource<span style=color:#000;font-weight:700>,</span> String dataIdPrefix<span style=color:#000;font-weight:700>,</span> NacosConfigProperties properties<span style=color:#000;font-weight:700>,</span> Environment environment<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+        <span style=color:#998;font-style:italic>// 获取配置类型
+</span><span style=color:#998;font-style:italic></span>        String fileExtension <span style=color:#000;font-weight:700>=</span> properties<span style=color:#000;font-weight:700>.</span><span style=color:teal>getFileExtension</span><span style=color:#000;font-weight:700>();</span>
+        String nacosGroup <span style=color:#000;font-weight:700>=</span> properties<span style=color:#000;font-weight:700>.</span><span style=color:teal>getGroup</span><span style=color:#000;font-weight:700>();</span>
+        <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>loadNacosDataIfPresent</span><span style=color:#000;font-weight:700>(</span>compositePropertySource<span style=color:#000;font-weight:700>,</span> dataIdPrefix<span style=color:#000;font-weight:700>,</span> nacosGroup<span style=color:#000;font-weight:700>,</span> fileExtension<span style=color:#000;font-weight:700>,</span> <span style=color:#000;font-weight:700>true</span><span style=color:#000;font-weight:700>);</span>
+        <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>loadNacosDataIfPresent</span><span style=color:#000;font-weight:700>(</span>compositePropertySource<span style=color:#000;font-weight:700>,</span> dataIdPrefix <span style=color:#000;font-weight:700>+</span> <span style=color:#d14>&#34;.&#34;</span> <span style=color:#000;font-weight:700>+</span> fileExtension<span style=color:#000;font-weight:700>,</span> nacosGroup<span style=color:#000;font-weight:700>,</span> fileExtension<span style=color:#000;font-weight:700>,</span> <span style=color:#000;font-weight:700>true</span><span style=color:#000;font-weight:700>);</span>
+        String<span style=color:#000;font-weight:700>[]</span> var7 <span style=color:#000;font-weight:700>=</span> environment<span style=color:#000;font-weight:700>.</span><span style=color:teal>getActiveProfiles</span><span style=color:#000;font-weight:700>();</span>
+        <span style=color:#458;font-weight:700>int</span> var8 <span style=color:#000;font-weight:700>=</span> var7<span style=color:#000;font-weight:700>.</span><span style=color:teal>length</span><span style=color:#000;font-weight:700>;</span>
+
+        <span style=color:#000;font-weight:700>for</span><span style=color:#000;font-weight:700>(</span><span style=color:#458;font-weight:700>int</span> var9 <span style=color:#000;font-weight:700>=</span> 0<span style=color:#000;font-weight:700>;</span> var9 <span style=color:#000;font-weight:700>&lt;</span> var8<span style=color:#000;font-weight:700>;</span> <span style=color:#000;font-weight:700>++</span>var9<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+            String profile <span style=color:#000;font-weight:700>=</span> var7<span style=color:#000;font-weight:700>[</span>var9<span style=color:#000;font-weight:700>];</span>
+            String dataId <span style=color:#000;font-weight:700>=</span> dataIdPrefix <span style=color:#000;font-weight:700>+</span> <span style=color:#d14>&#34;-&#34;</span> <span style=color:#000;font-weight:700>+</span> profile <span style=color:#000;font-weight:700>+</span> <span style=color:#d14>&#34;.&#34;</span> <span style=color:#000;font-weight:700>+</span> fileExtension<span style=color:#000;font-weight:700>;</span>
+            <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>loadNacosDataIfPresent</span><span style=color:#000;font-weight:700>(</span>compositePropertySource<span style=color:#000;font-weight:700>,</span> dataId<span style=color:#000;font-weight:700>,</span> nacosGroup<span style=color:#000;font-weight:700>,</span> fileExtension<span style=color:#000;font-weight:700>,</span> <span style=color:#000;font-weight:700>true</span><span style=color:#000;font-weight:700>);</span>
+        <span style=color:#000;font-weight:700>}</span>
+
+    <span style=color:#000;font-weight:700>}</span>
+
+    <span style=color:#000;font-weight:700>private</span> <span style=color:#458;font-weight:700>void</span> <span style=color:#900;font-weight:700>loadNacosConfiguration</span><span style=color:#000;font-weight:700>(</span><span style=color:#000;font-weight:700>final</span> CompositePropertySource composite<span style=color:#000;font-weight:700>,</span> List<span style=color:#000;font-weight:700>&lt;</span>Config<span style=color:#000;font-weight:700>&gt;</span> configs<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+        Iterator var3 <span style=color:#000;font-weight:700>=</span> configs<span style=color:#000;font-weight:700>.</span><span style=color:teal>iterator</span><span style=color:#000;font-weight:700>();</span>
+
+        <span style=color:#000;font-weight:700>while</span><span style=color:#000;font-weight:700>(</span>var3<span style=color:#000;font-weight:700>.</span><span style=color:teal>hasNext</span><span style=color:#000;font-weight:700>())</span> <span style=color:#000;font-weight:700>{</span>
+            Config config <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>(</span>Config<span style=color:#000;font-weight:700>)</span>var3<span style=color:#000;font-weight:700>.</span><span style=color:teal>next</span><span style=color:#000;font-weight:700>();</span>
+            String dataId <span style=color:#000;font-weight:700>=</span> config<span style=color:#000;font-weight:700>.</span><span style=color:teal>getDataId</span><span style=color:#000;font-weight:700>();</span>
+            String fileExtension <span style=color:#000;font-weight:700>=</span> dataId<span style=color:#000;font-weight:700>.</span><span style=color:teal>substring</span><span style=color:#000;font-weight:700>(</span>dataId<span style=color:#000;font-weight:700>.</span><span style=color:teal>lastIndexOf</span><span style=color:#000;font-weight:700>(</span><span style=color:#d14>&#34;.&#34;</span><span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>+</span> 1<span style=color:#000;font-weight:700>);</span>
+            <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>loadNacosDataIfPresent</span><span style=color:#000;font-weight:700>(</span>composite<span style=color:#000;font-weight:700>,</span> dataId<span style=color:#000;font-weight:700>,</span> config<span style=color:#000;font-weight:700>.</span><span style=color:teal>getGroup</span><span style=color:#000;font-weight:700>(),</span> fileExtension<span style=color:#000;font-weight:700>,</span> config<span style=color:#000;font-weight:700>.</span><span style=color:teal>isRefresh</span><span style=color:#000;font-weight:700>());</span>
+        <span style=color:#000;font-weight:700>}</span>
+
+    <span style=color:#000;font-weight:700>}</span>
+
+    <span style=color:#000;font-weight:700>private</span> <span style=color:#458;font-weight:700>void</span> <span style=color:#900;font-weight:700>checkConfiguration</span><span style=color:#000;font-weight:700>(</span>List<span style=color:#000;font-weight:700>&lt;</span>Config<span style=color:#000;font-weight:700>&gt;</span> configs<span style=color:#000;font-weight:700>,</span> String tips<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+        String<span style=color:#000;font-weight:700>[]</span> dataIds <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>new</span> String<span style=color:#000;font-weight:700>[</span>configs<span style=color:#000;font-weight:700>.</span><span style=color:teal>size</span><span style=color:#000;font-weight:700>()];</span>
+
+        <span style=color:#000;font-weight:700>for</span><span style=color:#000;font-weight:700>(</span><span style=color:#458;font-weight:700>int</span> i <span style=color:#000;font-weight:700>=</span> 0<span style=color:#000;font-weight:700>;</span> i <span style=color:#000;font-weight:700>&lt;</span> configs<span style=color:#000;font-weight:700>.</span><span style=color:teal>size</span><span style=color:#000;font-weight:700>();</span> <span style=color:#000;font-weight:700>++</span>i<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+            String dataId <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>((</span>Config<span style=color:#000;font-weight:700>)</span>configs<span style=color:#000;font-weight:700>.</span><span style=color:teal>get</span><span style=color:#000;font-weight:700>(</span>i<span style=color:#000;font-weight:700>)).</span><span style=color:teal>getDataId</span><span style=color:#000;font-weight:700>();</span>
+            <span style=color:#000;font-weight:700>if</span> <span style=color:#000;font-weight:700>(</span>dataId <span style=color:#000;font-weight:700>==</span> <span style=color:#000;font-weight:700>null</span> <span style=color:#000;font-weight:700>||</span> dataId<span style=color:#000;font-weight:700>.</span><span style=color:teal>trim</span><span style=color:#000;font-weight:700>().</span><span style=color:teal>length</span><span style=color:#000;font-weight:700>()</span> <span style=color:#000;font-weight:700>==</span> 0<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+                <span style=color:#000;font-weight:700>throw</span> <span style=color:#000;font-weight:700>new</span> IllegalStateException<span style=color:#000;font-weight:700>(</span>String<span style=color:#000;font-weight:700>.</span><span style=color:teal>format</span><span style=color:#000;font-weight:700>(</span><span style=color:#d14>&#34;the [ spring.cloud.nacos.config.%s[%s] ] must give a dataId&#34;</span><span style=color:#000;font-weight:700>,</span> tips<span style=color:#000;font-weight:700>,</span> i<span style=color:#000;font-weight:700>));</span>
+            <span style=color:#000;font-weight:700>}</span>
+
+            dataIds<span style=color:#000;font-weight:700>[</span>i<span style=color:#000;font-weight:700>]</span> <span style=color:#000;font-weight:700>=</span> dataId<span style=color:#000;font-weight:700>;</span>
+        <span style=color:#000;font-weight:700>}</span>
+
+        NacosDataParserHandler<span style=color:#000;font-weight:700>.</span><span style=color:teal>getInstance</span><span style=color:#000;font-weight:700>().</span><span style=color:teal>checkDataId</span><span style=color:#000;font-weight:700>(</span>dataIds<span style=color:#000;font-weight:700>);</span>
+    <span style=color:#000;font-weight:700>}</span>
+
+    <span style=color:#000;font-weight:700>private</span> <span style=color:#458;font-weight:700>void</span> <span style=color:#900;font-weight:700>loadNacosDataIfPresent</span><span style=color:#000;font-weight:700>(</span><span style=color:#000;font-weight:700>final</span> CompositePropertySource composite<span style=color:#000;font-weight:700>,</span> <span style=color:#000;font-weight:700>final</span> String dataId<span style=color:#000;font-weight:700>,</span> <span style=color:#000;font-weight:700>final</span> String group<span style=color:#000;font-weight:700>,</span> String fileExtension<span style=color:#000;font-weight:700>,</span> <span style=color:#458;font-weight:700>boolean</span> isRefreshable<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+        <span style=color:#000;font-weight:700>if</span> <span style=color:#000;font-weight:700>(</span><span style=color:#000;font-weight:700>null</span> <span style=color:#000;font-weight:700>!=</span> dataId <span style=color:#000;font-weight:700>&amp;&amp;</span> dataId<span style=color:#000;font-weight:700>.</span><span style=color:teal>trim</span><span style=color:#000;font-weight:700>().</span><span style=color:teal>length</span><span style=color:#000;font-weight:700>()</span> <span style=color:#000;font-weight:700>&gt;=</span> 1<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+            <span style=color:#000;font-weight:700>if</span> <span style=color:#000;font-weight:700>(</span><span style=color:#000;font-weight:700>null</span> <span style=color:#000;font-weight:700>!=</span> group <span style=color:#000;font-weight:700>&amp;&amp;</span> group<span style=color:#000;font-weight:700>.</span><span style=color:teal>trim</span><span style=color:#000;font-weight:700>().</span><span style=color:teal>length</span><span style=color:#000;font-weight:700>()</span> <span style=color:#000;font-weight:700>&gt;=</span> 1<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+                NacosPropertySource propertySource <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>loadNacosPropertySource</span><span style=color:#000;font-weight:700>(</span>dataId<span style=color:#000;font-weight:700>,</span> group<span style=color:#000;font-weight:700>,</span> fileExtension<span style=color:#000;font-weight:700>,</span> isRefreshable<span style=color:#000;font-weight:700>);</span>
+                <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>addFirstPropertySource</span><span style=color:#000;font-weight:700>(</span>composite<span style=color:#000;font-weight:700>,</span> propertySource<span style=color:#000;font-weight:700>,</span> <span style=color:#000;font-weight:700>false</span><span style=color:#000;font-weight:700>);</span>
+            <span style=color:#000;font-weight:700>}</span>
+        <span style=color:#000;font-weight:700>}</span>
+    <span style=color:#000;font-weight:700>}</span>
+    
+    <span style=color:#998;font-style:italic>// 获取配置,存在就直接取,不存在调用config server获取 关注 this.nacosPropertySourceBuilder.build
+</span><span style=color:#998;font-style:italic></span>    <span style=color:#000;font-weight:700>private</span> NacosPropertySource <span style=color:#900;font-weight:700>loadNacosPropertySource</span><span style=color:#000;font-weight:700>(</span><span style=color:#000;font-weight:700>final</span> String dataId<span style=color:#000;font-weight:700>,</span> <span style=color:#000;font-weight:700>final</span> String group<span style=color:#000;font-weight:700>,</span> String fileExtension<span style=color:#000;font-weight:700>,</span> <span style=color:#458;font-weight:700>boolean</span> isRefreshable<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+        <span style=color:#000;font-weight:700>return</span> NacosContextRefresher<span style=color:#000;font-weight:700>.</span><span style=color:teal>getRefreshCount</span><span style=color:#000;font-weight:700>()</span> <span style=color:#000;font-weight:700>!=</span> 0L <span style=color:#000;font-weight:700>&amp;&amp;</span> <span style=color:#000;font-weight:700>!</span>isRefreshable <span style=color:#000;font-weight:700>?</span> NacosPropertySourceRepository<span style=color:#000;font-weight:700>.</span><span style=color:teal>getNacosPropertySource</span><span style=color:#000;font-weight:700>(</span>dataId<span style=color:#000;font-weight:700>,</span> group<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>:</span> <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>nacosPropertySourceBuilder</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>build</span><span style=color:#000;font-weight:700>(</span>dataId<span style=color:#000;font-weight:700>,</span> group<span style=color:#000;font-weight:700>,</span> fileExtension<span style=color:#000;font-weight:700>,</span> isRefreshable<span style=color:#000;font-weight:700>);</span>
+    <span style=color:#000;font-weight:700>}</span>
+
+    <span style=color:#000;font-weight:700>private</span> <span style=color:#458;font-weight:700>void</span> <span style=color:#900;font-weight:700>addFirstPropertySource</span><span style=color:#000;font-weight:700>(</span><span style=color:#000;font-weight:700>final</span> CompositePropertySource composite<span style=color:#000;font-weight:700>,</span> NacosPropertySource nacosPropertySource<span style=color:#000;font-weight:700>,</span> <span style=color:#458;font-weight:700>boolean</span> ignoreEmpty<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+        <span style=color:#000;font-weight:700>if</span> <span style=color:#000;font-weight:700>(</span><span style=color:#000;font-weight:700>null</span> <span style=color:#000;font-weight:700>!=</span> nacosPropertySource <span style=color:#000;font-weight:700>&amp;&amp;</span> <span style=color:#000;font-weight:700>null</span> <span style=color:#000;font-weight:700>!=</span> composite<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+            <span style=color:#000;font-weight:700>if</span> <span style=color:#000;font-weight:700>(!</span>ignoreEmpty <span style=color:#000;font-weight:700>||</span> <span style=color:#000;font-weight:700>!((</span>Map<span style=color:#000;font-weight:700>)</span>nacosPropertySource<span style=color:#000;font-weight:700>.</span><span style=color:teal>getSource</span><span style=color:#000;font-weight:700>()).</span><span style=color:teal>isEmpty</span><span style=color:#000;font-weight:700>())</span> <span style=color:#000;font-weight:700>{</span>
+                composite<span style=color:#000;font-weight:700>.</span><span style=color:teal>addFirstPropertySource</span><span style=color:#000;font-weight:700>(</span>nacosPropertySource<span style=color:#000;font-weight:700>);</span>
+            <span style=color:#000;font-weight:700>}</span>
+        <span style=color:#000;font-weight:700>}</span>
+    <span style=color:#000;font-weight:700>}</span>
+
+    <span style=color:#000;font-weight:700>public</span> <span style=color:#458;font-weight:700>void</span> <span style=color:#900;font-weight:700>setNacosConfigManager</span><span style=color:#000;font-weight:700>(</span>NacosConfigManager nacosConfigManager<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+        <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>nacosConfigManager</span> <span style=color:#000;font-weight:700>=</span> nacosConfigManager<span style=color:#000;font-weight:700>;</span>
+    <span style=color:#000;font-weight:700>}</span>
+<span style=color:#000;font-weight:700>}</span>
+</code></pre></td></tr></table></div></div><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10>10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11>11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12>12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13>13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14>14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15>15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16>16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17>17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18>18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19>19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20>20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21>21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22>22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23>23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24>24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25>25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26>26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27>27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28>28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29>29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30>30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31>31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32>32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33>33
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34>34
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35>35
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36>36
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37>37
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38>38
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39>39
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40>40
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41>41
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42>42
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=43>43
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=44>44
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=45>45
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=46>46
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=47>47
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=48>48
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=49>49
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=50>50
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=51>51
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=52>52
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=53>53
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=54>54
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=55>55
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=56>56
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=57>57
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=58>58
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=59>59
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=60>60
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=61>61
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#000;font-weight:700>public</span> <span style=color:#000;font-weight:700>class</span> <span style=color:#458;font-weight:700>NacosPropertySourceBuilder</span> <span style=color:#000;font-weight:700>{</span>
+    <span style=color:#000;font-weight:700>private</span> <span style=color:#000;font-weight:700>static</span> <span style=color:#000;font-weight:700>final</span> Logger log <span style=color:#000;font-weight:700>=</span> LoggerFactory<span style=color:#000;font-weight:700>.</span><span style=color:teal>getLogger</span><span style=color:#000;font-weight:700>(</span>NacosPropertySourceBuilder<span style=color:#000;font-weight:700>.</span><span style=color:teal>class</span><span style=color:#000;font-weight:700>);</span>
+    <span style=color:#000;font-weight:700>private</span> <span style=color:#000;font-weight:700>static</span> <span style=color:#000;font-weight:700>final</span> Map<span style=color:#000;font-weight:700>&lt;</span>String<span style=color:#000;font-weight:700>,</span> Object<span style=color:#000;font-weight:700>&gt;</span> EMPTY_MAP <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>new</span> LinkedHashMap<span style=color:#000;font-weight:700>();</span>
+    <span style=color:#000;font-weight:700>private</span> ConfigService configService<span style=color:#000;font-weight:700>;</span>
+    <span style=color:#000;font-weight:700>private</span> <span style=color:#458;font-weight:700>long</span> timeout<span style=color:#000;font-weight:700>;</span>
+
+    <span style=color:#000;font-weight:700>public</span> <span style=color:#900;font-weight:700>NacosPropertySourceBuilder</span><span style=color:#000;font-weight:700>(</span>ConfigService configService<span style=color:#000;font-weight:700>,</span> <span style=color:#458;font-weight:700>long</span> timeout<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+        <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>configService</span> <span style=color:#000;font-weight:700>=</span> configService<span style=color:#000;font-weight:700>;</span>
+        <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>timeout</span> <span style=color:#000;font-weight:700>=</span> timeout<span style=color:#000;font-weight:700>;</span>
+    <span style=color:#000;font-weight:700>}</span>
+
+    <span style=color:#000;font-weight:700>public</span> <span style=color:#458;font-weight:700>long</span> <span style=color:#900;font-weight:700>getTimeout</span><span style=color:#000;font-weight:700>()</span> <span style=color:#000;font-weight:700>{</span>
+        <span style=color:#000;font-weight:700>return</span> <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>timeout</span><span style=color:#000;font-weight:700>;</span>
+    <span style=color:#000;font-weight:700>}</span>
+
+    <span style=color:#000;font-weight:700>public</span> <span style=color:#458;font-weight:700>void</span> <span style=color:#900;font-weight:700>setTimeout</span><span style=color:#000;font-weight:700>(</span><span style=color:#458;font-weight:700>long</span> timeout<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+        <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>timeout</span> <span style=color:#000;font-weight:700>=</span> timeout<span style=color:#000;font-weight:700>;</span>
+    <span style=color:#000;font-weight:700>}</span>
+
+    <span style=color:#000;font-weight:700>public</span> ConfigService <span style=color:#900;font-weight:700>getConfigService</span><span style=color:#000;font-weight:700>()</span> <span style=color:#000;font-weight:700>{</span>
+        <span style=color:#000;font-weight:700>return</span> <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>configService</span><span style=color:#000;font-weight:700>;</span>
+    <span style=color:#000;font-weight:700>}</span>
+
+    <span style=color:#000;font-weight:700>public</span> <span style=color:#458;font-weight:700>void</span> <span style=color:#900;font-weight:700>setConfigService</span><span style=color:#000;font-weight:700>(</span>ConfigService configService<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+        <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>configService</span> <span style=color:#000;font-weight:700>=</span> configService<span style=color:#000;font-weight:700>;</span>
+    <span style=color:#000;font-weight:700>}</span>
+
+    NacosPropertySource <span style=color:#900;font-weight:700>build</span><span style=color:#000;font-weight:700>(</span>String dataId<span style=color:#000;font-weight:700>,</span> String group<span style=color:#000;font-weight:700>,</span> String fileExtension<span style=color:#000;font-weight:700>,</span> <span style=color:#458;font-weight:700>boolean</span> isRefreshable<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+        Map<span style=color:#000;font-weight:700>&lt;</span>String<span style=color:#000;font-weight:700>,</span> Object<span style=color:#000;font-weight:700>&gt;</span> p <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>loadNacosData</span><span style=color:#000;font-weight:700>(</span>dataId<span style=color:#000;font-weight:700>,</span> group<span style=color:#000;font-weight:700>,</span> fileExtension<span style=color:#000;font-weight:700>);</span>
+        NacosPropertySource nacosPropertySource <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>new</span> NacosPropertySource<span style=color:#000;font-weight:700>(</span>group<span style=color:#000;font-weight:700>,</span> dataId<span style=color:#000;font-weight:700>,</span> p<span style=color:#000;font-weight:700>,</span> <span style=color:#000;font-weight:700>new</span> Date<span style=color:#000;font-weight:700>(),</span> isRefreshable<span style=color:#000;font-weight:700>);</span>
+        NacosPropertySourceRepository<span style=color:#000;font-weight:700>.</span><span style=color:teal>collectNacosPropertySource</span><span style=color:#000;font-weight:700>(</span>nacosPropertySource<span style=color:#000;font-weight:700>);</span>
+        <span style=color:#000;font-weight:700>return</span> nacosPropertySource<span style=color:#000;font-weight:700>;</span>
+    <span style=color:#000;font-weight:700>}</span>
+
+    <span style=color:#998;font-style:italic>// 获取配置
+</span><span style=color:#998;font-style:italic></span>    <span style=color:#000;font-weight:700>private</span> Map<span style=color:#000;font-weight:700>&lt;</span>String<span style=color:#000;font-weight:700>,</span> Object<span style=color:#000;font-weight:700>&gt;</span> <span style=color:#900;font-weight:700>loadNacosData</span><span style=color:#000;font-weight:700>(</span>String dataId<span style=color:#000;font-weight:700>,</span> String group<span style=color:#000;font-weight:700>,</span> String fileExtension<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+        String data <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>null</span><span style=color:#000;font-weight:700>;</span>
+
+        <span style=color:#000;font-weight:700>try</span> <span style=color:#000;font-weight:700>{</span>
+            <span style=color:#998;font-style:italic>// 请求config server 通过dataId和group获取配置
+</span><span style=color:#998;font-style:italic></span>            data <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>configService</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>getConfig</span><span style=color:#000;font-weight:700>(</span>dataId<span style=color:#000;font-weight:700>,</span> group<span style=color:#000;font-weight:700>,</span> <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>timeout</span><span style=color:#000;font-weight:700>);</span>
+            <span style=color:#000;font-weight:700>if</span> <span style=color:#000;font-weight:700>(</span>StringUtils<span style=color:#000;font-weight:700>.</span><span style=color:teal>isEmpty</span><span style=color:#000;font-weight:700>(</span>data<span style=color:#000;font-weight:700>))</span> <span style=color:#000;font-weight:700>{</span>
+                log<span style=color:#000;font-weight:700>.</span><span style=color:teal>warn</span><span style=color:#000;font-weight:700>(</span><span style=color:#d14>&#34;Ignore the empty nacos configuration and get it based on dataId[{}] &amp; group[{}]&#34;</span><span style=color:#000;font-weight:700>,</span> dataId<span style=color:#000;font-weight:700>,</span> group<span style=color:#000;font-weight:700>);</span>
+                <span style=color:#000;font-weight:700>return</span> EMPTY_MAP<span style=color:#000;font-weight:700>;</span>
+            <span style=color:#000;font-weight:700>}</span>
+
+            <span style=color:#000;font-weight:700>if</span> <span style=color:#000;font-weight:700>(</span>log<span style=color:#000;font-weight:700>.</span><span style=color:teal>isDebugEnabled</span><span style=color:#000;font-weight:700>())</span> <span style=color:#000;font-weight:700>{</span>
+                log<span style=color:#000;font-weight:700>.</span><span style=color:teal>debug</span><span style=color:#000;font-weight:700>(</span>String<span style=color:#000;font-weight:700>.</span><span style=color:teal>format</span><span style=color:#000;font-weight:700>(</span><span style=color:#d14>&#34;Loading nacos data, dataId: &#39;%s&#39;, group: &#39;%s&#39;, data: %s&#34;</span><span style=color:#000;font-weight:700>,</span> dataId<span style=color:#000;font-weight:700>,</span> group<span style=color:#000;font-weight:700>,</span> data<span style=color:#000;font-weight:700>));</span>
+            <span style=color:#000;font-weight:700>}</span>
+            <span style=color:#998;font-style:italic>// 通过配置类型解析配置到map
+</span><span style=color:#998;font-style:italic></span>            Map<span style=color:#000;font-weight:700>&lt;</span>String<span style=color:#000;font-weight:700>,</span> Object<span style=color:#000;font-weight:700>&gt;</span> dataMap <span style=color:#000;font-weight:700>=</span> NacosDataParserHandler<span style=color:#000;font-weight:700>.</span><span style=color:teal>getInstance</span><span style=color:#000;font-weight:700>().</span><span style=color:teal>parseNacosData</span><span style=color:#000;font-weight:700>(</span>data<span style=color:#000;font-weight:700>,</span> fileExtension<span style=color:#000;font-weight:700>);</span>
+            <span style=color:#000;font-weight:700>return</span> dataMap <span style=color:#000;font-weight:700>==</span> <span style=color:#000;font-weight:700>null</span> <span style=color:#000;font-weight:700>?</span> EMPTY_MAP <span style=color:#000;font-weight:700>:</span> dataMap<span style=color:#000;font-weight:700>;</span>
+        <span style=color:#000;font-weight:700>}</span> <span style=color:#000;font-weight:700>catch</span> <span style=color:#000;font-weight:700>(</span>NacosException var6<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+            log<span style=color:#000;font-weight:700>.</span><span style=color:teal>error</span><span style=color:#000;font-weight:700>(</span><span style=color:#d14>&#34;get data from Nacos error,dataId:{}, &#34;</span><span style=color:#000;font-weight:700>,</span> dataId<span style=color:#000;font-weight:700>,</span> var6<span style=color:#000;font-weight:700>);</span>
+        <span style=color:#000;font-weight:700>}</span> <span style=color:#000;font-weight:700>catch</span> <span style=color:#000;font-weight:700>(</span>Exception var7<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+            log<span style=color:#000;font-weight:700>.</span><span style=color:teal>error</span><span style=color:#000;font-weight:700>(</span><span style=color:#d14>&#34;parse data from Nacos error,dataId:{},data:{},&#34;</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000;font-weight:700>new</span> Object<span style=color:#000;font-weight:700>[]{</span>dataId<span style=color:#000;font-weight:700>,</span> data<span style=color:#000;font-weight:700>,</span> var7<span style=color:#000;font-weight:700>});</span>
+        <span style=color:#000;font-weight:700>}</span>
+
+        <span style=color:#000;font-weight:700>return</span> EMPTY_MAP<span style=color:#000;font-weight:700>;</span>
+    <span style=color:#000;font-weight:700>}</span>
+<span style=color:#000;font-weight:700>}</span>
+</code></pre></td></tr></table></div></div><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10>10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11>11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12>12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13>13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14>14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15>15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16>16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17>17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18>18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19>19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20>20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21>21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22>22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23>23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24>24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25>25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26>26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27>27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28>28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29>29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30>30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31>31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32>32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33>33
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34>34
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35>35
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36>36
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37>37
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38>38
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39>39
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40>40
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41>41
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42>42
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=43>43
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=44>44
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=45>45
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=46>46
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=47>47
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=48>48
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=49>49
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=50>50
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#000;font-weight:700>public</span> <span style=color:#000;font-weight:700>class</span> <span style=color:#458;font-weight:700>NacosConfigService</span> <span style=color:#000;font-weight:700>implements</span> ConfigService <span style=color:#000;font-weight:700>{</span>
+    <span style=color:#000;font-weight:700>private</span> <span style=color:#000;font-weight:700>static</span> <span style=color:#000;font-weight:700>final</span> Logger LOGGER <span style=color:#000;font-weight:700>=</span> LogUtils<span style=color:#000;font-weight:700>.</span><span style=color:teal>logger</span><span style=color:#000;font-weight:700>(</span>NacosConfigService<span style=color:#000;font-weight:700>.</span><span style=color:teal>class</span><span style=color:#000;font-weight:700>);</span>
+    <span style=color:#000;font-weight:700>private</span> <span style=color:#000;font-weight:700>static</span> <span style=color:#000;font-weight:700>final</span> <span style=color:#458;font-weight:700>long</span> POST_TIMEOUT <span style=color:#000;font-weight:700>=</span> 3000L<span style=color:#000;font-weight:700>;</span>
+    <span style=color:#000;font-weight:700>private</span> <span style=color:#000;font-weight:700>static</span> <span style=color:#000;font-weight:700>final</span> String EMPTY <span style=color:#000;font-weight:700>=</span> <span style=color:#d14>&#34;&#34;</span><span style=color:#000;font-weight:700>;</span>
+    <span style=color:#000;font-weight:700>private</span> HttpAgent agent<span style=color:#000;font-weight:700>;</span>
+    <span style=color:#000;font-weight:700>private</span> ClientWorker worker<span style=color:#000;font-weight:700>;</span>
+    <span style=color:#000;font-weight:700>private</span> String namespace<span style=color:#000;font-weight:700>;</span>
+    <span style=color:#000;font-weight:700>private</span> String encode<span style=color:#000;font-weight:700>;</span>
+    <span style=color:#000;font-weight:700>private</span> ConfigFilterChainManager configFilterChainManager <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>new</span> ConfigFilterChainManager<span style=color:#000;font-weight:700>();</span>
+    
+    <span style=color:#998;font-style:italic>// 获取配置
+</span><span style=color:#998;font-style:italic></span>    <span style=color:#000;font-weight:700>private</span> String <span style=color:#900;font-weight:700>getConfigInner</span><span style=color:#000;font-weight:700>(</span>String tenant<span style=color:#000;font-weight:700>,</span> String dataId<span style=color:#000;font-weight:700>,</span> String group<span style=color:#000;font-weight:700>,</span> <span style=color:#458;font-weight:700>long</span> timeoutMs<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>throws</span> NacosException <span style=color:#000;font-weight:700>{</span>
+        group <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>null2defaultGroup</span><span style=color:#000;font-weight:700>(</span>group<span style=color:#000;font-weight:700>);</span>
+        ParamUtils<span style=color:#000;font-weight:700>.</span><span style=color:teal>checkKeyParam</span><span style=color:#000;font-weight:700>(</span>dataId<span style=color:#000;font-weight:700>,</span> group<span style=color:#000;font-weight:700>);</span>
+        ConfigResponse cr <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>new</span> ConfigResponse<span style=color:#000;font-weight:700>();</span>
+        cr<span style=color:#000;font-weight:700>.</span><span style=color:teal>setDataId</span><span style=color:#000;font-weight:700>(</span>dataId<span style=color:#000;font-weight:700>);</span>
+        cr<span style=color:#000;font-weight:700>.</span><span style=color:teal>setTenant</span><span style=color:#000;font-weight:700>(</span>tenant<span style=color:#000;font-weight:700>);</span>
+        cr<span style=color:#000;font-weight:700>.</span><span style=color:teal>setGroup</span><span style=color:#000;font-weight:700>(</span>group<span style=color:#000;font-weight:700>);</span>
+        <span style=color:#998;font-style:italic>// 获取本地文件中的配置
+</span><span style=color:#998;font-style:italic></span>        String content <span style=color:#000;font-weight:700>=</span> LocalConfigInfoProcessor<span style=color:#000;font-weight:700>.</span><span style=color:teal>getFailover</span><span style=color:#000;font-weight:700>(</span><span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>agent</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>getName</span><span style=color:#000;font-weight:700>(),</span> dataId<span style=color:#000;font-weight:700>,</span> group<span style=color:#000;font-weight:700>,</span> tenant<span style=color:#000;font-weight:700>);</span>
+        <span style=color:#000;font-weight:700>if</span> <span style=color:#000;font-weight:700>(</span>content <span style=color:#000;font-weight:700>!=</span> <span style=color:#000;font-weight:700>null</span><span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+            LOGGER<span style=color:#000;font-weight:700>.</span><span style=color:teal>warn</span><span style=color:#000;font-weight:700>(</span><span style=color:#d14>&#34;[{}] [get-config] get failover ok, dataId={}, group={}, tenant={}, config={}&#34;</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000;font-weight:700>new</span> Object<span style=color:#000;font-weight:700>[]{</span><span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>agent</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>getName</span><span style=color:#000;font-weight:700>(),</span> dataId<span style=color:#000;font-weight:700>,</span> group<span style=color:#000;font-weight:700>,</span> tenant<span style=color:#000;font-weight:700>,</span> ContentUtils<span style=color:#000;font-weight:700>.</span><span style=color:teal>truncateContent</span><span style=color:#000;font-weight:700>(</span>content<span style=color:#000;font-weight:700>)});</span>
+            cr<span style=color:#000;font-weight:700>.</span><span style=color:teal>setContent</span><span style=color:#000;font-weight:700>(</span>content<span style=color:#000;font-weight:700>);</span>
+            <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>configFilterChainManager</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>doFilter</span><span style=color:#000;font-weight:700>((</span>IConfigRequest<span style=color:#000;font-weight:700>)</span><span style=color:#000;font-weight:700>null</span><span style=color:#000;font-weight:700>,</span> cr<span style=color:#000;font-weight:700>);</span>
+            content <span style=color:#000;font-weight:700>=</span> cr<span style=color:#000;font-weight:700>.</span><span style=color:teal>getContent</span><span style=color:#000;font-weight:700>();</span>
+            <span style=color:#000;font-weight:700>return</span> content<span style=color:#000;font-weight:700>;</span>
+        <span style=color:#000;font-weight:700>}</span> <span style=color:#000;font-weight:700>else</span> <span style=color:#000;font-weight:700>{</span>
+            <span style=color:#000;font-weight:700>try</span> <span style=color:#000;font-weight:700>{</span>
+                <span style=color:#998;font-style:italic>// ClientWorker 发送请求获取配置
+</span><span style=color:#998;font-style:italic></span>                String<span style=color:#000;font-weight:700>[]</span> ct <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>worker</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>getServerConfig</span><span style=color:#000;font-weight:700>(</span>dataId<span style=color:#000;font-weight:700>,</span> group<span style=color:#000;font-weight:700>,</span> tenant<span style=color:#000;font-weight:700>,</span> timeoutMs<span style=color:#000;font-weight:700>);</span>
+                cr<span style=color:#000;font-weight:700>.</span><span style=color:teal>setContent</span><span style=color:#000;font-weight:700>(</span>ct<span style=color:#000;font-weight:700>[</span>0<span style=color:#000;font-weight:700>]);</span>
+                <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>configFilterChainManager</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>doFilter</span><span style=color:#000;font-weight:700>((</span>IConfigRequest<span style=color:#000;font-weight:700>)</span><span style=color:#000;font-weight:700>null</span><span style=color:#000;font-weight:700>,</span> cr<span style=color:#000;font-weight:700>);</span>
+                content <span style=color:#000;font-weight:700>=</span> cr<span style=color:#000;font-weight:700>.</span><span style=color:teal>getContent</span><span style=color:#000;font-weight:700>();</span>
+                <span style=color:#000;font-weight:700>return</span> content<span style=color:#000;font-weight:700>;</span>
+            <span style=color:#000;font-weight:700>}</span> <span style=color:#000;font-weight:700>catch</span> <span style=color:#000;font-weight:700>(</span>NacosException var9<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+                <span style=color:#000;font-weight:700>if</span> <span style=color:#000;font-weight:700>(</span>403 <span style=color:#000;font-weight:700>==</span> var9<span style=color:#000;font-weight:700>.</span><span style=color:teal>getErrCode</span><span style=color:#000;font-weight:700>())</span> <span style=color:#000;font-weight:700>{</span>
+                    <span style=color:#000;font-weight:700>throw</span> var9<span style=color:#000;font-weight:700>;</span>
+                <span style=color:#000;font-weight:700>}</span> <span style=color:#000;font-weight:700>else</span> <span style=color:#000;font-weight:700>{</span>
+                    LOGGER<span style=color:#000;font-weight:700>.</span><span style=color:teal>warn</span><span style=color:#000;font-weight:700>(</span><span style=color:#d14>&#34;[{}] [get-config] get from server error, dataId={}, group={}, tenant={}, msg={}&#34;</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000;font-weight:700>new</span> Object<span style=color:#000;font-weight:700>[]{</span><span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>agent</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>getName</span><span style=color:#000;font-weight:700>(),</span> dataId<span style=color:#000;font-weight:700>,</span> group<span style=color:#000;font-weight:700>,</span> tenant<span style=color:#000;font-weight:700>,</span> var9<span style=color:#000;font-weight:700>.</span><span style=color:teal>toString</span><span style=color:#000;font-weight:700>()});</span>
+                    LOGGER<span style=color:#000;font-weight:700>.</span><span style=color:teal>warn</span><span style=color:#000;font-weight:700>(</span><span style=color:#d14>&#34;[{}] [get-config] get snapshot ok, dataId={}, group={}, tenant={}, config={}&#34;</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000;font-weight:700>new</span> Object<span style=color:#000;font-weight:700>[]{</span><span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>agent</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>getName</span><span style=color:#000;font-weight:700>(),</span> dataId<span style=color:#000;font-weight:700>,</span> group<span style=color:#000;font-weight:700>,</span> tenant<span style=color:#000;font-weight:700>,</span> ContentUtils<span style=color:#000;font-weight:700>.</span><span style=color:teal>truncateContent</span><span style=color:#000;font-weight:700>(</span>content<span style=color:#000;font-weight:700>)});</span>
+                    content <span style=color:#000;font-weight:700>=</span> LocalConfigInfoProcessor<span style=color:#000;font-weight:700>.</span><span style=color:teal>getSnapshot</span><span style=color:#000;font-weight:700>(</span><span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>agent</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>getName</span><span style=color:#000;font-weight:700>(),</span> dataId<span style=color:#000;font-weight:700>,</span> group<span style=color:#000;font-weight:700>,</span> tenant<span style=color:#000;font-weight:700>);</span>
+                    cr<span style=color:#000;font-weight:700>.</span><span style=color:teal>setContent</span><span style=color:#000;font-weight:700>(</span>content<span style=color:#000;font-weight:700>);</span>
+                    <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>configFilterChainManager</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>doFilter</span><span style=color:#000;font-weight:700>((</span>IConfigRequest<span style=color:#000;font-weight:700>)</span><span style=color:#000;font-weight:700>null</span><span style=color:#000;font-weight:700>,</span> cr<span style=color:#000;font-weight:700>);</span>
+                    content <span style=color:#000;font-weight:700>=</span> cr<span style=color:#000;font-weight:700>.</span><span style=color:teal>getContent</span><span style=color:#000;font-weight:700>();</span>
+                    <span style=color:#000;font-weight:700>return</span> content<span style=color:#000;font-weight:700>;</span>
+                <span style=color:#000;font-weight:700>}</span>
+            <span style=color:#000;font-weight:700>}</span>
+        <span style=color:#000;font-weight:700>}</span>
+    <span style=color:#000;font-weight:700>}</span>
+<span style=color:#000;font-weight:700>}</span>
+</code></pre></td></tr></table></div></div><p>获取配置关键</p><p><code>curl get http://config-server:{port}/v1/cs/configs?dataId={dataId}&group={group}&tenant={tenant}</code></p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10>10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11>11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12>12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13>13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14>14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15>15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16>16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17>17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18>18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19>19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20>20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21>21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22>22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23>23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24>24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25>25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26>26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27>27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28>28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29>29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30>30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31>31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32>32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33>33
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34>34
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35>35
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36>36
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37>37
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38>38
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39>39
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40>40
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41>41
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42>42
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=43>43
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=44>44
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=45>45
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=46>46
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=47>47
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=48>48
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=49>49
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=50>50
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=51>51
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=52>52
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=53>53
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=54>54
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#000;font-weight:700>public</span> <span style=color:#000;font-weight:700>class</span> <span style=color:#458;font-weight:700>ClientWorker</span> <span style=color:#000;font-weight:700>{</span>
+    <span style=color:#998;font-style:italic>//tenant 默认为环境变量 tenant.id 
+</span><span style=color:#998;font-style:italic></span>    <span style=color:#998;font-style:italic>// 通过配置 nacos.use.cloud.namespace.parsing=true 如果teannt 为空取 acm.namespace
+</span><span style=color:#998;font-style:italic></span>    <span style=color:#998;font-style:italic>// 通过配置 nacos.use.cloud.namespace.parsing=fase 如果teannt 为空取 ALIBABA_ALIWARE_NAMESPACE
+</span><span style=color:#998;font-style:italic></span>    <span style=color:#000;font-weight:700>public</span> String<span style=color:#000;font-weight:700>[]</span> <span style=color:#900;font-weight:700>getServerConfig</span><span style=color:#000;font-weight:700>(</span>String dataId<span style=color:#000;font-weight:700>,</span> String group<span style=color:#000;font-weight:700>,</span> String tenant<span style=color:#000;font-weight:700>,</span> <span style=color:#458;font-weight:700>long</span> readTimeout<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>throws</span> NacosException <span style=color:#000;font-weight:700>{</span>
+        String<span style=color:#000;font-weight:700>[]</span> ct <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>new</span> String<span style=color:#000;font-weight:700>[</span>2<span style=color:#000;font-weight:700>];</span>
+        <span style=color:#000;font-weight:700>if</span> <span style=color:#000;font-weight:700>(</span>StringUtils<span style=color:#000;font-weight:700>.</span><span style=color:teal>isBlank</span><span style=color:#000;font-weight:700>(</span>group<span style=color:#000;font-weight:700>))</span> <span style=color:#000;font-weight:700>{</span>
+            group <span style=color:#000;font-weight:700>=</span> <span style=color:#d14>&#34;DEFAULT_GROUP&#34;</span><span style=color:#000;font-weight:700>;</span>
+        <span style=color:#000;font-weight:700>}</span>
+
+        HttpResult result <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>null</span><span style=color:#000;font-weight:700>;</span>
+
+        <span style=color:#000;font-weight:700>try</span> <span style=color:#000;font-weight:700>{</span>
+            List<span style=color:#000;font-weight:700>&lt;</span>String<span style=color:#000;font-weight:700>&gt;</span> params <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>null</span><span style=color:#000;font-weight:700>;</span>
+            <span style=color:#000;font-weight:700>if</span> <span style=color:#000;font-weight:700>(</span>StringUtils<span style=color:#000;font-weight:700>.</span><span style=color:teal>isBlank</span><span style=color:#000;font-weight:700>(</span>tenant<span style=color:#000;font-weight:700>))</span> <span style=color:#000;font-weight:700>{</span>
+                params <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>new</span> ArrayList<span style=color:#000;font-weight:700>(</span>Arrays<span style=color:#000;font-weight:700>.</span><span style=color:teal>asList</span><span style=color:#000;font-weight:700>(</span><span style=color:#d14>&#34;dataId&#34;</span><span style=color:#000;font-weight:700>,</span> dataId<span style=color:#000;font-weight:700>,</span> <span style=color:#d14>&#34;group&#34;</span><span style=color:#000;font-weight:700>,</span> group<span style=color:#000;font-weight:700>));</span>
+            <span style=color:#000;font-weight:700>}</span> <span style=color:#000;font-weight:700>else</span> <span style=color:#000;font-weight:700>{</span>
+                params <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>new</span> ArrayList<span style=color:#000;font-weight:700>(</span>Arrays<span style=color:#000;font-weight:700>.</span><span style=color:teal>asList</span><span style=color:#000;font-weight:700>(</span><span style=color:#d14>&#34;dataId&#34;</span><span style=color:#000;font-weight:700>,</span> dataId<span style=color:#000;font-weight:700>,</span> <span style=color:#d14>&#34;group&#34;</span><span style=color:#000;font-weight:700>,</span> group<span style=color:#000;font-weight:700>,</span> <span style=color:#d14>&#34;tenant&#34;</span><span style=color:#000;font-weight:700>,</span> tenant<span style=color:#000;font-weight:700>));</span>
+            <span style=color:#000;font-weight:700>}</span>
+            <span style=color:#998;font-style:italic>// curl get http://config-server:{port}/v1/cs/configs?dataId={dataId}&amp;group={group}&amp;tenant={tenant}
+</span><span style=color:#998;font-style:italic></span>            result <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>agent</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>httpGet</span><span style=color:#000;font-weight:700>(</span><span style=color:#d14>&#34;/v1/cs/configs&#34;</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000;font-weight:700>(</span>List<span style=color:#000;font-weight:700>)</span><span style=color:#000;font-weight:700>null</span><span style=color:#000;font-weight:700>,</span> params<span style=color:#000;font-weight:700>,</span> <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>agent</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>getEncode</span><span style=color:#000;font-weight:700>(),</span> readTimeout<span style=color:#000;font-weight:700>);</span>
+        <span style=color:#000;font-weight:700>}</span> <span style=color:#000;font-weight:700>catch</span> <span style=color:#000;font-weight:700>(</span>IOException var10<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+            String message <span style=color:#000;font-weight:700>=</span> String<span style=color:#000;font-weight:700>.</span><span style=color:teal>format</span><span style=color:#000;font-weight:700>(</span><span style=color:#d14>&#34;[%s] [sub-server] get server config exception, dataId=%s, group=%s, tenant=%s&#34;</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>agent</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>getName</span><span style=color:#000;font-weight:700>(),</span> dataId<span style=color:#000;font-weight:700>,</span> group<span style=color:#000;font-weight:700>,</span> tenant<span style=color:#000;font-weight:700>);</span>
+            LOGGER<span style=color:#000;font-weight:700>.</span><span style=color:teal>error</span><span style=color:#000;font-weight:700>(</span>message<span style=color:#000;font-weight:700>,</span> var10<span style=color:#000;font-weight:700>);</span>
+            <span style=color:#000;font-weight:700>throw</span> <span style=color:#000;font-weight:700>new</span> NacosException<span style=color:#000;font-weight:700>(</span>500<span style=color:#000;font-weight:700>,</span> var10<span style=color:#000;font-weight:700>);</span>
+        <span style=color:#000;font-weight:700>}</span>
+
+        <span style=color:#000;font-weight:700>switch</span><span style=color:#000;font-weight:700>(</span>result<span style=color:#000;font-weight:700>.</span><span style=color:teal>code</span><span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+        <span style=color:#000;font-weight:700>case</span> 200<span style=color:#000;font-weight:700>:</span>
+            <span style=color:#998;font-style:italic>// 存储文件到本地缓存中
+</span><span style=color:#998;font-style:italic></span>            LocalConfigInfoProcessor<span style=color:#000;font-weight:700>.</span><span style=color:teal>saveSnapshot</span><span style=color:#000;font-weight:700>(</span><span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>agent</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>getName</span><span style=color:#000;font-weight:700>(),</span> dataId<span style=color:#000;font-weight:700>,</span> group<span style=color:#000;font-weight:700>,</span> tenant<span style=color:#000;font-weight:700>,</span> result<span style=color:#000;font-weight:700>.</span><span style=color:teal>content</span><span style=color:#000;font-weight:700>);</span>
+            ct<span style=color:#000;font-weight:700>[</span>0<span style=color:#000;font-weight:700>]</span> <span style=color:#000;font-weight:700>=</span> result<span style=color:#000;font-weight:700>.</span><span style=color:teal>content</span><span style=color:#000;font-weight:700>;</span>
+            <span style=color:#000;font-weight:700>if</span> <span style=color:#000;font-weight:700>(</span>result<span style=color:#000;font-weight:700>.</span><span style=color:teal>headers</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>containsKey</span><span style=color:#000;font-weight:700>(</span><span style=color:#d14>&#34;Config-Type&#34;</span><span style=color:#000;font-weight:700>))</span> <span style=color:#000;font-weight:700>{</span>
+                ct<span style=color:#000;font-weight:700>[</span>1<span style=color:#000;font-weight:700>]</span> <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>(</span>String<span style=color:#000;font-weight:700>)((</span>List<span style=color:#000;font-weight:700>)</span>result<span style=color:#000;font-weight:700>.</span><span style=color:teal>headers</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>get</span><span style=color:#000;font-weight:700>(</span><span style=color:#d14>&#34;Config-Type&#34;</span><span style=color:#000;font-weight:700>)).</span><span style=color:teal>get</span><span style=color:#000;font-weight:700>(</span>0<span style=color:#000;font-weight:700>);</span>
+            <span style=color:#000;font-weight:700>}</span> <span style=color:#000;font-weight:700>else</span> <span style=color:#000;font-weight:700>{</span>
+                ct<span style=color:#000;font-weight:700>[</span>1<span style=color:#000;font-weight:700>]</span> <span style=color:#000;font-weight:700>=</span> ConfigType<span style=color:#000;font-weight:700>.</span><span style=color:teal>TEXT</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>getType</span><span style=color:#000;font-weight:700>();</span>
+            <span style=color:#000;font-weight:700>}</span>
+
+            <span style=color:#000;font-weight:700>return</span> ct<span style=color:#000;font-weight:700>;</span>
+        <span style=color:#000;font-weight:700>case</span> 403<span style=color:#000;font-weight:700>:</span>
+            LOGGER<span style=color:#000;font-weight:700>.</span><span style=color:teal>error</span><span style=color:#000;font-weight:700>(</span><span style=color:#d14>&#34;[{}] [sub-server-error] no right, dataId={}, group={}, tenant={}&#34;</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000;font-weight:700>new</span> Object<span style=color:#000;font-weight:700>[]{</span><span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>agent</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>getName</span><span style=color:#000;font-weight:700>(),</span> dataId<span style=color:#000;font-weight:700>,</span> group<span style=color:#000;font-weight:700>,</span> tenant<span style=color:#000;font-weight:700>});</span>
+            <span style=color:#000;font-weight:700>throw</span> <span style=color:#000;font-weight:700>new</span> NacosException<span style=color:#000;font-weight:700>(</span>result<span style=color:#000;font-weight:700>.</span><span style=color:teal>code</span><span style=color:#000;font-weight:700>,</span> result<span style=color:#000;font-weight:700>.</span><span style=color:teal>content</span><span style=color:#000;font-weight:700>);</span>
+        <span style=color:#000;font-weight:700>case</span> 404<span style=color:#000;font-weight:700>:</span>
+            LocalConfigInfoProcessor<span style=color:#000;font-weight:700>.</span><span style=color:teal>saveSnapshot</span><span style=color:#000;font-weight:700>(</span><span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>agent</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>getName</span><span style=color:#000;font-weight:700>(),</span> dataId<span style=color:#000;font-weight:700>,</span> group<span style=color:#000;font-weight:700>,</span> tenant<span style=color:#000;font-weight:700>,</span> <span style=color:#000;font-weight:700>(</span>String<span style=color:#000;font-weight:700>)</span><span style=color:#000;font-weight:700>null</span><span style=color:#000;font-weight:700>);</span>
+            <span style=color:#000;font-weight:700>return</span> ct<span style=color:#000;font-weight:700>;</span>
+        <span style=color:#000;font-weight:700>case</span> 409<span style=color:#000;font-weight:700>:</span>
+            LOGGER<span style=color:#000;font-weight:700>.</span><span style=color:teal>error</span><span style=color:#000;font-weight:700>(</span><span style=color:#d14>&#34;[{}] [sub-server-error] get server config being modified concurrently, dataId={}, group={}, tenant={}&#34;</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000;font-weight:700>new</span> Object<span style=color:#000;font-weight:700>[]{</span><span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>agent</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>getName</span><span style=color:#000;font-weight:700>(),</span> dataId<span style=color:#000;font-weight:700>,</span> group<span style=color:#000;font-weight:700>,</span> tenant<span style=color:#000;font-weight:700>});</span>
+            <span style=color:#000;font-weight:700>throw</span> <span style=color:#000;font-weight:700>new</span> NacosException<span style=color:#000;font-weight:700>(</span>409<span style=color:#000;font-weight:700>,</span> <span style=color:#d14>&#34;data being modified, dataId=&#34;</span> <span style=color:#000;font-weight:700>+</span> dataId <span style=color:#000;font-weight:700>+</span> <span style=color:#d14>&#34;,group=&#34;</span> <span style=color:#000;font-weight:700>+</span> group <span style=color:#000;font-weight:700>+</span> <span style=color:#d14>&#34;,tenant=&#34;</span> <span style=color:#000;font-weight:700>+</span> tenant<span style=color:#000;font-weight:700>);</span>
+        <span style=color:#000;font-weight:700>default</span><span style=color:#000;font-weight:700>:</span>
+            LOGGER<span style=color:#000;font-weight:700>.</span><span style=color:teal>error</span><span style=color:#000;font-weight:700>(</span><span style=color:#d14>&#34;[{}] [sub-server-error]  dataId={}, group={}, tenant={}, code={}&#34;</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000;font-weight:700>new</span> Object<span style=color:#000;font-weight:700>[]{</span><span style=color:#000;font-weight:700>this</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>agent</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>getName</span><span style=color:#000;font-weight:700>(),</span> dataId<span style=color:#000;font-weight:700>,</span> group<span style=color:#000;font-weight:700>,</span> tenant<span style=color:#000;font-weight:700>,</span> result<span style=color:#000;font-weight:700>.</span><span style=color:teal>code</span><span style=color:#000;font-weight:700>});</span>
+            <span style=color:#000;font-weight:700>throw</span> <span style=color:#000;font-weight:700>new</span> NacosException<span style=color:#000;font-weight:700>(</span>result<span style=color:#000;font-weight:700>.</span><span style=color:teal>code</span><span style=color:#000;font-weight:700>,</span> <span style=color:#d14>&#34;http error, code=&#34;</span> <span style=color:#000;font-weight:700>+</span> result<span style=color:#000;font-weight:700>.</span><span style=color:teal>code</span> <span style=color:#000;font-weight:700>+</span> <span style=color:#d14>&#34;,dataId=&#34;</span> <span style=color:#000;font-weight:700>+</span> dataId <span style=color:#000;font-weight:700>+</span> <span style=color:#d14>&#34;,group=&#34;</span> <span style=color:#000;font-weight:700>+</span> group <span style=color:#000;font-weight:700>+</span> <span style=color:#d14>&#34;,tenant=&#34;</span> <span style=color:#000;font-weight:700>+</span> tenant<span style=color:#000;font-weight:700>);</span>
+        <span style=color:#000;font-weight:700>}</span>
+    <span style=color:#000;font-weight:700>}</span>
+<span style=color:#000;font-weight:700>}</span>
+</code></pre></td></tr></table></div></div><p>好啦,今天就说到这里,如有疑问可以评论区留言</p><p><a href=https://github.com/homeant/spring-cloud-example>代码地址</a></p></div></div></div></div><div class=container><div class=row><div class="col-lg-10 mx-auto"><div id=gitalk-comments></div><link href=//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css rel=stylesheet><script src=//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js></script><script type=application/javascript>const gitalk=new Gitalk({clientID:'6c2478e5c574adadad50',clientSecret:'0aecf2c4c0d2f26b9e277f1a6c45f27b617e4e4a',repo:'comment.tianhui.xin',owner:'homeant',admin:['homeant'],id:'86b1ef6630dfea6c2395c2af311348bb',distractionFreeMode:true})
+gitalk.render('gitalk-comments')</script></div></div></div></section><footer class="bg-light section pb-0"><div class=container><div class=row><div class="col-md-3 col-sm-6 mb-5"><h3 class=mb-4>个人链接</h3><ul class="list-unstyled footer-list"><li><a href=https://tianhui.xin/about>关于我</a></li><li><a href=//github.com/homeant>GitHub</a></li></ul></div><div class="col-md-3 col-sm-6 mb-5"><h3 class=mb-4>最新文章</h3><ul class="list-unstyled footer-list"><li><a href=https://tianhui.xin/blog/2022/01/02/spring-boot-admin-kubernetes/>Spring Boot Admin On Kubernetes</a></li><li><a href=https://tianhui.xin/blog/2021/09/16/spring-conditional-annotations/>Spring Conditional详解</a></li><li><a href=https://tianhui.xin/blog/2021/04/03/mybatis_data_encryption/>mybatis对数据进行加密</a></li><li><a href=https://tianhui.xin/blog/2020/06/27/spring_cloud_nacos/>跟我学SpringCloud 之 nacos</a></li><li><a href=https://tianhui.xin/blog/2020/06/21/mapstruct/>一见倾心之初遇MapStruct</a></li><li><a href=https://tianhui.xin/blog/2020/05/31/mybatisinterceptorofdatamasking/>Mybatis Interceptor 实现数据脱敏</a></li></ul></div><div class="col-md-3 col-sm-6 mb-5"><h3 class=mb-4>友情链接</h3><ul class="list-unstyled footer-list"><li><a href=http://xujin.org/>玹霖志</a></li><li><a href=https://itachi.xyz/>昨夜梦 今辰你 明日思</a></li></ul></div><div class="col-md-3 col-sm-6 mb-5"><a class="d-block mb-3" href=https://tianhui.xin/><img width=66px class=img-fluid src=https://tianhui.xin/images/logo.png alt=怪咖晨></a><p class=mb-4>有智者立长志，无志者长立志。</p><ul class="list-inline social-icons"><li class=list-inline-item><a href=//github.com/homeant><i class=ti-github></i></a></li></ul></div></div><div class="border-top border-default text-center py-4 mt-4"><small class=content>© 2009-2020 <a href=//tianhui.xin>tianhui.xin</a> 版权所有 ICP证：<a href=http://www.beian.miit.gov.cn>京16046477</a></small>
+您是本站第<span id=busuanzi_value_site_uv></span>位访客</div></div></footer><script src=https://tianhui.xin/plugins/jQuery/jquery.min.js></script><script src=https://tianhui.xin/plugins/bootstrap/bootstrap.min.js></script><script src=https://tianhui.xin/plugins/slick/slick.min.js></script><script src=https://tianhui.xin/plugins/love-click.js></script><script src=https://cdn.bootcdn.net/ajax/libs/jquery.sticky/1.0.4/jquery.sticky.min.js></script><script src=https://tianhui.xin/plugins/scrollUp/scrollUp.min.js></script><script src=https://tianhui.xin/plugins/clipboard/clipboard.js></script><script src=https://cdn.jsdelivr.net/npm/algoliasearch@4.5.1/dist/algoliasearch-lite.umd.js integrity="sha256-EXPXz4W6pQgfYY3yTpnDa3OH8/EPn16ciVsPQ/ypsjk=" crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/instantsearch.js@4.8.3/dist/instantsearch.production.min.js integrity="sha256-LAGhRRdtVoD6RLo2qDQsU2mp+XVSciKRC8XPOBWmofM=" crossorigin=anonymous></script><script src=https://tianhui.xin/js/app.c626aab600fdfdf0c064234dd1dc543b.js></script><script src=https://tianhui.xin/js/post.2ce597fd293e38d5be795230098b93c0.js></script><script async src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js></script><div class=scrollUp><i class=ti-angle-up></i></div></body></html>

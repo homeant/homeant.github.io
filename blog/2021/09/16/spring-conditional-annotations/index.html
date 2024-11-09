@@ -1,0 +1,199 @@
+<!doctype html><html lang=zh><head><meta charset=utf-8><title>Spring Conditional详解</title><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta name=keywords content="怪咖晨,个人博客,java,spring cloud,spring boot,huangtianhui,Spring Boot,Spring Conditional"><meta name=description content="@Conditional是Spring4新提供的注解，它的作用是按照一定条件进行判断，满足条件就将bean注册到容器。"><meta name=author content="huangtianhui"><meta name=generator content="Hugo 0.78.1"><link rel=stylesheet href=https://tianhui.xin/plugins/bootstrap/bootstrap.min.css><link rel=stylesheet href=https://tianhui.xin/plugins/themify-icons/themify-icons.css><link rel=stylesheet href=https://tianhui.xin/plugins/slick/slick.css><link href=https://tianhui.xin/css/animate.min.css rel=stylesheet media=screen><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/instantsearch.css@8.0.0/themes/reset-min.css integrity="sha256-2AeJLzExpZvqLUxMfcs+4DWcMwNfpnjUeAAvEtPr0wU=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/instantsearch.css@8.0.0/themes/satellite-min.css integrity="sha256-p/rGN4RGy6EDumyxF9t7LKxWGg6/MZfGhJM/asKkqvA=" crossorigin=anonymous><link href=https://tianhui.xin/css/style.min.aa098d6308cd50eb086d8a887786f77e.css rel=stylesheet media=screen><link rel="shortcut icon" href=https://tianhui.xin/images/favicon.png type=image/x-icon><link rel=icon href=https://tianhui.xin/images/favicon.png type=image/x-icon><meta property="og:title" content="Spring Conditional详解"><meta property="og:description" content="@Conditional是Spring4新提供的注解，它的作用是按照一定条件进行判断，满足条件就将bean注册到容器。"><meta property="og:type" content="article"><meta property="og:url" content="https://tianhui.xin/blog/2021/09/16/spring-conditional-annotations/"><meta property="article:published_time" content="2021-09-16T18:30:52+08:00"><meta property="article:modified_time" content="2021-09-16T18:30:52+08:00"></head><body><div class=preloader></div><header class=header-area><div class=main-header-area><div class=container><nav class="navbar navbar-expand-lg navbar-light bg-transparent"><a class=nav-brand href=https://tianhui.xin/><img width=66px src=https://tianhui.xin/images/logo.png alt=怪咖晨></a>
+<button class=navbar-toggler type=button data-toggle=collapse data-target=#navigation aria-expanded=false aria-label="Toggle navigation">
+<i class=ti-menu></i></button><div class="collapse navbar-collapse" id=navigation><div class=navbar-close data-toggle=collapse data-target=#navigation><button class=navbar-toggler type=button>
+<i class=ti-close></i></button></div><div class=navbar-warp><ul class="navbar-nav mx-auto"><li class=nav-item><a class=nav-link href=https://tianhui.xin/>首页</a></li><li class=nav-item><a class=nav-link href=https://tianhui.xin/blog>博客</a></li><li class=nav-item><a class=nav-link href=https://tianhui.xin/categories/%E5%AD%A6%E6%97%A0%E6%AD%A2%E5%A2%83/>学无止境</a></li><li class=nav-item><a class=nav-link href=https://tianhui.xin/about>关于我</a></li><li class=nav-item><a class=nav-link href=https://tianhui.xin/search>搜索</a></li></ul><a href=//github.com/homeant class="btn btn-sm btn-primary ml-3">关注我</a></div></div></nav></div></div></header><div class="banner-area bg-img" style=background-image:url(https://tianhui.xin/images/banner.png)><div class=container><div class="row justify-content-center"><div class="col-12 col-sm-9 col-xl-6"><div class="banner-content text-center"><h2>怪咖晨</h2><p>多年软件开发经验</p><p>致力于微服务、DDD实践</p></div></div></div></div></div><section class=section><div class=container><div class=row><div class="col-lg-10 mx-auto"><h2>Spring Conditional详解</h2><div class=content><p><code>@Conditional</code>是<code>Spring4</code>新提供的注解，它的作用是按照一定条件进行判断，满足条件就将bean注册到容器。</p><h3 id=contidional-介绍>Contidional 介绍</h3><p><code>Conditional</code>是由<code>SpringFramework</code>提供的一个注解，位于 <code>org.springframework.context.annotation</code> 包内，定义如下。</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1>1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2>2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3>3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4>4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5>5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6>6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7>7
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#3c5d5d;font-weight:700>@Retention</span><span style=color:#000;font-weight:700>(</span>RetentionPolicy<span style=color:#000;font-weight:700>.</span><span style=color:teal>RUNTIME</span><span style=color:#000;font-weight:700>)</span>
+<span style=color:#3c5d5d;font-weight:700>@Target</span><span style=color:#000;font-weight:700>({</span>ElementType<span style=color:#000;font-weight:700>.</span><span style=color:teal>TYPE</span><span style=color:#000;font-weight:700>,</span> ElementType<span style=color:#000;font-weight:700>.</span><span style=color:teal>METHOD</span><span style=color:#000;font-weight:700>})</span>
+<span style=color:#000;font-weight:700>public</span> <span style=color:#3c5d5d;font-weight:700>@interface</span> Conditional <span style=color:#000;font-weight:700>{</span>
+
+	Class<span style=color:#000;font-weight:700>&lt;?</span> <span style=color:#000;font-weight:700>extends</span> Condition<span style=color:#000;font-weight:700>&gt;[]</span> <span style=color:#900;font-weight:700>value</span><span style=color:#000;font-weight:700>();</span>
+
+<span style=color:#000;font-weight:700>}</span>
+</code></pre></td></tr></table></div></div><p>我们可以将 <code>Spring</code> 的<code>@Conditional</code>注解用于以下场景：</p><ul><li>可以作为类级别的注解直接或者间接的与<code>@Component</code>相关联，包括<code>@Configuration类</code>；</li><li>可以作为元注解，用于自动编写构造性注解；</li><li>作为方法级别的注解，作用在任何@Bean方法上。</li></ul><h3 id=condition-接口>Condition 接口</h3><p>Condition 将在即将注册 Bean 定义之前进行检查，并且可以根据它的 <code>matches()</code> 方法返回值动态决定是否注册组件（true-允许注册；false-不允许注册）。</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1>1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2>2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3>3
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#000;font-weight:700>public</span> <span style=color:#000;font-weight:700>interface</span> <span style=color:#458;font-weight:700>Condition</span> <span style=color:#000;font-weight:700>{</span>
+	<span style=color:#458;font-weight:700>boolean</span> <span style=color:#900;font-weight:700>matches</span><span style=color:#000;font-weight:700>(</span>ConditionContext context<span style=color:#000;font-weight:700>,</span> AnnotatedTypeMetadata metadata<span style=color:#000;font-weight:700>);</span>
+<span style=color:#000;font-weight:700>}</span>
+</code></pre></td></tr></table></div></div><blockquote><p>注意：Condition 必须遵循与 BeanFactoryPostProcessor 相同的限制，并注意永远不要与 bean 实例交互。对于与 @Configuration bean 交互的条件的更细粒度控制，请考虑实现 ConfigurationCondition 接口。</p></blockquote><h3 id=contidional-申明>Contidional 申明</h3><ul><li>某个<code>@Configuration</code>注解的配置类上</li><li>某个<code>@Configuration</code>注解配置类中带有<code>@Bean</code>注解的方法上</li><li>任何用<code>@Component</code>、<code>@Service</code>、<code>@Repository</code>或<code>@Controller</code>注释声明的 Bean</li></ul><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1>1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2>2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3>3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4>4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5>5
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#3c5d5d;font-weight:700>@Configuration</span>
+<span style=color:#3c5d5d;font-weight:700>@Conditional</span><span style=color:#000;font-weight:700>(</span>IsDevEnvCondition<span style=color:#000;font-weight:700>.</span><span style=color:teal>class</span><span style=color:#000;font-weight:700>)</span>
+<span style=color:#000;font-weight:700>class</span> <span style=color:#458;font-weight:700>DevEnvLoggingConfiguration</span> <span style=color:#000;font-weight:700>{</span>
+    <span style=color:#998;font-style:italic>// ...
+</span><span style=color:#998;font-style:italic></span><span style=color:#000;font-weight:700>}</span>
+</code></pre></td></tr></table></div></div><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1>1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2>2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3>3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4>4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5>5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6>6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7>7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8>8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9>9
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#3c5d5d;font-weight:700>@Configuration</span>
+<span style=color:#000;font-weight:700>class</span> <span style=color:#458;font-weight:700>DevEnvLoggingConfiguration</span> <span style=color:#000;font-weight:700>{</span>
+    
+    <span style=color:#3c5d5d;font-weight:700>@Bean</span>
+    <span style=color:#3c5d5d;font-weight:700>@Conditional</span><span style=color:#000;font-weight:700>(</span>IsDevEnvCondition<span style=color:#000;font-weight:700>.</span><span style=color:teal>class</span><span style=color:#000;font-weight:700>)</span>
+    LoggingService <span style=color:#900;font-weight:700>loggingService</span><span style=color:#000;font-weight:700>()</span> <span style=color:#000;font-weight:700>{</span>
+        <span style=color:#000;font-weight:700>return</span> <span style=color:#000;font-weight:700>new</span> LoggingService<span style=color:#000;font-weight:700>();</span>
+    <span style=color:#000;font-weight:700>}</span>
+<span style=color:#000;font-weight:700>}</span>
+</code></pre></td></tr></table></div></div><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1>1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2>2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3>3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4>4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5>5
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#3c5d5d;font-weight:700>@Service</span>
+<span style=color:#3c5d5d;font-weight:700>@Conditional</span><span style=color:#000;font-weight:700>(</span>IsDevEnvCondition<span style=color:#000;font-weight:700>.</span><span style=color:teal>class</span><span style=color:#000;font-weight:700>)</span>
+<span style=color:#000;font-weight:700>class</span> <span style=color:#458;font-weight:700>LoggingService</span> <span style=color:#000;font-weight:700>{</span>
+    <span style=color:#998;font-style:italic>// ...
+</span><span style=color:#998;font-style:italic></span><span style=color:#000;font-weight:700>}</span>
+</code></pre></td></tr></table></div></div><h3 id=contidional-实战>Contidional 实战</h3><h4 id=自定义条件>自定义条件</h4><p>检查 Java 版本是否为 8</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1>1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2>2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3>3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4>4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5>5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6>6
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#000;font-weight:700>class</span> <span style=color:#458;font-weight:700>Java8Condition</span> <span style=color:#000;font-weight:700>implements</span> Condition <span style=color:#000;font-weight:700>{</span>
+    <span style=color:#3c5d5d;font-weight:700>@Override</span>
+    <span style=color:#000;font-weight:700>public</span> <span style=color:#458;font-weight:700>boolean</span> <span style=color:#900;font-weight:700>matches</span><span style=color:#000;font-weight:700>(</span>ConditionContext context<span style=color:#000;font-weight:700>,</span> AnnotatedTypeMetadata metadata<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+        <span style=color:#000;font-weight:700>return</span> JavaVersion<span style=color:#000;font-weight:700>.</span><span style=color:teal>getJavaVersion</span><span style=color:#000;font-weight:700>().</span><span style=color:teal>equals</span><span style=color:#000;font-weight:700>(</span>JavaVersion<span style=color:#000;font-weight:700>.</span><span style=color:teal>EIGHT</span><span style=color:#000;font-weight:700>);</span>
+    <span style=color:#000;font-weight:700>}</span>
+<span style=color:#000;font-weight:700>}</span>
+</code></pre></td></tr></table></div></div><p>将 <code>Java8Condition</code> 作为 <code>@Conditional</code> 注释中的一个属性：</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1>1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2>2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3>3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4>4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5>5
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#3c5d5d;font-weight:700>@Service</span>
+<span style=color:#3c5d5d;font-weight:700>@Conditional</span><span style=color:#000;font-weight:700>(</span>Java8Condition<span style=color:#000;font-weight:700>.</span><span style=color:teal>class</span><span style=color:#000;font-weight:700>)</span>
+<span style=color:#000;font-weight:700>public</span> <span style=color:#000;font-weight:700>class</span> <span style=color:#458;font-weight:700>Java8DependedService</span> <span style=color:#000;font-weight:700>{</span>
+    <span style=color:#998;font-style:italic>// ...
+</span><span style=color:#998;font-style:italic></span><span style=color:#000;font-weight:700>}</span>
+</code></pre></td></tr></table></div></div><h4 id=常见的条件注解>常见的条件注解</h4><h5 id=conditionalonproperty>ConditionalOnProperty</h5><ol><li><code>value</code>属性，指定要检查的配置属性;</li><li><code>haveValue</code>属性，定义这个条件所需的值；</li><li><code>matchIfMissing</code>属性，如果缺少参数，是否应该匹配条件。</li></ol><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1>1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2>2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3>3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4>4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5>5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6>6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7>7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8>8
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#3c5d5d;font-weight:700>@Service</span>
+<span style=color:#3c5d5d;font-weight:700>@ConditionalOnProperty</span><span style=color:#000;font-weight:700>(</span>
+  value<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#34;logging.enabled&#34;</span><span style=color:#000;font-weight:700>,</span> 
+  havingValue <span style=color:#000;font-weight:700>=</span> <span style=color:#d14>&#34;true&#34;</span><span style=color:#000;font-weight:700>,</span> 
+  matchIfMissing <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>true</span><span style=color:#000;font-weight:700>)</span>
+<span style=color:#000;font-weight:700>class</span> <span style=color:#458;font-weight:700>LoggingService</span> <span style=color:#000;font-weight:700>{</span>
+    <span style=color:#998;font-style:italic>// ...
+</span><span style=color:#998;font-style:italic></span><span style=color:#000;font-weight:700>}</span>
+</code></pre></td></tr></table></div></div><h5 id=conditionalonexpression>ConditionalOnExpression</h5><p>相比较前面的Bean，Class是否存在，配置参数是否存在或者有某个值而言，这个依赖<code>SPEL</code>表达式的，就显得更加的高级了；
+其主要就是执行<code>Spel</code>表达式，根据返回的<code>true</code>/<code>false</code>来判断是否满足条件</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1>1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2>2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3>3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4>4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5>5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6>6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7>7
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#3c5d5d;font-weight:700>@Service</span>
+<span style=color:#3c5d5d;font-weight:700>@ConditionalOnExpression</span><span style=color:#000;font-weight:700>(</span>
+  <span style=color:#d14>&#34;${logging.enabled:true} and &#39;${logging.level}&#39;.equals(&#39;DEBUG&#39;)&#34;</span>
+<span style=color:#000;font-weight:700>)</span>
+<span style=color:#000;font-weight:700>class</span> <span style=color:#458;font-weight:700>LoggingService</span> <span style=color:#000;font-weight:700>{</span>
+    <span style=color:#998;font-style:italic>// ...
+</span><span style=color:#998;font-style:italic></span><span style=color:#000;font-weight:700>}</span>
+</code></pre></td></tr></table></div></div><h5 id=conditionalonbean>ConditionalOnBean</h5><p>只有在容器中注册了某个bean,该条件才起作用</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1>1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2>2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3>3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4>4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5>5
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#3c5d5d;font-weight:700>@Service</span>
+<span style=color:#3c5d5d;font-weight:700>@ConditionalOnBean</span><span style=color:#000;font-weight:700>(</span>CustomLoggingConfiguration<span style=color:#000;font-weight:700>.</span><span style=color:teal>class</span><span style=color:#000;font-weight:700>)</span>
+<span style=color:#000;font-weight:700>class</span> <span style=color:#458;font-weight:700>LoggingService</span> <span style=color:#000;font-weight:700>{</span>
+    <span style=color:#998;font-style:italic>// ...
+</span><span style=color:#998;font-style:italic></span><span style=color:#000;font-weight:700>}</span>
+</code></pre></td></tr></table></div></div><h3 id=contidional-进阶>Contidional 进阶</h3><h4 id=多重注解条件>多重注解条件</h4><p>此处demo实现满足某个环境变量时该条件才能生效</p><p>创建注解类 Env</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1>1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2>2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3>3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4>4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5>5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6>6
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#3c5d5d;font-weight:700>@Target</span><span style=color:#000;font-weight:700>({</span>ElementType<span style=color:#000;font-weight:700>.</span><span style=color:teal>TYPE</span><span style=color:#000;font-weight:700>,</span> ElementType<span style=color:#000;font-weight:700>.</span><span style=color:teal>METHOD</span><span style=color:#000;font-weight:700>})</span>
+<span style=color:#3c5d5d;font-weight:700>@Retention</span><span style=color:#000;font-weight:700>(</span>RetentionPolicy<span style=color:#000;font-weight:700>.</span><span style=color:teal>RUNTIME</span><span style=color:#000;font-weight:700>)</span>
+<span style=color:#3c5d5d;font-weight:700>@Documented</span>
+<span style=color:#000;font-weight:700>public</span> <span style=color:#3c5d5d;font-weight:700>@interface</span> Env <span style=color:#000;font-weight:700>{</span>
+    String<span style=color:#000;font-weight:700>[]</span> <span style=color:#900;font-weight:700>value</span><span style=color:#000;font-weight:700>();</span>
+<span style=color:#000;font-weight:700>}</span>
+</code></pre></td></tr></table></div></div><p>创建 Condition 实现</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10>10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11>11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12>12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13>13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14>14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15>15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16>16
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#000;font-weight:700>public</span> <span style=color:#000;font-weight:700>class</span> <span style=color:#458;font-weight:700>EnvCondition</span> <span style=color:#000;font-weight:700>implements</span> Condition <span style=color:#000;font-weight:700>{</span>
+
+    <span style=color:#3c5d5d;font-weight:700>@Override</span>
+    <span style=color:#000;font-weight:700>public</span> <span style=color:#458;font-weight:700>boolean</span> <span style=color:#900;font-weight:700>matches</span><span style=color:#000;font-weight:700>(</span>ConditionContext conditionContext<span style=color:#000;font-weight:700>,</span> AnnotatedTypeMetadata metadata<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+        <span style=color:#998;font-style:italic>// 查找@EnvCondition作用的方法或者类上的@Env注解
+</span><span style=color:#998;font-style:italic></span>        Map<span style=color:#000;font-weight:700>&lt;</span>String<span style=color:#000;font-weight:700>,</span> Object<span style=color:#000;font-weight:700>&gt;</span> annotationAttributes <span style=color:#000;font-weight:700>=</span> metadata<span style=color:#000;font-weight:700>.</span><span style=color:teal>getAnnotationAttributes</span><span style=color:#000;font-weight:700>(</span>Env<span style=color:#000;font-weight:700>.</span><span style=color:teal>class</span><span style=color:#000;font-weight:700>.</span><span style=color:teal>getName</span><span style=color:#000;font-weight:700>());</span>
+        <span style=color:#000;font-weight:700>if</span> <span style=color:#000;font-weight:700>(</span>annotationAttributes <span style=color:#000;font-weight:700>!=</span> <span style=color:#000;font-weight:700>null</span><span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+            String<span style=color:#000;font-weight:700>[]</span> envList <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>(</span>String<span style=color:#000;font-weight:700>[])</span> annotationAttributes<span style=color:#000;font-weight:700>.</span><span style=color:teal>get</span><span style=color:#000;font-weight:700>(</span><span style=color:#d14>&#34;value&#34;</span><span style=color:#000;font-weight:700>);</span>
+            <span style=color:#998;font-style:italic>// 获取配置的环境变量，通过Java启动参数(vm options)配置 -Denv=dev
+</span><span style=color:#998;font-style:italic></span>            String env <span style=color:#000;font-weight:700>=</span> context<span style=color:#000;font-weight:700>.</span><span style=color:teal>getEnvironment</span><span style=color:#000;font-weight:700>().</span><span style=color:teal>getProperty</span><span style=color:#000;font-weight:700>(</span><span style=color:#d14>&#34;env&#34;</span><span style=color:#000;font-weight:700>);</span>
+            <span style=color:#000;font-weight:700>return</span> Arrays<span style=color:#000;font-weight:700>.</span><span style=color:teal>stream</span><span style=color:#000;font-weight:700>(</span>envList<span style=color:#000;font-weight:700>).</span><span style=color:teal>anyMatch</span><span style=color:#000;font-weight:700>(</span>r <span style=color:#000;font-weight:700>-&gt;</span> Objects<span style=color:#000;font-weight:700>.</span><span style=color:teal>equals</span><span style=color:#000;font-weight:700>(</span>r<span style=color:#000;font-weight:700>,</span> env<span style=color:#000;font-weight:700>));</span>
+        <span style=color:#000;font-weight:700>}</span>
+        <span style=color:#000;font-weight:700>return</span> <span style=color:#000;font-weight:700>false</span><span style=color:#000;font-weight:700>;</span>
+    <span style=color:#000;font-weight:700>}</span>
+<span style=color:#000;font-weight:700>}</span>
+
+</code></pre></td></tr></table></div></div><p>自定义条件使用</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10>10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11>11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12>12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13>13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14>14
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#3c5d5d;font-weight:700>@Configuration</span>
+<span style=color:#000;font-weight:700>public</span> <span style=color:#000;font-weight:700>class</span> <span style=color:#458;font-weight:700>DemoConfiguration</span><span style=color:#000;font-weight:700>{</span>
+    <span style=color:#3c5d5d;font-weight:700>@Env</span><span style=color:#000;font-weight:700>(</span><span style=color:#d14>&#34;dev&#34;</span><span style=color:#000;font-weight:700>)</span>
+    <span style=color:#3c5d5d;font-weight:700>@EnvCondition</span>
+    <span style=color:#000;font-weight:700>public</span> EnvBean <span style=color:#900;font-weight:700>envBean</span><span style=color:#000;font-weight:700>(){</span>
+        <span style=color:#998;font-style:italic>// ...
+</span><span style=color:#998;font-style:italic></span>    <span style=color:#000;font-weight:700>}</span>
+
+    <span style=color:#3c5d5d;font-weight:700>@Env</span><span style=color:#000;font-weight:700>(</span><span style=color:#d14>&#34;prod&#34;</span><span style=color:#000;font-weight:700>)</span>
+    <span style=color:#3c5d5d;font-weight:700>@EnvCondition</span>
+    <span style=color:#000;font-weight:700>public</span> EnvBean <span style=color:#900;font-weight:700>prodBean</span><span style=color:#000;font-weight:700>(){</span>
+        <span style=color:#998;font-style:italic>// ...
+</span><span style=color:#998;font-style:italic></span>    <span style=color:#000;font-weight:700>}</span>
+<span style=color:#000;font-weight:700>}</span>
+</code></pre></td></tr></table></div></div><h3 id=写在最后>写在最后</h3><p>码字不易，因个人能力有限，难免有疏漏和错误之处，如发现bug或者有更好的建议，欢迎批评指正，不吝感激</p></div></div></div></div><div class=container><div class=row><div class="col-lg-10 mx-auto"><div id=gitalk-comments></div><link href=//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css rel=stylesheet><script src=//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js></script><script type=application/javascript>const gitalk=new Gitalk({clientID:'6c2478e5c574adadad50',clientSecret:'0aecf2c4c0d2f26b9e277f1a6c45f27b617e4e4a',repo:'comment.tianhui.xin',owner:'homeant',admin:['homeant'],id:'5e20270e7a0dd66c889fe37e3e81805d',distractionFreeMode:true})
+gitalk.render('gitalk-comments')</script></div></div></div></section><footer class="bg-light section pb-0"><div class=container><div class=row><div class="col-md-3 col-sm-6 mb-5"><h3 class=mb-4>个人链接</h3><ul class="list-unstyled footer-list"><li><a href=https://tianhui.xin/about>关于我</a></li><li><a href=//github.com/homeant>GitHub</a></li></ul></div><div class="col-md-3 col-sm-6 mb-5"><h3 class=mb-4>最新文章</h3><ul class="list-unstyled footer-list"><li><a href=https://tianhui.xin/blog/2022/01/02/spring-boot-admin-kubernetes/>Spring Boot Admin On Kubernetes</a></li><li><a href=https://tianhui.xin/blog/2021/09/16/spring-conditional-annotations/>Spring Conditional详解</a></li><li><a href=https://tianhui.xin/blog/2021/04/03/mybatis_data_encryption/>mybatis对数据进行加密</a></li><li><a href=https://tianhui.xin/blog/2020/06/27/spring_cloud_nacos/>跟我学SpringCloud 之 nacos</a></li><li><a href=https://tianhui.xin/blog/2020/06/21/mapstruct/>一见倾心之初遇MapStruct</a></li><li><a href=https://tianhui.xin/blog/2020/05/31/mybatisinterceptorofdatamasking/>Mybatis Interceptor 实现数据脱敏</a></li></ul></div><div class="col-md-3 col-sm-6 mb-5"><h3 class=mb-4>友情链接</h3><ul class="list-unstyled footer-list"><li><a href=http://xujin.org/>玹霖志</a></li><li><a href=https://itachi.xyz/>昨夜梦 今辰你 明日思</a></li></ul></div><div class="col-md-3 col-sm-6 mb-5"><a class="d-block mb-3" href=https://tianhui.xin/><img width=66px class=img-fluid src=https://tianhui.xin/images/logo.png alt=怪咖晨></a><p class=mb-4>有智者立长志，无志者长立志。</p><ul class="list-inline social-icons"><li class=list-inline-item><a href=//github.com/homeant><i class=ti-github></i></a></li></ul></div></div><div class="border-top border-default text-center py-4 mt-4"><small class=content>© 2009-2020 <a href=//tianhui.xin>tianhui.xin</a> 版权所有 ICP证：<a href=http://www.beian.miit.gov.cn>京16046477</a></small>
+您是本站第<span id=busuanzi_value_site_uv></span>位访客</div></div></footer><script src=https://tianhui.xin/plugins/jQuery/jquery.min.js></script><script src=https://tianhui.xin/plugins/bootstrap/bootstrap.min.js></script><script src=https://tianhui.xin/plugins/slick/slick.min.js></script><script src=https://tianhui.xin/plugins/love-click.js></script><script src=https://cdn.bootcdn.net/ajax/libs/jquery.sticky/1.0.4/jquery.sticky.min.js></script><script src=https://tianhui.xin/plugins/scrollUp/scrollUp.min.js></script><script src=https://tianhui.xin/plugins/clipboard/clipboard.js></script><script src=https://cdn.jsdelivr.net/npm/algoliasearch@4.5.1/dist/algoliasearch-lite.umd.js integrity="sha256-EXPXz4W6pQgfYY3yTpnDa3OH8/EPn16ciVsPQ/ypsjk=" crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/instantsearch.js@4.8.3/dist/instantsearch.production.min.js integrity="sha256-LAGhRRdtVoD6RLo2qDQsU2mp+XVSciKRC8XPOBWmofM=" crossorigin=anonymous></script><script src=https://tianhui.xin/js/app.c626aab600fdfdf0c064234dd1dc543b.js></script><script src=https://tianhui.xin/js/post.2ce597fd293e38d5be795230098b93c0.js></script><script async src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js></script><div class=scrollUp><i class=ti-angle-up></i></div></body></html>

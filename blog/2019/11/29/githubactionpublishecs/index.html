@@ -1,0 +1,362 @@
+<!doctype html><html lang=zh><head><meta charset=utf-8><title>通过GitHub actions发布hugo到私有云服务器</title><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta name=keywords content="怪咖晨,个人博客,java,spring cloud,spring boot,huangtianhui,hugo,githubAction"><meta name=description content="继上次分享的GitHub actions 发布到GitHub pages,收到的反馈还不错，咱们这次也记录了下编写脚本的过程，过程比较坎坷，如果只要结果，请看文章最后几个板块的内容。"><meta name=author content="huangtianhui"><meta name=generator content="Hugo 0.78.1"><link rel=stylesheet href=https://tianhui.xin/plugins/bootstrap/bootstrap.min.css><link rel=stylesheet href=https://tianhui.xin/plugins/themify-icons/themify-icons.css><link rel=stylesheet href=https://tianhui.xin/plugins/slick/slick.css><link href=https://tianhui.xin/css/animate.min.css rel=stylesheet media=screen><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/instantsearch.css@8.0.0/themes/reset-min.css integrity="sha256-2AeJLzExpZvqLUxMfcs+4DWcMwNfpnjUeAAvEtPr0wU=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/instantsearch.css@8.0.0/themes/satellite-min.css integrity="sha256-p/rGN4RGy6EDumyxF9t7LKxWGg6/MZfGhJM/asKkqvA=" crossorigin=anonymous><link href=https://tianhui.xin/css/style.min.aa098d6308cd50eb086d8a887786f77e.css rel=stylesheet media=screen><link rel="shortcut icon" href=https://tianhui.xin/images/favicon.png type=image/x-icon><link rel=icon href=https://tianhui.xin/images/favicon.png type=image/x-icon><meta property="og:title" content="通过GitHub actions发布hugo到私有云服务器"><meta property="og:description" content="继上次分享的GitHub actions 发布到GitHub pages,收到的反馈还不错，咱们这次也记录了下编写脚本的过程，过程比较坎坷，如果只要结果，请看文章最后几个板块的内容。"><meta property="og:type" content="article"><meta property="og:url" content="https://tianhui.xin/blog/2019/11/29/githubactionpublishecs/"><meta property="article:published_time" content="2019-11-29T03:00:00+00:00"><meta property="article:modified_time" content="2019-11-29T03:00:00+00:00"></head><body><div class=preloader></div><header class=header-area><div class=main-header-area><div class=container><nav class="navbar navbar-expand-lg navbar-light bg-transparent"><a class=nav-brand href=https://tianhui.xin/><img width=66px src=https://tianhui.xin/images/logo.png alt=怪咖晨></a>
+<button class=navbar-toggler type=button data-toggle=collapse data-target=#navigation aria-expanded=false aria-label="Toggle navigation">
+<i class=ti-menu></i></button><div class="collapse navbar-collapse" id=navigation><div class=navbar-close data-toggle=collapse data-target=#navigation><button class=navbar-toggler type=button>
+<i class=ti-close></i></button></div><div class=navbar-warp><ul class="navbar-nav mx-auto"><li class=nav-item><a class=nav-link href=https://tianhui.xin/>首页</a></li><li class=nav-item><a class=nav-link href=https://tianhui.xin/blog>博客</a></li><li class=nav-item><a class=nav-link href=https://tianhui.xin/categories/%E5%AD%A6%E6%97%A0%E6%AD%A2%E5%A2%83/>学无止境</a></li><li class=nav-item><a class=nav-link href=https://tianhui.xin/about>关于我</a></li><li class=nav-item><a class=nav-link href=https://tianhui.xin/search>搜索</a></li></ul><a href=//github.com/homeant class="btn btn-sm btn-primary ml-3">关注我</a></div></div></nav></div></div></header><div class="banner-area bg-img" style=background-image:url(https://tianhui.xin/images/banner.png)><div class=container><div class="row justify-content-center"><div class="col-12 col-sm-9 col-xl-6"><div class="banner-content text-center"><h2>怪咖晨</h2><p>多年软件开发经验</p><p>致力于微服务、DDD实践</p></div></div></div></div></div><section class=section><div class=container><div class=row><div class="col-lg-10 mx-auto"><h2>通过GitHub actions发布hugo到私有云服务器</h2><div class=content><p>继上次分享的GitHub actions 发布到GitHub pages,收到的反馈还不错，咱们这次也记录了下编写脚本的过程，过程比较坎坷，如果只要结果，请看文章最后几个板块的内容。</p><h2 id=准备工作>准备工作</h2><h3 id=ssh-key-生成>SSH key 生成</h3><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1>1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2>2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3>3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4>4
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>ssh-keygen -t rsa -b <span style=color:#099>4096</span> -C <span style=color:#d14>&#34;</span><span style=color:#000;font-weight:700>$(</span>git config user.email<span style=color:#000;font-weight:700>)</span><span style=color:#d14>&#34;</span> -f gh-pages -N <span style=color:#d14>&#34;&#34;</span>
+<span style=color:#998;font-style:italic># You will get 2 files:</span>
+<span style=color:#998;font-style:italic>#   gh-pages.pub (public key)</span>
+<span style=color:#998;font-style:italic>#   gh-pages     (private key)</span>
+</code></pre></td></tr></table></div></div><h3 id=配置私钥>配置私钥</h3><p>如果前面读过我的<a href=/blog/2019/11/17/hugousegithubactionstopages/>hugo通过Github Action部署到Github Pages</a>文章，那么一定知道怎么去上传公钥，这里我们再重复一下</p><p>假设 开发项目为 tianhui.xin<br>打开tianhui.xin仓库的<strong>settings</strong>，再点击<strong>Secrets</strong>，然后添加咱们刚刚生成的私钥，name为<strong>ACTIONS_DEPLOY_KEY</strong></p><table><thead><tr><th style=text-align:left>Add your private key</th><th style=text-align:left>Success</th></tr></thead><tbody><tr><td style=text-align:left><img src="https://image.tianhui.xin/hugo_github_actions/008.jpg?x-oss-process=style/make" alt></td><td style=text-align:left><img src="https://image.tianhui.xin/hugo_github_actions/009.jpg?x-oss-process=style/make" alt></td></tr></tbody></table><h3 id=上传公钥服务器>上传公钥服务器</h3><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1>1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2>2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3>3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4>4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5>5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6>6
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>ssh-copy-id appuser@10.10.10.10
+/usr/bin/ssh-copy-id: INFO: Source of key<span style=color:#000;font-weight:700>(</span>s<span style=color:#000;font-weight:700>)</span> to be installed: <span style=color:#d14>&#34;/home/appuser/.ssh/id_rsa.pub&#34;</span>
+The authenticity of host <span style=color:#d14>&#39;10.10.10.10 (10.10.10.10)&#39;</span> can<span style=color:#a61717;background-color:#e3d2d2>&#39;</span>t be established.
+ECDSA key fingerprint is SHA256:mpM5LP8zLMh/CibV34URdTFbciAJ3fvCG1f9kSD2ITI.
+ECDSA key fingerprint is MD5:60:40:77:02:5b:c6:e0:9a:e7:a3:96:bf:10:da:12:1c.
+Are you sure you want to <span style=color:#000;font-weight:700>continue</span> connecting <span style=color:#000;font-weight:700>(</span>yes/no<span style=color:#000;font-weight:700>)</span>? yes
+</code></pre></td></tr></table></div></div><p>输入远程用户的密码后，SSH公钥就会自动上传了．SSH公钥保存在远程Linux服务器的<code>.ssh/authorized_keys</code>文件中</p><h2 id=思考>思考</h2><blockquote><p><code>docker</code>镜像每次都是一个新的，<code>SSH</code>在第一次连接都会询问这个一个问题</p></blockquote><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1>1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2>2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3>3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4>4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5>5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6>6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7>7
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>The authenticity of host <span style=color:#d14>&#39;10.10.10.10 (10.10.10.10)&#39;</span> can<span style=color:#d14>&#39;t be established.
+</span><span style=color:#d14>
+</span><span style=color:#d14>RSA key fingerprint is 97:8c:1b:f2:6f:14:6b:5c:3b:ec:aa:46:46:74:7c:40.
+</span><span style=color:#d14>Are you sure you want to continue connecting (yes/no)? yes
+</span><span style=color:#d14>Warning: Permanently added &#39;</span>10.10.10.10 <span style=color:#000;font-weight:700>(</span>10.10.10.10<span style=color:#000;font-weight:700>)</span><span style=color:#d14>&#39; (RSA) to the list of
+</span><span style=color:#d14>known hosts.
+</span><span style=color:#d14>Enter passphrase for key &#39;</span>/home/appuser/.ssh/id_rsa<span style=color:#a61717;background-color:#e3d2d2>&#39;</span>:
+</code></pre></td></tr></table></div></div><p>其原因是因为<code>/home/appuser/.ssh</code>目录下的<code>known_hosts</code>不存在对你正要连接的服务器信息，也就是说你是第一次连接；那么我们是不是可以伪造一个呢，喏，你还别说，我还真去把自己电脑上的<code>known_hosts</code>的对应记录复制了一份上去，我简直是个天才，但结果不尽人意，好吧，咱们继续折腾。</p><p>幸运的是我在梯子的帮助下，找到了这样一个命令<code>ssh-keyscan</code>，搞起🤕</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1>1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>ssh-keyscan -t rsa 10.10.10.10 &gt;&gt; <span style=color:#d14>&#34;/home/appuser/known_hosts&#34;</span>
+</code></pre></td></tr></table></div></div><h2 id=新建job脚本测试ssh脚本>新建job脚本(测试SSH脚本)</h2><p>主要过程就是测试下在<code>docker</code>环境下如何远程<code>SSH</code>，</p><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10>10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11>11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12>12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13>13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14>14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15>15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16>16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17>17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18>18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19>19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20>20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21>21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22>22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23>23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24>24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25>25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26>26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27>27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28>28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29>29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30>30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31>31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32>32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33>33
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34>34
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35>35
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36>36
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37>37
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38>38
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39>39
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40>40
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:navy>name</span>:<span style=color:#bbb> </span>aliyun<span style=color:#bbb>
+</span><span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:navy>on</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:navy>push</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:navy>branches</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- master<span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:navy>jobs</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:navy>build</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:navy>runs-on</span>:<span style=color:#bbb> </span>ubuntu-latest<span style=color:#bbb>
+</span><span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:navy>steps</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- <span style=color:navy>name</span>:<span style=color:#bbb> </span>checkout<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:navy>uses</span>:<span style=color:#bbb> </span>actions/checkout@master<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:navy>with</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>          </span><span style=color:navy>submodules</span>:<span style=color:#bbb> </span><span style=color:#000;font-weight:700>true</span><span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- <span style=color:navy>name</span>:<span style=color:#bbb> </span>Setup Hugo<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:navy>uses</span>:<span style=color:#bbb> </span>peaceiris/actions-hugo@v2.2.2<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:navy>with</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>          </span><span style=color:navy>hugo-version</span>:<span style=color:#bbb> </span><span style=color:#d14>&#39;0.59.1&#39;</span><span style=color:#bbb>
+</span><span style=color:#bbb>          </span><span style=color:navy>extended</span>:<span style=color:#bbb> </span><span style=color:#000;font-weight:700>true</span><span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- <span style=color:navy>name</span>:<span style=color:#bbb> </span>Build<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:navy>run</span>:<span style=color:#bbb> </span>hugo --minify<span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- <span style=color:navy>name</span>:<span style=color:#bbb> </span>Deploy<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:navy>env</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>          </span><span style=color:navy>ACTIONS_DEPLOY_KEY</span>:<span style=color:#bbb> </span>${{ secrets.ACTIONS_DEPLOY_KEY }}<span style=color:#bbb>
+</span><span style=color:#bbb>          </span><span style=color:navy>HOST</span>:<span style=color:#bbb> </span><span style=color:#099>10.10.10.10</span><span style=color:#bbb>
+</span><span style=color:#bbb>          </span><span style=color:navy>USER</span>:<span style=color:#bbb> </span>appuser<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:navy>run</span>:<span style=color:#bbb> </span>|<span style=color:#d14>
+</span><span style=color:#d14>          SSH_PATH=&#34;$HOME/.ssh&#34;
+</span><span style=color:#d14>          mkdir -p $SSH_PATH
+</span><span style=color:#d14>          touch &#34;$SSH_PATH/known_hosts&#34;
+</span><span style=color:#d14>          echo &#34;$ACTIONS_DEPLOY_KEY&#34; &gt; &#34;$SSH_PATH/id_rsa&#34;
+</span><span style=color:#d14>          chmod 700 &#34;$SSH_PATH&#34;
+</span><span style=color:#d14>          chmod 600 &#34;$SSH_PATH/known_hosts&#34;
+</span><span style=color:#d14>          chmod 600 &#34;$SSH_PATH/id_rsa&#34;
+</span><span style=color:#d14>          eval $(ssh-agent)
+</span><span style=color:#d14>          ssh-add &#34;$SSH_PATH/id_rsa&#34;
+</span><span style=color:#d14>          ssh-keyscan -t rsa $HOST &gt;&gt; &#34;$SSH_PATH/known_hosts&#34;
+</span><span style=color:#d14>          ssh -o StrictHostKeyChecking=no -i $SSH_PATH/id_rsa -A -tt $USER@$HOST ls</span><span style=color:#bbb>          
+</span></code></pre></td></tr></table></div></div><p>执行<code>push</code>，等待CI部署完成，查看<code>log</code>发现已经打印出了服务器的文件文件夹信息，😄</p><p><img src="https://image.tianhui.xin/githubActionPublishECS/1.png?x-oss-process=style/make" alt=测试结果></p><h2 id=最终的job脚本>最终的job脚本</h2><h3 id=配置说明>配置说明</h3><p>使用只需要关注<code>deploy</code>中的<code>env</code>配置</p><table><thead><tr><th style=text-align:left>config</th><th style=text-align:left>description</th></tr></thead><tbody><tr><td style=text-align:left>ACTIONS_DEPLOY_KEY</td><td style=text-align:left>连接服务的私钥(在GitHub项目下的<code>setting</code>><code>Secrets</code>配置)</td></tr><tr><td style=text-align:left>HOST</td><td style=text-align:left>服务器的IP地址</td></tr><tr><td style=text-align:left>USER</td><td style=text-align:left>服务器的部署用户，对应的私钥的用户</td></tr><tr><td style=text-align:left>HOME_PATH</td><td style=text-align:left>登陆服务器后，我们去哪个目录，一般设置为用户目录</td></tr><tr><td style=text-align:left>DEVELOP_SH_PATH</td><td style=text-align:left>服务器部署脚本(咱们的部署目录还是服务器上执行，不写在job中)</td></tr><tr><td style=text-align:left>PACKAGE_NAME</td><td style=text-align:left>打包的名称(public.tar.gz),目前只支持这个</td></tr><tr><td style=text-align:left>DEVELOP_DIR</td><td style=text-align:left>项目部署文件夹</td></tr><tr><td style=text-align:left>BACKUP_DIR</td><td style=text-align:left>项目的备份文件夹</td></tr></tbody></table><h3 id=job文件>job文件</h3><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10>10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11>11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12>12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13>13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14>14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15>15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16>16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17>17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18>18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19>19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20>20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21>21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22>22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23>23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24>24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25>25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26>26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27>27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28>28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29>29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30>30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31>31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32>32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33>33
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34>34
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35>35
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36>36
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37>37
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38>38
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39>39
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40>40
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41>41
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42>42
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=43>43
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=44>44
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=45>45
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=46>46
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=47>47
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=48>48
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=49>49
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:navy>name</span>:<span style=color:#bbb> </span>aliyun<span style=color:#bbb>
+</span><span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:navy>on</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:navy>push</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:navy>branches</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- master<span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:navy>jobs</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:navy>build</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:navy>runs-on</span>:<span style=color:#bbb> </span>ubuntu-latest<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:navy>steps</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- <span style=color:navy>name</span>:<span style=color:#bbb> </span>checkout<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:navy>uses</span>:<span style=color:#bbb> </span>actions/checkout@master<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:navy>with</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>          </span><span style=color:navy>submodules</span>:<span style=color:#bbb> </span><span style=color:#000;font-weight:700>true</span><span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- <span style=color:navy>name</span>:<span style=color:#bbb> </span>setup Hugo<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:navy>uses</span>:<span style=color:#bbb> </span>peaceiris/actions-hugo@v2.2.2<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:navy>with</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>          </span><span style=color:navy>hugo-version</span>:<span style=color:#bbb> </span><span style=color:#d14>&#39;0.59.1&#39;</span><span style=color:#bbb>
+</span><span style=color:#bbb>          </span><span style=color:navy>extended</span>:<span style=color:#bbb> </span><span style=color:#000;font-weight:700>true</span><span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- <span style=color:navy>name</span>:<span style=color:#bbb> </span>Build<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:navy>run</span>:<span style=color:#bbb> </span>hugo --minify<span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- <span style=color:navy>name</span>:<span style=color:#bbb> </span>deploy<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:navy>env</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>          </span><span style=color:navy>ACTIONS_DEPLOY_KEY</span>:<span style=color:#bbb> </span>${{ secrets.ACTIONS_DEPLOY_KEY }}<span style=color:#bbb>
+</span><span style=color:#bbb>          </span><span style=color:navy>HOST</span>:<span style=color:#bbb> </span><span style=color:#099>10.10.10.10</span><span style=color:#bbb>
+</span><span style=color:#bbb>          </span><span style=color:navy>USER</span>:<span style=color:#bbb> </span>appuser<span style=color:#bbb>
+</span><span style=color:#bbb>          </span><span style=color:navy>HOME_PATH</span>:<span style=color:#bbb> </span>/home/appuser<span style=color:#bbb>
+</span><span style=color:#bbb>          </span><span style=color:navy>DEVELOP_SH_PATH</span>:<span style=color:#bbb> </span>/home/appuser/develop.sh<span style=color:#bbb>
+</span><span style=color:#bbb>          </span><span style=color:navy>PACKAGE_NAME</span>:<span style=color:#bbb> </span>public.tar.gz<span style=color:#bbb>
+</span><span style=color:#bbb>          </span><span style=color:navy>DEVELOP_DIR</span>:<span style=color:#bbb> </span>tianhui.xin<span style=color:#bbb>
+</span><span style=color:#bbb>          </span><span style=color:navy>BACKUP_DIR</span>:<span style=color:#bbb> </span>backup<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:navy>run</span>:<span style=color:#bbb> </span>|<span style=color:#d14>
+</span><span style=color:#d14>          SSH_PATH=&#34;$HOME/.ssh&#34;
+</span><span style=color:#d14>          mkdir -p $SSH_PATH
+</span><span style=color:#d14>          touch &#34;$SSH_PATH/known_hosts&#34;
+</span><span style=color:#d14>          echo &#34;$ACTIONS_DEPLOY_KEY&#34; &gt; &#34;$SSH_PATH/id_rsa&#34;
+</span><span style=color:#d14>          chmod 700 &#34;$SSH_PATH&#34;
+</span><span style=color:#d14>          chmod 600 &#34;$SSH_PATH/known_hosts&#34;
+</span><span style=color:#d14>          chmod 600 &#34;$SSH_PATH/id_rsa&#34;
+</span><span style=color:#d14>          eval $(ssh-agent)
+</span><span style=color:#d14>          ssh-add &#34;$SSH_PATH/id_rsa&#34;
+</span><span style=color:#d14>          ssh-keyscan -t rsa $HOST &gt;&gt; &#34;$SSH_PATH/known_hosts&#34;
+</span><span style=color:#d14>          cd public
+</span><span style=color:#d14>          tar -cf $PACKAGE_NAME *
+</span><span style=color:#d14>          scp $PACKAGE_NAME $USER@$HOST:$HOME_PATH
+</span><span style=color:#d14>          ssh -o StrictHostKeyChecking=no -i $SSH_PATH/id_rsa -A -tt $USER@$HOST sh $DEVELOP_SH_PATH \
+</span><span style=color:#d14>            -d $HOME_PATH/$DEVELOP_DIR -b $HOME_PATH/$BACKUP_DIR -f $HOME_PATH/$PACKAGE_NAME
+</span><span style=color:#d14>          exit</span><span style=color:#bbb>          
+</span></code></pre></td></tr></table></div></div><h2 id=远程服务器操作>远程服务器操作</h2><h3 id=新建developsh>新建develop.sh</h3><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10>10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11>11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12>12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13>13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14>14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15>15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16>16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17>17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18>18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19>19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20>20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21>21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22>22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23>23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24>24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25>25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26>26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27>27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28>28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29>29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30>30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31>31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32>32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33>33
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34>34
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35>35
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36>36
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37>37
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38>38
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39>39
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40>40
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41>41
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42>42
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=43>43
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=44>44
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=45>45
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=46>46
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=47>47
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=48>48
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=49>49
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=50>50
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=51>51
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=52>52
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=53>53
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=54>54
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=55>55
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=56>56
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=57>57
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=58>58
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=59>59
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=60>60
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=61>61
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=62>62
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=63>63
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=64>64
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=65>65
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=66>66
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=67>67
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=68>68
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=69>69
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=70>70
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#999;font-weight:700;font-style:italic>#!/bin/sh
+</span><span style=color:#999;font-weight:700;font-style:italic></span><span style=color:#0086b3>set</span> -e
+
+<span style=color:teal>FILE_NAME</span><span style=color:#000;font-weight:700>=</span><span style=color:#d14>`</span>basename <span style=color:teal>$0</span><span style=color:#d14>`</span>
+
+<span style=color:#998;font-style:italic>#说明</span>
+<span style=color:teal>show_usage</span><span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#34;usage:</span><span style=color:teal>$FILE_NAME</span><span style=color:#d14> [-d develop_path,-b backup_path -f file_path]&#34;</span>
+
+<span style=color:#998;font-style:italic>#参数</span>
+<span style=color:#998;font-style:italic># 本地仓库目录</span>
+<span style=color:teal>opt_develop_path</span><span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#34;&#34;</span>
+
+<span style=color:#998;font-style:italic># 备份目录</span>
+<span style=color:teal>opt_backup_path</span><span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#34;&#34;</span>
+
+<span style=color:#998;font-style:italic># 部署文件</span>
+<span style=color:teal>opt_file_path</span><span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#34;&#34;</span>
+
+
+<span style=color:teal>GETOPT_ARGS</span><span style=color:#000;font-weight:700>=</span><span style=color:#d14>`</span>getopt -o d:b:f: -al develop_path:,backup_path:,file_path: -- <span style=color:#d14>&#34;</span><span style=color:teal>$@</span><span style=color:#d14>&#34;</span><span style=color:#d14>`</span>
+<span style=color:#0086b3>eval</span> <span style=color:#0086b3>set</span> -- <span style=color:#d14>&#34;</span><span style=color:teal>$GETOPT_ARGS</span><span style=color:#d14>&#34;</span>
+<span style=color:#998;font-style:italic>#获取参数</span>
+<span style=color:#000;font-weight:700>while</span> <span style=color:#000;font-weight:700>[</span> -n <span style=color:#d14>&#34;</span><span style=color:teal>$1</span><span style=color:#d14>&#34;</span> <span style=color:#000;font-weight:700>]</span>
+<span style=color:#000;font-weight:700>do</span>
+        <span style=color:#000;font-weight:700>case</span> <span style=color:#d14>&#34;</span><span style=color:teal>$1</span><span style=color:#d14>&#34;</span> in
+                -d|--develop_path<span style=color:#000;font-weight:700>)</span> <span style=color:teal>opt_develop_path</span><span style=color:#000;font-weight:700>=</span><span style=color:teal>$2</span>; <span style=color:#0086b3>shift</span> 2;;
+                -b|--backup_path<span style=color:#000;font-weight:700>)</span> <span style=color:teal>opt_backup_path</span><span style=color:#000;font-weight:700>=</span><span style=color:teal>$2</span>; <span style=color:#0086b3>shift</span> 2;;
+				-f|--opt_file_path<span style=color:#000;font-weight:700>)</span> <span style=color:teal>opt_file_path</span><span style=color:#000;font-weight:700>=</span><span style=color:teal>$2</span>; <span style=color:#0086b3>shift</span> 2;;
+                --<span style=color:#000;font-weight:700>)</span> <span style=color:#0086b3>break</span> ;;
+                *<span style=color:#000;font-weight:700>)</span> <span style=color:#0086b3>echo</span> <span style=color:teal>$1</span>,<span style=color:teal>$2</span>,<span style=color:teal>$show_usage</span>; <span style=color:#0086b3>break</span> ;;
+        <span style=color:#000;font-weight:700>esac</span>
+<span style=color:#000;font-weight:700>done</span>
+
+<span style=color:#998;font-style:italic># 判断参数</span>
+<span style=color:#000;font-weight:700>if</span> <span style=color:#000;font-weight:700>[[</span> -z <span style=color:teal>$opt_develop_path</span> <span style=color:#000;font-weight:700>||</span> -z <span style=color:teal>$opt_backup_path</span> <span style=color:#000;font-weight:700>||</span> -z <span style=color:teal>$opt_file_path</span> <span style=color:#000;font-weight:700>]]</span>; <span style=color:#000;font-weight:700>then</span>
+        <span style=color:#0086b3>echo</span> -e <span style=color:teal>$show_usage</span>
+        <span style=color:#0086b3>exit</span> <span style=color:#099>0</span>
+<span style=color:#000;font-weight:700>fi</span>
+
+<span style=color:#000;font-weight:700>if</span> <span style=color:#000;font-weight:700>[</span> <span style=color:#d14>&#34;</span><span style=color:teal>$opt_develop_path</span><span style=color:#d14>&#34;</span> <span style=color:#000;font-weight:700>=</span> <span style=color:#d14>&#34;</span><span style=color:teal>$opt_backup_path</span><span style=color:#d14>&#34;</span> <span style=color:#000;font-weight:700>]</span>; <span style=color:#000;font-weight:700>then</span>
+  <span style=color:#0086b3>echo</span> <span style=color:#d14>&#39;develop_path eq backup_path&#39;</span>
+  <span style=color:#0086b3>exit</span> <span style=color:#099>0</span>
+<span style=color:#000;font-weight:700>fi</span>
+
+<span style=color:#998;font-style:italic># 判断部署文件是否存在</span>
+<span style=color:#000;font-weight:700>if</span> <span style=color:#000;font-weight:700>[</span> ! -f <span style=color:teal>$opt_file_path</span> <span style=color:#000;font-weight:700>]</span>; <span style=color:#000;font-weight:700>then</span>
+	<span style=color:#0086b3>echo</span> <span style=color:#d14>&#34;</span><span style=color:teal>$opt_file_path</span><span style=color:#d14> file does not exist&#34;</span>
+	<span style=color:#0086b3>exit</span> <span style=color:#099>0</span>
+<span style=color:#000;font-weight:700>fi</span>
+
+<span style=color:#998;font-style:italic># 判断文件夹是否存在</span>
+<span style=color:#000;font-weight:700>if</span> <span style=color:#000;font-weight:700>[</span> ! -x <span style=color:teal>$opt_develop_path</span> <span style=color:#000;font-weight:700>]</span>; <span style=color:#000;font-weight:700>then</span>
+  mkdir <span style=color:teal>$opt_develop_path</span>
+<span style=color:#000;font-weight:700>fi</span>
+
+<span style=color:#998;font-style:italic># 判断文件夹是否存在</span>
+<span style=color:#000;font-weight:700>if</span> <span style=color:#000;font-weight:700>[</span> ! -x <span style=color:teal>$opt_backup_path</span> <span style=color:#000;font-weight:700>]</span>; <span style=color:#000;font-weight:700>then</span>
+  mkdir <span style=color:teal>$opt_backup_path</span>
+<span style=color:#000;font-weight:700>fi</span>
+
+<span style=color:#998;font-style:italic># 文件夹不是空的</span>
+<span style=color:#000;font-weight:700>if</span> <span style=color:#000;font-weight:700>[</span> ! <span style=color:#d14>&#34;`ls -A </span><span style=color:teal>$opt_develop_path</span><span style=color:#d14>`&#34;</span> <span style=color:#000;font-weight:700>=</span> <span style=color:#d14>&#34;&#34;</span> <span style=color:#000;font-weight:700>]</span>; <span style=color:#000;font-weight:700>then</span>
+  <span style=color:#0086b3>cd</span> <span style=color:teal>$opt_develop_path</span>
+  tar -cf <span style=color:teal>$opt_backup_path</span>/<span style=color:#000;font-weight:700>$(</span>date +%Y%m%d%H%M<span style=color:#000;font-weight:700>)</span>.tar.gz <span style=color:teal>$opt_develop_path</span>/*
+  rm -rf <span style=color:teal>$opt_develop_path</span>/*
+<span style=color:#000;font-weight:700>fi</span>
+<span style=color:#998;font-style:italic># 解压文件</span>
+tar -xf <span style=color:teal>$opt_file_path</span> -C <span style=color:teal>$opt_develop_path</span>
+
+<span style=color:#0086b3>echo</span> <span style=color:#d14>&#34;publish success!&#34;</span>
+</code></pre></td></tr></table></div></div><h3 id=给予执行权限>给予执行权限</h3><div class=highlight><div style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1>1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>chomd u+x develop.sh
+</code></pre></td></tr></table></div></div><p><img src="https://image.tianhui.xin/githubActionPublishECS/2.png?x-oss-process=style/make" alt=执行结果></p><p>一切准备就绪，开始你的奇妙之旅吧，码字不易，有问题请留言交流。</p><p>相关文章:</p><ol><li><a href=/blog/2019/11/17/hugousegithubactionstopages/>hugo通过Github Action部署到Github Pages</a></li></ol></div></div></div></div><div class=container><div class=row><div class="col-lg-10 mx-auto"><div id=gitalk-comments></div><link href=//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css rel=stylesheet><script src=//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js></script><script type=application/javascript>const gitalk=new Gitalk({clientID:'6c2478e5c574adadad50',clientSecret:'0aecf2c4c0d2f26b9e277f1a6c45f27b617e4e4a',repo:'comment.tianhui.xin',owner:'homeant',admin:['homeant'],id:'e87604e83f99cc1f0ad28bba9e1d05c7',distractionFreeMode:true})
+gitalk.render('gitalk-comments')</script></div></div></div></section><footer class="bg-light section pb-0"><div class=container><div class=row><div class="col-md-3 col-sm-6 mb-5"><h3 class=mb-4>个人链接</h3><ul class="list-unstyled footer-list"><li><a href=https://tianhui.xin/about>关于我</a></li><li><a href=//github.com/homeant>GitHub</a></li></ul></div><div class="col-md-3 col-sm-6 mb-5"><h3 class=mb-4>最新文章</h3><ul class="list-unstyled footer-list"><li><a href=https://tianhui.xin/blog/2022/01/02/spring-boot-admin-kubernetes/>Spring Boot Admin On Kubernetes</a></li><li><a href=https://tianhui.xin/blog/2021/09/16/spring-conditional-annotations/>Spring Conditional详解</a></li><li><a href=https://tianhui.xin/blog/2021/04/03/mybatis_data_encryption/>mybatis对数据进行加密</a></li><li><a href=https://tianhui.xin/blog/2020/06/27/spring_cloud_nacos/>跟我学SpringCloud 之 nacos</a></li><li><a href=https://tianhui.xin/blog/2020/06/21/mapstruct/>一见倾心之初遇MapStruct</a></li><li><a href=https://tianhui.xin/blog/2020/05/31/mybatisinterceptorofdatamasking/>Mybatis Interceptor 实现数据脱敏</a></li></ul></div><div class="col-md-3 col-sm-6 mb-5"><h3 class=mb-4>友情链接</h3><ul class="list-unstyled footer-list"><li><a href=http://xujin.org/>玹霖志</a></li><li><a href=https://itachi.xyz/>昨夜梦 今辰你 明日思</a></li></ul></div><div class="col-md-3 col-sm-6 mb-5"><a class="d-block mb-3" href=https://tianhui.xin/><img width=66px class=img-fluid src=https://tianhui.xin/images/logo.png alt=怪咖晨></a><p class=mb-4>有智者立长志，无志者长立志。</p><ul class="list-inline social-icons"><li class=list-inline-item><a href=//github.com/homeant><i class=ti-github></i></a></li></ul></div></div><div class="border-top border-default text-center py-4 mt-4"><small class=content>© 2009-2020 <a href=//tianhui.xin>tianhui.xin</a> 版权所有 ICP证：<a href=http://www.beian.miit.gov.cn>京16046477</a></small>
+您是本站第<span id=busuanzi_value_site_uv></span>位访客</div></div></footer><script src=https://tianhui.xin/plugins/jQuery/jquery.min.js></script><script src=https://tianhui.xin/plugins/bootstrap/bootstrap.min.js></script><script src=https://tianhui.xin/plugins/slick/slick.min.js></script><script src=https://tianhui.xin/plugins/love-click.js></script><script src=https://cdn.bootcdn.net/ajax/libs/jquery.sticky/1.0.4/jquery.sticky.min.js></script><script src=https://tianhui.xin/plugins/scrollUp/scrollUp.min.js></script><script src=https://tianhui.xin/plugins/clipboard/clipboard.js></script><script src=https://cdn.jsdelivr.net/npm/algoliasearch@4.5.1/dist/algoliasearch-lite.umd.js integrity="sha256-EXPXz4W6pQgfYY3yTpnDa3OH8/EPn16ciVsPQ/ypsjk=" crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/instantsearch.js@4.8.3/dist/instantsearch.production.min.js integrity="sha256-LAGhRRdtVoD6RLo2qDQsU2mp+XVSciKRC8XPOBWmofM=" crossorigin=anonymous></script><script src=https://tianhui.xin/js/app.c626aab600fdfdf0c064234dd1dc543b.js></script><script src=https://tianhui.xin/js/post.2ce597fd293e38d5be795230098b93c0.js></script><script async src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js></script><div class=scrollUp><i class=ti-angle-up></i></div></body></html>
