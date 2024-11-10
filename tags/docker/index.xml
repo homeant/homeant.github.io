@@ -1,4 +1,36 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>docker on 怪咖晨</title><link>https://tianhui.xin/tags/docker/</link><description>Recent content in docker on 怪咖晨</description><generator>Hugo -- gohugo.io</generator><language>zh</language><lastBuildDate>Tue, 29 Oct 2019 15:39:26 +0000</lastBuildDate><atom:link href="https://tianhui.xin/tags/docker/index.xml" rel="self" type="application/rss+xml"/><item><title>docker命令大全</title><link>https://tianhui.xin/blog/2019/10/29/dockercommand/</link><pubDate>Tue, 29 Oct 2019 15:39:26 +0000</pubDate><guid>https://tianhui.xin/blog/2019/10/29/dockercommand/</guid><description>&lt;p>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源。&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Docker on Codly Blog</title><link>https://tianhui.xin/tags/docker/</link><description>Recent content in Docker on Codly Blog</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><copyright>Codly</copyright><lastBuildDate>Tue, 29 Oct 2019 15:39:26 +0000</lastBuildDate><atom:link href="https://tianhui.xin/tags/docker/index.xml" rel="self" type="application/rss+xml"/><item><title>docker命令大全</title><link>https://tianhui.xin/p/docker%E5%91%BD%E4%BB%A4%E5%A4%A7%E5%85%A8/</link><pubDate>Tue, 29 Oct 2019 15:39:26 +0000</pubDate><guid>https://tianhui.xin/p/docker%E5%91%BD%E4%BB%A4%E5%A4%A7%E5%85%A8/</guid><description>&lt;p>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源。&lt;/p>
 &lt;p>Docker 可以让开发者打包他们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化。&lt;/p>
 &lt;p>容器是完全使用沙箱机制，相互之间不会有任何接口（类似 iPhone 的 app）,更重要的是容器性能开销极低。&lt;/p>
-&lt;p>Docker 从 17.03 版本之后分为 CE（Community Edition: 社区版） 和 EE（Enterprise Edition: 企业版），我们用社区版就可以了。&lt;/p></description></item></channel></rss>
+&lt;p>Docker 从 17.03 版本之后分为 CE（Community Edition: 社区版） 和 EE（Enterprise Edition: 企业版），我们用社区版就可以了。&lt;/p>
+&lt;p>1、docker -h 帮助&lt;/p>
+&lt;p>2、获取镜像&lt;/p>
+&lt;p>sudo docker pull NAME[:TAG]&lt;/p>
+&lt;p>sudo docker pull centos:latest&lt;/p>
+&lt;p>3、启动Container盒子&lt;/p>
+&lt;p>sudo docker run [OPTIONS] IMAGE [COMMAND] [ARG&amp;hellip;]&lt;/p>
+&lt;p>sudp docker run -t -i contos /bin/bash&lt;/p>
+&lt;p>4、查看镜像列表，列出本地的所有images&lt;/p>
+&lt;p>sudo docker images [OPTIONS] [NAME]&lt;/p>
+&lt;p>sudo docker images centos&lt;/p>
+&lt;p>5、查看容器列表，可看到我们创建过的所有container&lt;/p>
+&lt;p>sudo docker ps [OPTIONS]&lt;/p>
+&lt;p>sudo docker ps -a&lt;/p>
+&lt;p>6、删除镜像，从本地删除一个已经下载的镜像&lt;/p>
+&lt;p>sudo docker rmi IMAGE [IMAGE&amp;hellip;]&lt;/p>
+&lt;p>sudo docker rmi centos:latest&lt;/p>
+&lt;p>7、移除一个或多个容器实例&lt;/p>
+&lt;p>sudo docker rm [OPTIONS] CONTAINER [CONTAINER&amp;hellip;]&lt;/p>
+&lt;p>移除所有微运行的容器&lt;/p>
+&lt;p>sudo docker rm sudo docker ps -aq&lt;/p>
+&lt;p>8、停止一个正在运行的容器&lt;/p>
+&lt;p>sudo docker kill [OPTIONS] CONTAINER [CONTAINNER&amp;hellip;]&lt;/p>
+&lt;p>sudo docker kill 026e&lt;/p>
+&lt;p>9、重启一个正在运行的容器&lt;/p>
+&lt;p>sudo docker restart [OPTIONS] contains[CONTAINER]&lt;/p>
+&lt;p>sudo docker restart 026e&lt;/p>
+&lt;p>10、停止一个已经停止的容器&lt;/p>
+&lt;p>sudo docker start [OPTIONS] CONTAINER [CONTAINER..]&lt;/p>
+&lt;p>sudo docker start 026e&lt;/p>
+&lt;p>11、进入某个正在运行的容器&lt;/p>
+&lt;p>docker exec [OPTIONS] [CONTAINER][COMMAND]&lt;/p>
+&lt;p>docker exec -it cloud-config /bin/bash&lt;/p></description></item></channel></rss>

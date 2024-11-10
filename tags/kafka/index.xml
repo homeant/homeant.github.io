@@ -1,1 +1,96 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>kafka on 怪咖晨</title><link>https://tianhui.xin/tags/kafka/</link><description>Recent content in kafka on 怪咖晨</description><generator>Hugo -- gohugo.io</generator><language>zh</language><lastBuildDate>Mon, 22 Oct 2018 11:00:00 +0000</lastBuildDate><atom:link href="https://tianhui.xin/tags/kafka/index.xml" rel="self" type="application/rss+xml"/><item><title>kafka 环境搭建</title><link>https://tianhui.xin/blog/2018/10/22/kafka/</link><pubDate>Mon, 22 Oct 2018 11:00:00 +0000</pubDate><guid>https://tianhui.xin/blog/2018/10/22/kafka/</guid><description>&lt;p>kafka 环境搭建&lt;/p></description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Kafka on Codly Blog</title><link>https://tianhui.xin/tags/kafka/</link><description>Recent content in Kafka on Codly Blog</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><copyright>Codly</copyright><lastBuildDate>Mon, 22 Oct 2018 11:00:00 +0000</lastBuildDate><atom:link href="https://tianhui.xin/tags/kafka/index.xml" rel="self" type="application/rss+xml"/><item><title>kafka 环境搭建</title><link>https://tianhui.xin/p/kafka-%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</link><pubDate>Mon, 22 Oct 2018 11:00:00 +0000</pubDate><guid>https://tianhui.xin/p/kafka-%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</guid><description>&lt;img src="https://image.tianhui.xin/kafka/1.jpg?x-oss-process=style/make" alt="Featured image of post kafka 环境搭建" />&lt;p>kafka 环境搭建&lt;/p>
+&lt;h2 id="安装">安装
+&lt;/h2>&lt;h3 id="下载kafka">下载kafka
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">curl -L -O https://mirrors.cnnic.cn/apache/kafka/2.0.0/kafka_2.12-2.0.0.tgz
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="解压">解压
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">tar -xvf kafka_2.12-2.0.0.tgz -C /usr/local/kafka
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="配置zookeeper">配置zookeeper
+&lt;/h2>&lt;p>&lt;a class="link" href="https://tianhui.xin/2018/10/03/zookeeper.cluster.html" target="_blank" rel="noopener"
+>zookeeper安装&lt;/a>&lt;/p>
+&lt;h3 id="配置zookeeper-1">配置zookeeper
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">vi config/server.properties
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>找到&lt;strong>zookeeper.connect&lt;/strong>，并将值修改为zookeeper的地址，如&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">zookeeper.connect&lt;span class="o">=&lt;/span>localhost:2181
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="启动kafka">启动kafka
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">/usr/local/kafka/bin/kafka-server-start.sh /usr/local/kafka/config/server.properties
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="查看kafka是否启动">查看kafka是否启动
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">netstat -tunlp&lt;span class="p">|&lt;/span>egrep &lt;span class="s2">&amp;#34;(2181|9092)&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="单机测试">单机测试
+&lt;/h2>&lt;p>启动两个xshell客户端分别作为&lt;strong>生产者&lt;/strong>和&lt;strong>消费者&lt;/strong>&lt;/p>
+&lt;ol>
+&lt;li>生产者测试&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">./kafka-console-producer.sh --broker-list localhost:9092 --topic &lt;span class="nb">test&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&amp;gt; hello world!
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ol start="2">
+&lt;li>消费者测试&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic &lt;span class="nb">test&lt;/span> --from-beginning
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>注意: 早期的kafka版本，消费者参数用的是**&amp;ndash;zookeeper**，填写的值是zookeeper的地址，在我们今天教程中的版本参数应该是 &lt;strong>&amp;ndash;bootstrap-server&lt;/strong>,填写的是kafka的broker地址&lt;/p>
+&lt;h2 id="查看topic">查看topic
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">./kafka-topics.sh --list --zookeeper localhost:2181
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item></channel></rss>

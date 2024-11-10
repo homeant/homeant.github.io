@@ -1,1 +1,529 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>webpack-chain on 怪咖晨</title><link>https://tianhui.xin/tags/webpack-chain/</link><description>Recent content in webpack-chain on 怪咖晨</description><generator>Hugo -- gohugo.io</generator><language>zh</language><lastBuildDate>Fri, 02 Nov 2018 16:00:00 +0000</lastBuildDate><atom:link href="https://tianhui.xin/tags/webpack-chain/index.xml" rel="self" type="application/rss+xml"/><item><title>webpack4 开发环境搭建</title><link>https://tianhui.xin/blog/2018/11/02/webpack4.develop/</link><pubDate>Fri, 02 Nov 2018 16:00:00 +0000</pubDate><guid>https://tianhui.xin/blog/2018/11/02/webpack4.develop/</guid><description>&lt;p>webpack4 开发环境搭建&lt;/p></description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Webpack-Chain on Codly Blog</title><link>https://tianhui.xin/tags/webpack-chain/</link><description>Recent content in Webpack-Chain on Codly Blog</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><copyright>Codly</copyright><lastBuildDate>Fri, 02 Nov 2018 16:00:00 +0000</lastBuildDate><atom:link href="https://tianhui.xin/tags/webpack-chain/index.xml" rel="self" type="application/rss+xml"/><item><title>webpack4 开发环境搭建</title><link>https://tianhui.xin/p/webpack4-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</link><pubDate>Fri, 02 Nov 2018 16:00:00 +0000</pubDate><guid>https://tianhui.xin/p/webpack4-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</guid><description>&lt;p>webpack4 开发环境搭建&lt;/p>
+&lt;h2 id="npm-初始化项目">npm 初始化项目
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">yarn init
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="安装webpack依赖">安装webpack依赖
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">yarn add webpack webpack-dev-server webpack-cli @webpack-cli/init --dev
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="webpack-初始化">webpack 初始化
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">npx webpack-cli init
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;hr>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">? Will your application have multiple bundles? Yes
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">? Type the names you want &lt;span class="k">for&lt;/span> your modules &lt;span class="o">(&lt;/span>entry files&lt;span class="o">)&lt;/span>, separated by comma &lt;span class="o">[&lt;/span>example: app,vendor&lt;span class="o">]&lt;/span> app
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">? What is the location of &lt;span class="s2">&amp;#34;app&amp;#34;&lt;/span>? &lt;span class="o">[&lt;/span>example: ./src/app&lt;span class="o">]&lt;/span> ./src/app
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">? Which folder will your generated bundles be in? &lt;span class="o">[&lt;/span>default: dist&lt;span class="o">]&lt;/span>: dist
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">? Will you be using ES2015? Yes
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">? Will you use one of the below CSS solutions? SASS
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">yarn add v1.12.1
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="添加编译插件">添加编译插件
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## 二选一&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## 1. class 写法 向下兼容&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">yarn add @babel/plugin-proposal-class-properties --dev
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## 2. babel 支持 import &lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">## yarn add @babel/plugin-syntax-dynamic-import --dev&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">yarn add @babel/preset-env @babel/core cross-env --dev
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="安装loader">安装loader
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">yarn add html-withimg-loader url-loader file-loader style-loader postcss-loader --dev
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="插件安装">插件安装
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">yarn add mini-css-extract-plugin uglifyjs-webpack-plugin clean-webpack-plugin copy-webpack-plugin extract-css html-webpack-plugin --dev
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="安装webpack-chain">安装webpack-chain
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">yarn add webpack-chain --dev
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>此处&lt;strong>webpack-chain&lt;/strong>为&lt;strong>5.0.1&lt;/strong>版本，是针对&lt;strong>webpack 4&lt;/strong>维护的，需特别注意&lt;/p>
+&lt;p>github地址：&lt;a class="link" href="https://github.com/neutrinojs/webpack-chain/tree/v4" target="_blank" rel="noopener"
+>webpack-chain&lt;/a>&lt;/p>
+&lt;h2 id="创建webpackconfigjs">创建webpack.config.js
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt"> 10
+&lt;/span>&lt;span class="lnt"> 11
+&lt;/span>&lt;span class="lnt"> 12
+&lt;/span>&lt;span class="lnt"> 13
+&lt;/span>&lt;span class="lnt"> 14
+&lt;/span>&lt;span class="lnt"> 15
+&lt;/span>&lt;span class="lnt"> 16
+&lt;/span>&lt;span class="lnt"> 17
+&lt;/span>&lt;span class="lnt"> 18
+&lt;/span>&lt;span class="lnt"> 19
+&lt;/span>&lt;span class="lnt"> 20
+&lt;/span>&lt;span class="lnt"> 21
+&lt;/span>&lt;span class="lnt"> 22
+&lt;/span>&lt;span class="lnt"> 23
+&lt;/span>&lt;span class="lnt"> 24
+&lt;/span>&lt;span class="lnt"> 25
+&lt;/span>&lt;span class="lnt"> 26
+&lt;/span>&lt;span class="lnt"> 27
+&lt;/span>&lt;span class="lnt"> 28
+&lt;/span>&lt;span class="lnt"> 29
+&lt;/span>&lt;span class="lnt"> 30
+&lt;/span>&lt;span class="lnt"> 31
+&lt;/span>&lt;span class="lnt"> 32
+&lt;/span>&lt;span class="lnt"> 33
+&lt;/span>&lt;span class="lnt"> 34
+&lt;/span>&lt;span class="lnt"> 35
+&lt;/span>&lt;span class="lnt"> 36
+&lt;/span>&lt;span class="lnt"> 37
+&lt;/span>&lt;span class="lnt"> 38
+&lt;/span>&lt;span class="lnt"> 39
+&lt;/span>&lt;span class="lnt"> 40
+&lt;/span>&lt;span class="lnt"> 41
+&lt;/span>&lt;span class="lnt"> 42
+&lt;/span>&lt;span class="lnt"> 43
+&lt;/span>&lt;span class="lnt"> 44
+&lt;/span>&lt;span class="lnt"> 45
+&lt;/span>&lt;span class="lnt"> 46
+&lt;/span>&lt;span class="lnt"> 47
+&lt;/span>&lt;span class="lnt"> 48
+&lt;/span>&lt;span class="lnt"> 49
+&lt;/span>&lt;span class="lnt"> 50
+&lt;/span>&lt;span class="lnt"> 51
+&lt;/span>&lt;span class="lnt"> 52
+&lt;/span>&lt;span class="lnt"> 53
+&lt;/span>&lt;span class="lnt"> 54
+&lt;/span>&lt;span class="lnt"> 55
+&lt;/span>&lt;span class="lnt"> 56
+&lt;/span>&lt;span class="lnt"> 57
+&lt;/span>&lt;span class="lnt"> 58
+&lt;/span>&lt;span class="lnt"> 59
+&lt;/span>&lt;span class="lnt"> 60
+&lt;/span>&lt;span class="lnt"> 61
+&lt;/span>&lt;span class="lnt"> 62
+&lt;/span>&lt;span class="lnt"> 63
+&lt;/span>&lt;span class="lnt"> 64
+&lt;/span>&lt;span class="lnt"> 65
+&lt;/span>&lt;span class="lnt"> 66
+&lt;/span>&lt;span class="lnt"> 67
+&lt;/span>&lt;span class="lnt"> 68
+&lt;/span>&lt;span class="lnt"> 69
+&lt;/span>&lt;span class="lnt"> 70
+&lt;/span>&lt;span class="lnt"> 71
+&lt;/span>&lt;span class="lnt"> 72
+&lt;/span>&lt;span class="lnt"> 73
+&lt;/span>&lt;span class="lnt"> 74
+&lt;/span>&lt;span class="lnt"> 75
+&lt;/span>&lt;span class="lnt"> 76
+&lt;/span>&lt;span class="lnt"> 77
+&lt;/span>&lt;span class="lnt"> 78
+&lt;/span>&lt;span class="lnt"> 79
+&lt;/span>&lt;span class="lnt"> 80
+&lt;/span>&lt;span class="lnt"> 81
+&lt;/span>&lt;span class="lnt"> 82
+&lt;/span>&lt;span class="lnt"> 83
+&lt;/span>&lt;span class="lnt"> 84
+&lt;/span>&lt;span class="lnt"> 85
+&lt;/span>&lt;span class="lnt"> 86
+&lt;/span>&lt;span class="lnt"> 87
+&lt;/span>&lt;span class="lnt"> 88
+&lt;/span>&lt;span class="lnt"> 89
+&lt;/span>&lt;span class="lnt"> 90
+&lt;/span>&lt;span class="lnt"> 91
+&lt;/span>&lt;span class="lnt"> 92
+&lt;/span>&lt;span class="lnt"> 93
+&lt;/span>&lt;span class="lnt"> 94
+&lt;/span>&lt;span class="lnt"> 95
+&lt;/span>&lt;span class="lnt"> 96
+&lt;/span>&lt;span class="lnt"> 97
+&lt;/span>&lt;span class="lnt"> 98
+&lt;/span>&lt;span class="lnt"> 99
+&lt;/span>&lt;span class="lnt">100
+&lt;/span>&lt;span class="lnt">101
+&lt;/span>&lt;span class="lnt">102
+&lt;/span>&lt;span class="lnt">103
+&lt;/span>&lt;span class="lnt">104
+&lt;/span>&lt;span class="lnt">105
+&lt;/span>&lt;span class="lnt">106
+&lt;/span>&lt;span class="lnt">107
+&lt;/span>&lt;span class="lnt">108
+&lt;/span>&lt;span class="lnt">109
+&lt;/span>&lt;span class="lnt">110
+&lt;/span>&lt;span class="lnt">111
+&lt;/span>&lt;span class="lnt">112
+&lt;/span>&lt;span class="lnt">113
+&lt;/span>&lt;span class="lnt">114
+&lt;/span>&lt;span class="lnt">115
+&lt;/span>&lt;span class="lnt">116
+&lt;/span>&lt;span class="lnt">117
+&lt;/span>&lt;span class="lnt">118
+&lt;/span>&lt;span class="lnt">119
+&lt;/span>&lt;span class="lnt">120
+&lt;/span>&lt;span class="lnt">121
+&lt;/span>&lt;span class="lnt">122
+&lt;/span>&lt;span class="lnt">123
+&lt;/span>&lt;span class="lnt">124
+&lt;/span>&lt;span class="lnt">125
+&lt;/span>&lt;span class="lnt">126
+&lt;/span>&lt;span class="lnt">127
+&lt;/span>&lt;span class="lnt">128
+&lt;/span>&lt;span class="lnt">129
+&lt;/span>&lt;span class="lnt">130
+&lt;/span>&lt;span class="lnt">131
+&lt;/span>&lt;span class="lnt">132
+&lt;/span>&lt;span class="lnt">133
+&lt;/span>&lt;span class="lnt">134
+&lt;/span>&lt;span class="lnt">135
+&lt;/span>&lt;span class="lnt">136
+&lt;/span>&lt;span class="lnt">137
+&lt;/span>&lt;span class="lnt">138
+&lt;/span>&lt;span class="lnt">139
+&lt;/span>&lt;span class="lnt">140
+&lt;/span>&lt;span class="lnt">141
+&lt;/span>&lt;span class="lnt">142
+&lt;/span>&lt;span class="lnt">143
+&lt;/span>&lt;span class="lnt">144
+&lt;/span>&lt;span class="lnt">145
+&lt;/span>&lt;span class="lnt">146
+&lt;/span>&lt;span class="lnt">147
+&lt;/span>&lt;span class="lnt">148
+&lt;/span>&lt;span class="lnt">149
+&lt;/span>&lt;span class="lnt">150
+&lt;/span>&lt;span class="lnt">151
+&lt;/span>&lt;span class="lnt">152
+&lt;/span>&lt;span class="lnt">153
+&lt;/span>&lt;span class="lnt">154
+&lt;/span>&lt;span class="lnt">155
+&lt;/span>&lt;span class="lnt">156
+&lt;/span>&lt;span class="lnt">157
+&lt;/span>&lt;span class="lnt">158
+&lt;/span>&lt;span class="lnt">159
+&lt;/span>&lt;span class="lnt">160
+&lt;/span>&lt;span class="lnt">161
+&lt;/span>&lt;span class="lnt">162
+&lt;/span>&lt;span class="lnt">163
+&lt;/span>&lt;span class="lnt">164
+&lt;/span>&lt;span class="lnt">165
+&lt;/span>&lt;span class="lnt">166
+&lt;/span>&lt;span class="lnt">167
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">const &lt;span class="nv">path&lt;/span> &lt;span class="o">=&lt;/span> require&lt;span class="o">(&lt;/span>&lt;span class="s1">&amp;#39;path&amp;#39;&lt;/span>&lt;span class="o">)&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">const &lt;span class="nv">isProd&lt;/span> &lt;span class="o">=&lt;/span> process.env.NODE_ENV &lt;span class="o">===&lt;/span> &lt;span class="s1">&amp;#39;production&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">const &lt;span class="nv">MiniCssExtractPlugin&lt;/span> &lt;span class="o">=&lt;/span> require&lt;span class="o">(&lt;/span>&lt;span class="s2">&amp;#34;mini-css-extract-plugin&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">const &lt;span class="nv">WebpackChain&lt;/span> &lt;span class="o">=&lt;/span> require&lt;span class="o">(&lt;/span>&lt;span class="s1">&amp;#39;webpack-chain&amp;#39;&lt;/span>&lt;span class="o">)&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">const &lt;span class="nv">config&lt;/span> &lt;span class="o">=&lt;/span> new WebpackChain&lt;span class="o">()&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">config.when&lt;span class="o">(&lt;/span>isProd,config&lt;span class="o">=&lt;/span>&amp;gt;&lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> config.entry&lt;span class="o">(&lt;/span>&lt;span class="s1">&amp;#39;index&amp;#39;&lt;/span>&lt;span class="o">)&lt;/span>.add&lt;span class="o">(&lt;/span>&lt;span class="s1">&amp;#39;./src/index.js&amp;#39;&lt;/span>&lt;span class="o">)&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">})&lt;/span>.when&lt;span class="o">(&lt;/span>!isProd,config&lt;span class="o">=&lt;/span>&amp;gt;&lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> config.entry&lt;span class="o">(&lt;/span>&lt;span class="s1">&amp;#39;index&amp;#39;&lt;/span>&lt;span class="o">)&lt;/span>.add&lt;span class="o">(&lt;/span>&lt;span class="s1">&amp;#39;./src/index.js&amp;#39;&lt;/span>&lt;span class="o">)&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">// Modify output settings
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> .output
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> .path&lt;span class="o">(&lt;/span>path.join&lt;span class="o">(&lt;/span>__dirname, &lt;span class="s2">&amp;#34;dist&amp;#34;&lt;/span>&lt;span class="o">))&lt;/span>.filename&lt;span class="o">(&lt;/span>&lt;span class="s1">&amp;#39;[name].js&amp;#39;&lt;/span>&lt;span class="o">)&lt;/span>.end&lt;span class="o">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> .when&lt;span class="o">(&lt;/span>isProd, &lt;span class="nv">config&lt;/span> &lt;span class="o">=&lt;/span>&amp;gt; &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> config.mode&lt;span class="o">(&lt;/span>&lt;span class="s1">&amp;#39;production&amp;#39;&lt;/span>&lt;span class="o">)&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">})&lt;/span>.when&lt;span class="o">(&lt;/span>!isProd,config&lt;span class="o">=&lt;/span>&amp;gt;&lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> config.mode&lt;span class="o">(&lt;/span>&lt;span class="s1">&amp;#39;development&amp;#39;&lt;/span>&lt;span class="o">)&lt;/span>.devtool&lt;span class="o">(&lt;/span>&lt;span class="s1">&amp;#39;source-map&amp;#39;&lt;/span>&lt;span class="o">)&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">})&lt;/span>.end&lt;span class="o">()&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">/**
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> * module
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> */
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">config
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> .module
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> .rule&lt;span class="o">(&lt;/span>&lt;span class="s2">&amp;#34;compile&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> .test&lt;span class="o">(&lt;/span>/&lt;span class="se">\.&lt;/span>js$/&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> .include.add&lt;span class="o">(&lt;/span>path.join&lt;span class="o">(&lt;/span>__dirname,&lt;span class="s1">&amp;#39;src&amp;#39;&lt;/span>&lt;span class="o">))&lt;/span>.end&lt;span class="o">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> .exclude.add&lt;span class="o">(&lt;/span>/node_modules/&lt;span class="o">)&lt;/span>.end&lt;span class="o">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> .use&lt;span class="o">(&lt;/span>&lt;span class="s1">&amp;#39;babel&amp;#39;&lt;/span>&lt;span class="o">)&lt;/span>.loader&lt;span class="o">(&lt;/span>&lt;span class="s2">&amp;#34;babel-loader&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> .options&lt;span class="o">({&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> presets: &lt;span class="o">[&lt;/span>&lt;span class="s1">&amp;#39;@babel/preset-env&amp;#39;&lt;/span>&lt;span class="o">]&lt;/span>,
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> plugins: &lt;span class="o">[&lt;/span>&lt;span class="s1">&amp;#39;@babel/plugin-proposal-class-properties&amp;#39;&lt;/span>&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">})&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">config.module
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> .rule&lt;span class="o">(&lt;/span>&lt;span class="s1">&amp;#39;images&amp;#39;&lt;/span>&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> .test&lt;span class="o">(&lt;/span>/&lt;span class="se">\.&lt;/span>&lt;span class="o">(&lt;/span>png&lt;span class="p">|&lt;/span>jpg&lt;span class="p">|&lt;/span>jpeg&lt;span class="p">|&lt;/span>gif&lt;span class="o">)&lt;/span>/&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> .use&lt;span class="o">(&lt;/span>&lt;span class="s1">&amp;#39;url-loader&amp;#39;&lt;/span>&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> .loader&lt;span class="o">(&lt;/span>&lt;span class="s1">&amp;#39;url-loader&amp;#39;&lt;/span>&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> .options&lt;span class="o">({&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> limit: &lt;span class="m">1&lt;/span> * 1024,
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> name: path.posix.join&lt;span class="o">(&lt;/span>&lt;span class="s2">&amp;#34;images&amp;#34;&lt;/span>,&lt;span class="s2">&amp;#34;[name].[ext]&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">// &lt;span class="k">do&lt;/span> not base64-inline SVGs.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">// https://github.com/facebookincubator/create-react-app/pull/1180
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">config.module
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> .rule&lt;span class="o">(&lt;/span>&lt;span class="s1">&amp;#39;svg&amp;#39;&lt;/span>&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> .test&lt;span class="o">(&lt;/span>/&lt;span class="se">\.&lt;/span>&lt;span class="o">(&lt;/span>svg&lt;span class="o">)(&lt;/span>&lt;span class="se">\?&lt;/span>.*&lt;span class="o">)&lt;/span>?$/&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> .use&lt;span class="o">(&lt;/span>&lt;span class="s1">&amp;#39;url-loader&amp;#39;&lt;/span>&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> .loader&lt;span class="o">(&lt;/span>&lt;span class="s1">&amp;#39;url-loader&amp;#39;&lt;/span>&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> .options&lt;span class="o">({&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> limit: &lt;span class="m">1024&lt;/span> * 3,//30kb
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> fallback: &lt;span class="s1">&amp;#39;file-loader&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">config.module
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> .rule&lt;span class="o">(&lt;/span>&lt;span class="s2">&amp;#34;fonts&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> .test&lt;span class="o">(&lt;/span>/&lt;span class="se">\.&lt;/span>&lt;span class="o">(&lt;/span>woff2?&lt;span class="p">|&lt;/span>eot&lt;span class="p">|&lt;/span>ttf&lt;span class="p">|&lt;/span>otf&lt;span class="o">)(&lt;/span>&lt;span class="se">\?&lt;/span>.*&lt;span class="o">)&lt;/span>?$/i&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> .use&lt;span class="o">(&lt;/span>&lt;span class="s1">&amp;#39;url-loader&amp;#39;&lt;/span>&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> .loader&lt;span class="o">(&lt;/span>&lt;span class="s1">&amp;#39;url-loader&amp;#39;&lt;/span>&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> .options&lt;span class="o">({&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> limit: 10000,
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> fallback: &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> loader: &lt;span class="s1">&amp;#39;file-loader&amp;#39;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> options: &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> name: path.posix.join&lt;span class="o">(&lt;/span>&lt;span class="s2">&amp;#34;fonts&amp;#34;&lt;/span>,&lt;span class="s2">&amp;#34;[name].[ext]&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">})&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">config.when&lt;span class="o">(&lt;/span>isProd,config&lt;span class="o">=&lt;/span>&amp;gt;&lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> config.module.rule&lt;span class="o">(&lt;/span>&lt;span class="s2">&amp;#34;css&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span>.test&lt;span class="o">(&lt;/span>/&lt;span class="se">\.&lt;/span>&lt;span class="o">(&lt;/span>sa&lt;span class="p">|&lt;/span>sc&lt;span class="p">|&lt;/span>c&lt;span class="o">)&lt;/span>ss$/&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> .use&lt;span class="o">(&lt;/span>&lt;span class="s2">&amp;#34;style&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span>.loader&lt;span class="o">(&lt;/span>MiniCssExtractPlugin.loader&lt;span class="o">)&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">})&lt;/span>.when&lt;span class="o">(&lt;/span>!isProd,config&lt;span class="o">=&lt;/span>&amp;gt;&lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> config.module.rule&lt;span class="o">(&lt;/span>&lt;span class="s2">&amp;#34;css&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span>.test&lt;span class="o">(&lt;/span>/&lt;span class="se">\.&lt;/span>&lt;span class="o">(&lt;/span>sa&lt;span class="p">|&lt;/span>sc&lt;span class="p">|&lt;/span>c&lt;span class="o">)&lt;/span>ss$/&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> .use&lt;span class="o">(&lt;/span>&lt;span class="s2">&amp;#34;style-loader&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span>.loader&lt;span class="o">(&lt;/span>&lt;span class="s2">&amp;#34;style-loader&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">})&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">config.module.rule&lt;span class="o">(&lt;/span>&lt;span class="s2">&amp;#34;css&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span>.test&lt;span class="o">(&lt;/span>/&lt;span class="se">\.&lt;/span>&lt;span class="o">(&lt;/span>sa&lt;span class="p">|&lt;/span>sc&lt;span class="p">|&lt;/span>c&lt;span class="o">)&lt;/span>ss$/&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> .use&lt;span class="o">(&lt;/span>&lt;span class="s1">&amp;#39;css&amp;#39;&lt;/span>&lt;span class="o">)&lt;/span>.loader&lt;span class="o">(&lt;/span>&lt;span class="s2">&amp;#34;css-loader&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span>.end&lt;span class="o">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> .use&lt;span class="o">(&lt;/span>&lt;span class="s1">&amp;#39;postcss-loader&amp;#39;&lt;/span>&lt;span class="o">)&lt;/span>.loader&lt;span class="o">(&lt;/span>&lt;span class="s1">&amp;#39;postcss-loader&amp;#39;&lt;/span>&lt;span class="o">)&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">config.module.rule&lt;span class="o">(&lt;/span>&lt;span class="s2">&amp;#34;scss&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span>.test&lt;span class="o">(&lt;/span>/&lt;span class="se">\.&lt;/span>&lt;span class="o">(&lt;/span>sa&lt;span class="p">|&lt;/span>sc&lt;span class="o">)&lt;/span>ss$/&lt;span class="o">)&lt;/span>.use&lt;span class="o">(&lt;/span>&lt;span class="s2">&amp;#34;sass-loader&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span>.loader&lt;span class="o">(&lt;/span>&lt;span class="s2">&amp;#34;sass-loader&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">config.module.rule&lt;span class="o">(&lt;/span>&lt;span class="s2">&amp;#34;lass&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span>.test&lt;span class="o">(&lt;/span>/&lt;span class="se">\.&lt;/span>less$/&lt;span class="o">)&lt;/span>.use&lt;span class="o">(&lt;/span>&lt;span class="s2">&amp;#34;less-loader&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span>.loader&lt;span class="o">(&lt;/span>&lt;span class="s2">&amp;#34;less-loader&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">//config.module.rule&lt;span class="o">(&lt;/span>&lt;span class="s2">&amp;#34;html&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span>.test&lt;span class="o">(&lt;/span>/&lt;span class="se">\.&lt;/span>&lt;span class="o">(&lt;/span>htm&lt;span class="p">|&lt;/span>html&lt;span class="o">)&lt;/span>$/i&lt;span class="o">)&lt;/span>.use&lt;span class="o">(&lt;/span>&lt;span class="s2">&amp;#34;html&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span>.loader&lt;span class="o">(&lt;/span>&lt;span class="s1">&amp;#39;html-withimg-loader&amp;#39;&lt;/span>&lt;span class="o">)&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">/**
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> * plugin
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> */
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">config.when&lt;span class="o">(&lt;/span>isProd,config&lt;span class="o">=&lt;/span>&amp;gt;&lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> const &lt;span class="nv">UglifyJSPlugin&lt;/span> &lt;span class="o">=&lt;/span> require&lt;span class="o">(&lt;/span>&lt;span class="s1">&amp;#39;uglifyjs-webpack-plugin&amp;#39;&lt;/span>&lt;span class="o">)&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> const &lt;span class="nv">CleanWebpackPlugin&lt;/span> &lt;span class="o">=&lt;/span> require&lt;span class="o">(&lt;/span>&lt;span class="s1">&amp;#39;clean-webpack-plugin&amp;#39;&lt;/span>&lt;span class="o">)&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> const &lt;span class="nv">CopyWebpackPlugin&lt;/span> &lt;span class="o">=&lt;/span> require&lt;span class="o">(&lt;/span>&lt;span class="s2">&amp;#34;copy-webpack-plugin&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> config.plugin&lt;span class="o">(&lt;/span>&lt;span class="s2">&amp;#34;clear&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span>.use&lt;span class="o">(&lt;/span>new CleanWebpackPlugin&lt;span class="o">([&lt;/span>path.join&lt;span class="o">(&lt;/span>__dirname, &lt;span class="s1">&amp;#39;dist&amp;#39;&lt;/span>&lt;span class="o">)]))&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> config.optimization.splitChunks&lt;span class="o">({&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> cacheGroups: &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> commons: &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> chunks: &lt;span class="s2">&amp;#34;initial&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> name: &lt;span class="s2">&amp;#34;common&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> minChunks: 2,
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> maxInitialRequests: 5, // The default limit is too small to showcase the effect
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> minSize: 0, // This is example is too small to create commons chunks
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> reuseExistingChunk: &lt;span class="nb">true&lt;/span> // 可设置是否重用该chunk（查看源码没有发现默认值）
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">})&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> config.plugin&lt;span class="o">(&lt;/span>&lt;span class="s2">&amp;#34;js&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span>.use&lt;span class="o">(&lt;/span>new UglifyJSPlugin&lt;span class="o">({}))&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> config.plugin&lt;span class="o">(&lt;/span>&lt;span class="s1">&amp;#39;extract-css&amp;#39;&lt;/span>&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> .use&lt;span class="o">(&lt;/span>MiniCssExtractPlugin, &lt;span class="o">[{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> filename: &lt;span class="s2">&amp;#34;css/[name].css&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> chunkFilename: &lt;span class="s2">&amp;#34;css/[name].css&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}])&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> // config.plugin&lt;span class="o">(&lt;/span>&lt;span class="s1">&amp;#39;copy&amp;#39;&lt;/span>&lt;span class="o">)&lt;/span>.use&lt;span class="o">(&lt;/span>new CopyWebpackPlugin&lt;span class="o">([&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> // &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> // from:&lt;span class="s2">&amp;#34;./src/sass&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> // &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> // &lt;span class="o">]))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">const &lt;span class="nv">HtmlWebpackPlugin&lt;/span> &lt;span class="o">=&lt;/span> require&lt;span class="o">(&lt;/span>&lt;span class="s1">&amp;#39;html-webpack-plugin&amp;#39;&lt;/span>&lt;span class="o">)&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">config.plugin&lt;span class="o">(&lt;/span>&lt;span class="s2">&amp;#34;html&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span>.use&lt;span class="o">(&lt;/span>HtmlWebpackPlugin, &lt;span class="o">[{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> /*
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> template 参数指定入口 html 文件路径，插件会把这个文件交给 webpack 去编译，
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> webpack 按照正常流程，找到 loaders 中 &lt;span class="nb">test&lt;/span> 条件匹配的 loader 来编译，那么这里 html-loader 就是匹配的 loader
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> html-loader 编译后产生的字符串，会由 html-webpack-plugin 储存为 html 文件到输出目录，默认文件名为 index.html
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 可以通过 filename 参数指定输出的文件名
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> html-webpack-plugin 也可以不指定 template 参数，它会使用默认的 html 模板。
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> */
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> template: &lt;span class="s2">&amp;#34;./public/index.html&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> filename:&lt;span class="s2">&amp;#34;index.html&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> /*
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 因为和 webpack &lt;span class="m">4&lt;/span> 的兼容性问题，chunksSortMode 参数需要设置为 none
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> https://github.com/jantimon/html-webpack-plugin/issues/870
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> */
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> chunksSortMode: &lt;span class="s1">&amp;#39;none&amp;#39;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> xhtml: true,
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> minify: &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> collapseWhitespace: false, //删除空格，但是不会删除SCRIPT、style和textarea中的空格
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> conservativeCollapse: false, //删除空格，总是保留一个空格
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> removeAttributeQuotes: false, //删除引号，删除不需要引号的值
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> useShortDoctype: false, //使用短的文档类型
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> removeComments: true,
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> collapseBooleanAttributes: true,
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> removeScriptTypeAttributes: &lt;span class="nb">true&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> // more options:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> // https://github.com/kangax/html-minifier#options-quick-reference
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}])&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">config.when&lt;span class="o">(&lt;/span>isProd,config&lt;span class="o">=&lt;/span>&amp;gt;&lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">})&lt;/span>.when&lt;span class="o">(&lt;/span>!isProd,config&lt;span class="o">=&lt;/span>&amp;gt;&lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> config.devServer.host&lt;span class="o">(&lt;/span>&lt;span class="s1">&amp;#39;localhost&amp;#39;&lt;/span>&lt;span class="o">)&lt;/span>.port&lt;span class="o">(&lt;/span>8080&lt;span class="o">)&lt;/span>.open&lt;span class="o">(&lt;/span>process.os &lt;span class="o">===&lt;/span> &lt;span class="s1">&amp;#39;darwin&amp;#39;&lt;/span>&lt;span class="o">)&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">config.resolve.alias.set&lt;span class="o">(&lt;/span>&lt;span class="s2">&amp;#34;@&amp;#34;&lt;/span>,path.join&lt;span class="o">(&lt;/span>__dirname,&lt;span class="s2">&amp;#34;src&amp;#34;&lt;/span>&lt;span class="o">))&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">// Export the completed configuration object to be consumed by webpack
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">module.exports &lt;span class="o">=&lt;/span> config.toConfig&lt;span class="o">()&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="添加启动脚本">添加启动脚本
+&lt;/h2>&lt;p>修改&lt;strong>package.json&lt;/strong>文件中&lt;strong>scripts&lt;/strong>节点，加入如下配置:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;scripts&amp;#34;&lt;/span>: &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;dev&amp;#34;&lt;/span>: &lt;span class="s2">&amp;#34;cross-env NODE_ENV=development webpack-dev-server&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;build&amp;#34;&lt;/span>: &lt;span class="s2">&amp;#34;cross-env NODE_ENV=production webpack&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="创建postcssconfigjs">创建postcss.config.js
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">module.exports &lt;span class="o">=&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> plugins: &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> autoprefixer: &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;browsers&amp;#34;&lt;/span>: &lt;span class="o">[&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;ie &amp;gt;= 9&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;ff &amp;gt;= 30&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;chrome &amp;gt;= 34&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;safari &amp;gt;= 7&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;opera &amp;gt;= 23&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="创建srcindexjs">创建src/index.js
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="nb">export&lt;/span> default class demo &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> constructor&lt;span class="o">(){&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> console.log&lt;span class="o">(&lt;/span>&lt;span class="s2">&amp;#34;init&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="创建exampleindexjs">创建example/index.js
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">import Demo from &lt;span class="s2">&amp;#34;../src/index&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">const &lt;span class="nv">demo&lt;/span> &lt;span class="o">=&lt;/span> new Demo&lt;span class="o">()&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="根目录创建indexhtml">根目录创建index.html
+&lt;/h2>&lt;h2 id="启动">启动
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">yarn run dev
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item></channel></rss>

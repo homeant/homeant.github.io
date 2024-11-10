@@ -1,1 +1,291 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>activiti on 怪咖晨</title><link>https://tianhui.xin/tags/activiti/</link><description>Recent content in activiti on 怪咖晨</description><generator>Hugo -- gohugo.io</generator><language>zh</language><lastBuildDate>Sun, 21 Apr 2019 14:03:17 +0000</lastBuildDate><atom:link href="https://tianhui.xin/tags/activiti/index.xml" rel="self" type="application/rss+xml"/><item><title>activiti表结构</title><link>https://tianhui.xin/blog/2019/04/21/activititables/</link><pubDate>Sun, 21 Apr 2019 14:03:17 +0000</pubDate><guid>https://tianhui.xin/blog/2019/04/21/activititables/</guid><description>&lt;p>activiti表结构&lt;/p></description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Activiti on Codly Blog</title><link>https://tianhui.xin/tags/activiti/</link><description>Recent content in Activiti on Codly Blog</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><copyright>Codly</copyright><lastBuildDate>Sun, 21 Apr 2019 14:03:17 +0000</lastBuildDate><atom:link href="https://tianhui.xin/tags/activiti/index.xml" rel="self" type="application/rss+xml"/><item><title>activiti表结构</title><link>https://tianhui.xin/p/activiti%E8%A1%A8%E7%BB%93%E6%9E%84/</link><pubDate>Sun, 21 Apr 2019 14:03:17 +0000</pubDate><guid>https://tianhui.xin/p/activiti%E8%A1%A8%E7%BB%93%E6%9E%84/</guid><description>&lt;p>activiti表结构&lt;/p>
+&lt;h2 id="表结构">表结构
+&lt;/h2>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>表分类&lt;/th>
+&lt;th>表名&lt;/th>
+&lt;th>解释&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td rowspan="2">一般数据&lt;/td>
+&lt;td >ACT_GE_BYTEARRAY&lt;/td>
+&lt;td >通用的流程定义和流程资源&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td >ACT_GE_PROPERTY&lt;/td>
+&lt;td >系统相关属性&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td rowspan="8">流程历史记录&lt;/td>
+&lt;td >ACT_HI_ACTINST&lt;/td>
+&lt;td >历史的流程实例&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td >ACT_HI_ATTACHMENT&lt;/td>
+&lt;td >历史的流程附件&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td >ACT_HI_COMMENT&lt;/td>
+&lt;td >历史的说明性信息&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td >ACT_HI_DETAIL&lt;/td>
+&lt;td >历史的流程运行中的细节信息&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td >ACT_HI_IDENTITYLINK&lt;/td>
+&lt;td >历史的流程运行过程中用户关系&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td >ACT_HI_PROCINST&lt;/td>
+&lt;td >历史的流程实例&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td >ACT_HI_TASKINST&lt;/td>
+&lt;td >历史的任务实例&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td >ACT_HI_VARINST&lt;/td>
+&lt;td >历史的流程运行中的变量信息&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td rowspan="4">用户用户组表&lt;/td>
+&lt;td >ACT_ID_GROUP&lt;/td>
+&lt;td >身份信息-组信息&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td >ACT_ID_INFO&lt;/td>
+&lt;td >身份信息-组信息&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td >ACT_ID_MEMBERSHIP&lt;/td>
+&lt;td >身份信息-用户和组关系的中间表&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td >ACT_ID_USER&lt;/td>
+&lt;td >身份信息-用户信息&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td rowspan="3">流程定义表&lt;/td>
+&lt;td >ACT_RE_DEPLOYMENT&lt;/td>
+&lt;td >部署单元信息&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td >ACT_RE_MODEL&lt;/td>
+&lt;td >模型信息&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td >ACT_RE_PROCDEF&lt;/td>
+&lt;td >已部署的流程定义&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td rowspan="6">运行实例表&lt;/td>
+&lt;td >ACT_RU_EVENT_SUBSCR&lt;/td>
+&lt;td >运行时事件&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td >ACT_RU_EXECUTION&lt;/td>
+&lt;td >运行时流程执行实例&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td >ACT_RU_IDENTITYLINK&lt;/td>
+&lt;td >运行时用户关系信息&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td >ACT_RU_JOB&lt;/td>
+&lt;td >运行时作业&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td >ACT_RU_TASK&lt;/td>
+&lt;td >运行时任务&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td >ACT_RU_VARIABLE&lt;/td>
+&lt;td>运行时变量表&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;h2 id="流程查询">流程查询
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="cm">/*得到流程*/&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">SELECT&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">ACT_RE_PROCDEF&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ID_&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">ACT_RE_PROCDEF&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">NAME_&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">ACT_RE_PROCDEF&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">DESCRIPTION_&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">FROM&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">ACT_RE_PROCDEF&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">LEFT&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">JOIN&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ACT_RE_DEPLOYMENT&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">ON&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ACT_RE_PROCDEF&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">DEPLOYMENT_ID_&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ACT_RE_DEPLOYMENT&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ID_&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">WHERE&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">ACT_RE_PROCDEF&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">KEY_&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">?&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="查询流程正在运行的任务">查询流程正在运行的任务
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">SELECT&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">art&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ID_&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">art&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">art&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">EXECUTION_ID_&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">art&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">PROC_INST_ID_&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">art&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">NAME_&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">art&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ASSIGNEE_&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">art&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">CREATE_TIME_&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">FROM&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">ACT_RU_TASK&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">art&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">WHERE&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">art&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">PROC_DEF_ID_&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">?&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="查询正常运行的流程实例">查询正常运行的流程实例
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">SELECT&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">art&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ID_&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">TASK_ID_&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">art&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">EXECUTION_ID_&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">art&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">PROC_INST_ID_&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">art&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">NAME_&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">art&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ASSIGNEE_&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">art&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">CREATE_TIME_&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">are&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">PARENT_ID_&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">are&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">PROC_DEF_ID_&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">are&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ROOT_PROC_INST_ID_&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">are&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ACT_ID_&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">are&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">START_TIME_&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">FROM&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">ACT_RU_TASK&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">art&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">LEFT&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">JOIN&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ACT_RU_EXECUTION&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">are&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">ON&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">art&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">EXECUTION_ID_&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">are&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ID_&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">WHERE&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">art&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">PROC_DEF_ID_&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">?&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="查询流程实例变量">查询流程实例变量
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">SELECT&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">arv&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ID_&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">arv&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">TYPE_&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">arv&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">NAME_&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">CASE&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">arv&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">TYPE_&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">WHEN&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;string&amp;#39;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">THEN&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">arv&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">TEXT_&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">WHEN&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;boolean&amp;#39;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">THEN&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">arv&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">LONG_&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">WHEN&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;integer&amp;#39;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">THEN&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">arv&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">LONG_&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">ELSE&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;&amp;#39;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">END&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">VALUE_&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">FROM&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">ACT_RU_VARIABLE&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">arv&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">WHERE&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">arv&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">EXECUTION_ID_&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">?&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">select&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">distinct&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">RES&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ACT_RE_PROCDEF&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">RES&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">WHERE&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">RES&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">KEY_&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;leave&amp;#39;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">and&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">RES&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">SUSPENSION_STATE_&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">order&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">by&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">RES&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ID_&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">asc&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">select&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">distinct&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">RES&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ACT_RU_TASK&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">RES&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">WHERE&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">RES&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">PROC_DEF_ID_&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;leave:1:866908b5-1fb6-11e9-a502-4c348832211f&amp;#39;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">order&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">by&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">RES&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ID_&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">asc&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="cm">/*查询历史流程*/&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">select&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">distinct&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">RES&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">DEF&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">KEY_&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">as&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">PROC_DEF_KEY_&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">DEF&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">NAME_&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">as&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">PROC_DEF_NAME_&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">DEF&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">VERSION_&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">as&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">PROC_DEF_VERSION_&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">DEF&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">DEPLOYMENT_ID_&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">as&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">DEPLOYMENT_ID_&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ACT_HI_PROCINST&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">RES&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">left&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">outer&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">join&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ACT_RE_PROCDEF&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">DEF&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">on&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">RES&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">PROC_DEF_ID_&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">DEF&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ID_&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">order&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">by&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">RES&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">END_TIME_&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">desc&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="cm">/*查询正在运行的流程*/&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">select&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">distinct&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">RES&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ACT_RU_TASK&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">RES&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">WHERE&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">RES&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ASSIGNEE_&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;leader&amp;#39;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">and&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">RES&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">TASK_DEF_KEY_&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;dept_leave_audit&amp;#39;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">and&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">RES&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">SUSPENSION_STATE_&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">order&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">by&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">RES&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ID_&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">asc&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="cloud">cloud
+&lt;/h2>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>project&lt;/th>
+&lt;th>desc&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>activiti-cloud-runtime-bundle-service&lt;/td>
+&lt;td>运行时&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>activiti-cloud-audit-service&lt;/td>
+&lt;td>审计&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>activiti-cloud-query-service&lt;/td>
+&lt;td>查询&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table></description></item></channel></rss>

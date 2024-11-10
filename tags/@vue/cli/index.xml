@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>@Vue/Cli on Codly Blog</title><link>https://tianhui.xin/tags/@vue/cli/</link><description>Recent content in @Vue/Cli on Codly Blog</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><copyright>Codly</copyright><lastBuildDate>Fri, 24 Aug 2018 21:00:00 +0000</lastBuildDate><atom:link href="https://tianhui.xin/tags/@vue/cli/index.xml" rel="self" type="application/rss+xml"/><item><title>Vue CLi 3快速入门</title><link>https://tianhui.xin/p/vue-cli-3%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/</link><pubDate>Fri, 24 Aug 2018 21:00:00 +0000</pubDate><guid>https://tianhui.xin/p/vue-cli-3%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/</guid><description>&lt;img src="https://image.tianhui.xin/Vue-CLi/12.png" alt="Featured image of post Vue CLi 3快速入门" />&lt;p>Vue CLi 3快速入门&lt;/p>
+&lt;p>2018年08月13日在开源中国收到了Vue CLi 3.0 正式版的发布，关于它的横空出世，晨在这里简单说一下，很多人在微博都在调侃Vue,说是不是更新太块了，都学不过来，下面是我搜集的几张图，&lt;/p>
+&lt;p>&lt;img src="https://image.tianhui.xin/Vue-CLi/1.png"
+loading="lazy"
+alt="话说这位冒充尤雨溪的同学，真调皮&amp;hellip;"
+>&lt;/p>
+&lt;p>&lt;img src="https://image.tianhui.xin/Vue-CLi/2.jpg"
+loading="lazy"
+alt="不得不说，前端同学真是聪明"
+>&lt;/p>
+&lt;p>&lt;img src="https://image.tianhui.xin/Vue-CLi/3.png"
+loading="lazy"
+alt="前端更新太块，学不动了"
+>&lt;/p>
+&lt;p>解释一下，Vue这次并没有发布新版本，而是出了一个简化配置的脚手架，命名为Vue CLi 3，不过调侃小右的也是用尽了各种技能。&lt;/p>
+&lt;p>好了，言归正传，回归我们今日的正题，&lt;strong>快速入门Vue CLi 3&lt;/strong>，打开官方文档我们都能看到&lt;/p>
+&lt;blockquote>
+&lt;p>Vue CLI 的包名称由 &lt;code>vue-cli&lt;/code> 改成了 &lt;code>@vue/cli&lt;/code>。 如果你已经全局安装了旧版本的 &lt;code>vue-cli&lt;/code> (1.x 或 2.x)，你需要先通过 &lt;code>npm uninstall vue-cli -g&lt;/code> 或 &lt;code>yarn global remove vue-cli&lt;/code> 卸载它。&lt;/p>
+&lt;/blockquote>
+&lt;p>安装的细节，我们这里不做过多的阐述，具体的可以查看官方文档&lt;a class="link" href="https://cli.vuejs.org/guide/" target="_blank" rel="noopener"
+>Vue CLi 3&lt;/a>&lt;/p>
+&lt;h1 id="创建项目">创建项目
+&lt;/h1>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="n">vue&lt;/span> &lt;span class="n">create&lt;/span> &lt;span class="nb">hello-world&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>刚入门，一直回车就好，🙂&lt;/p>
+&lt;p>目录结构是啥样子的，让我们看一下&lt;/p>
+&lt;p>&lt;img src="https://image.tianhui.xin/Vue-CLi/4.png"
+loading="lazy"
+alt="目录结构"
+>&lt;/p>
+&lt;p>&lt;code>@vue/cli&lt;/code>在这次发布中，到底更新了什么呢，首先要说的第一个东西就是简化配置文件，集中配置文件到&lt;code>vue.config.js&lt;/code>中,文件在哪呢，木有啊，那是因为&lt;code>@vue/cli&lt;/code>做了一些默认的配置。我们可以自己创建一个这样的文件。&lt;/p>
+&lt;p>&lt;code>vue inspect&lt;/code>，是脚手架提供的一个配置检查的服务，并且生成一个你很熟悉的文件&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">vue inspect &amp;gt; output.js
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>那么这样，是不是很熟悉呢&lt;/p>
+&lt;p>&lt;img src="https://image.tianhui.xin/Vue-CLi/6.png"
+loading="lazy"
+alt="webpack配置"
+>&lt;/p>
+&lt;p>是的，这个webpack的一些配置项，那么我们应该怎么书写呢，语法是这样的&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-javascript" data-lang="javascript">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// vue.config.js
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="nx">module&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">exports&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">configureWebpack&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">plugins&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="p">[&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">new&lt;/span> &lt;span class="nx">MyAwesomeWebpackPlugin&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">},&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">chainWebpack&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">config&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// GraphQL Loader
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">config&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">module&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="nx">rule&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;graphql&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="nx">test&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sr">/\.graphql$/&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="nx">use&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;graphql-tag/loader&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="nx">loader&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;graphql-tag/loader&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="nx">end&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>那么，&lt;code>chainWebpack&lt;/code>这是个什么东西，作者采用了&lt;a class="link" href="https://github.com/neutrinojs/webpack-chain" target="_blank" rel="noopener"
+>webpack-chain&lt;/a>的思想，内部实现也是&lt;code>webpack-chain&lt;/code>来实现&lt;code>webpack&lt;/code>的配置，仔细看&lt;code> webpack-chain&lt;/code>的文档就会看出，它是一个链式API的方式来简化配置的一个插件。&lt;/p>
+&lt;p>晨这边也修改过几个loader,大概分享一下代码吧&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-javascript" data-lang="javascript">&lt;span class="line">&lt;span class="cl">&lt;span class="nx">module&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">exports&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">chainWebpack&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">config&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">config&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">module&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">rule&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;compile&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="nx">test&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sr">/\.js$/&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="nx">include&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;./examples&amp;#39;&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="nx">add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;./packages&amp;#39;&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="nx">end&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="nx">use&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;babel&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="nx">loader&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;babel-loader&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="nx">options&lt;/span>&lt;span class="p">({&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">presets&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="p">[&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;babel-preset-es2015&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">{&lt;/span>&lt;span class="nx">modules&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">}]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">});&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// https://github.com/friends-of-js/yaml-loader
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">config&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">module&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">rule&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;yml&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="nx">test&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sr">/\.ya?ml$/&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="nx">use&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;yaml&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="nx">loader&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;@friends-of-js/yaml-loader&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="nx">options&lt;/span>&lt;span class="p">({&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">useNodeEnv&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="kc">true&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">});&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="vue-ui">vue ui
+&lt;/h2>&lt;p>最后我们来介绍另一个东西，对，没错，现在要说的就是&lt;code>vue ui&lt;/code>,它是做什么的呢？&lt;/p>
+&lt;ol>
+&lt;li>项目管理，包括创建和导入
+&lt;img src="https://image.tianhui.xin/Vue-CLi/11.png"
+loading="lazy"
+alt="项目管理"
+>&lt;/li>
+&lt;li>插件管理，包括依赖管理
+&lt;img src="https://image.tianhui.xin/Vue-CLi/7.png"
+loading="lazy"
+alt="插件管理"
+>
+&lt;img src="https://image.tianhui.xin/Vue-CLi/8.png"
+loading="lazy"
+alt="依赖配置"
+>
+&lt;img src="https://image.tianhui.xin/Vue-CLi/9.png"
+loading="lazy"
+alt="项目配置"
+>&lt;/li>
+&lt;li>任务启动及监控
+&lt;img src="https://image.tianhui.xin/Vue-CLi/10.png"
+loading="lazy"
+alt="vue ui项目任务启动及监控"
+>&lt;/li>
+&lt;/ol>
+&lt;p>目前该ui属于&lt;code>Beta&lt;/code>版本，可能会出现bug,相信社区会让其更加完善和强大。&lt;/p></description></item></channel></rss>
