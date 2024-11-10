@@ -14,19 +14,7 @@
 朋友圈也是晒疯了,各种各样的太阳,对都是你们的太阳;
 此时的我回到家中,左思右想,这个周末又要颓废了吗,别介,好记性不如烂笔头,写会文章吧；(TM&mldr;.一堆废话)</p><p>好吧,咱进入今天的正题,Java对象转换工具哪家强？
 首先,java平台中提供了很多的转换工具,旨在提供工作效率,我给大家列举一下</p><p><a class=link href=https://spring.io/projects/spring-framework target=_blank rel=noopener>BeanUtils</a></p><p><a class=link href=http://dozer.sourceforge.net/documentation/gettingstarted.html target=_blank rel=noopener>Dozer</a></p><p><a class=link href=https://orika-mapper.github.io/orika-docs/ target=_blank rel=noopener>Orika</a></p><p><a class=link href=https://github.com/mapstruct/mapstruct target=_blank rel=noopener>MapStruct</a></p><p><a class=link href=http://modelmapper.org/ target=_blank rel=noopener>ModelMapper</a></p><p><a class=link href=https://github.com/jmapper-framework/jmapper-core/wiki target=_blank rel=noopener>JMapper</a></p><p>此处排名不分先后,<a class=link href=https://segmentfault.com/a/1190000021004596 target=_blank rel=noopener>专业评测</a></p><h2 id=什么是mapstruct>什么是MapStruct</h2><blockquote><p>MapStruct is a code generator that greatly simplifies the implementation of mappings between Java bean types based on a convention over configuration approach.
-The generated mapping code uses plain method invocations and thus is fast, type-safe and easy to understand.</p></blockquote><p>啥意思？官方说它是个代码生成器,生成约定的Java bean对象转换.重点是纯方法调用</p><p><code>纯方法调用</code>容我先买个关子,5毛,不能再多了.</p><p>还记得最初的<code>BeanUtils</code>吗,对于同属性copy,当年用的贼嗨,慢慢的工作经验和程序的并发出现,发现效率并没有那么高;</p><p>还有非同属性copy,中途换了N多,比如居于配置文件的<code>Dozer</code>,写着复杂的xml配置.这些框架的背后无不使用了Java的反射或者代理;</p><p>此时,要说今天的主角之前,我觉得咱又必须要先说一下,大名鼎鼎的<code>lombok</code>,很多人都耳目共染,有了它,我们再也不用写get/set了,好嗨呀!!!</p><p>那么<code>MapStruct</code>又能让我们少写什么呢,对,这位同学很聪慧,不需要我们写对象转换时的get/set啦.</p><h2 id=mapstruct亮点是啥>MapStruct亮点是啥</h2><blockquote><p>Multi-layered applications often require to map between different object models (e.g. entities and DTOs). Writing such mapping code is a tedious and error-prone task. MapStruct aims at simplifying this work by automating it as much as possible.</p></blockquote><blockquote><p>In contrast to other mapping frameworks MapStruct generates bean mappings at compile-time which ensures a high performance, allows for fast developer feedback and thorough error checking.</p></blockquote><p>翻译就算了,直接说重点,Java bean 属性转换,这样的代码写多了,看着<code>冗余</code>,还不好找(密密麻麻),<code>MapStruct</code>在编译的时候,帮你生成对应的映射关系,提供开发效率.</p><h2 id=如何使用>如何使用</h2><h3 id=导入对应依赖>导入对应依赖</h3><blockquote><p><code>1.3.1.Final</code>的<code>mapstruct-jdk8</code>已经指向<code>mapstruct</code>,所以导入<code>mapstruct-jdk8</code>已经成为过去式</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=nt>&lt;dependencies&gt;</span>
+The generated mapping code uses plain method invocations and thus is fast, type-safe and easy to understand.</p></blockquote><p>啥意思？官方说它是个代码生成器,生成约定的Java bean对象转换.重点是纯方法调用</p><p><code>纯方法调用</code>容我先买个关子,5毛,不能再多了.</p><p>还记得最初的<code>BeanUtils</code>吗,对于同属性copy,当年用的贼嗨,慢慢的工作经验和程序的并发出现,发现效率并没有那么高;</p><p>还有非同属性copy,中途换了N多,比如居于配置文件的<code>Dozer</code>,写着复杂的xml配置.这些框架的背后无不使用了Java的反射或者代理;</p><p>此时,要说今天的主角之前,我觉得咱又必须要先说一下,大名鼎鼎的<code>lombok</code>,很多人都耳目共染,有了它,我们再也不用写get/set了,好嗨呀!!!</p><p>那么<code>MapStruct</code>又能让我们少写什么呢,对,这位同学很聪慧,不需要我们写对象转换时的get/set啦.</p><h2 id=mapstruct亮点是啥>MapStruct亮点是啥</h2><blockquote><p>Multi-layered applications often require to map between different object models (e.g. entities and DTOs). Writing such mapping code is a tedious and error-prone task. MapStruct aims at simplifying this work by automating it as much as possible.</p></blockquote><blockquote><p>In contrast to other mapping frameworks MapStruct generates bean mappings at compile-time which ensures a high performance, allows for fast developer feedback and thorough error checking.</p></blockquote><p>翻译就算了,直接说重点,Java bean 属性转换,这样的代码写多了,看着<code>冗余</code>,还不好找(密密麻麻),<code>MapStruct</code>在编译的时候,帮你生成对应的映射关系,提供开发效率.</p><h2 id=如何使用>如何使用</h2><h3 id=导入对应依赖>导入对应依赖</h3><blockquote><p><code>1.3.1.Final</code>的<code>mapstruct-jdk8</code>已经指向<code>mapstruct</code>,所以导入<code>mapstruct-jdk8</code>已经成为过去式</p></blockquote><div class=highlight><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=nt>&lt;dependencies&gt;</span>
 </span></span><span class=line><span class=cl>    <span class=nt>&lt;dependency&gt;</span>
 </span></span><span class=line><span class=cl>        <span class=nt>&lt;groupId&gt;</span>org.mapstruct<span class=nt>&lt;/groupId&gt;</span>
 </span></span><span class=line><span class=cl>        <span class=nt>&lt;artifactId&gt;</span>mapstruct<span class=nt>&lt;/artifactId&gt;</span>
@@ -38,69 +26,26 @@ The generated mapping code uses plain method invocations and thus is fast, type-
 </span></span><span class=line><span class=cl>        <span class=nt>&lt;version&gt;</span>1.3.1.Final<span class=nt>&lt;/version&gt;</span>
 </span></span><span class=line><span class=cl>    <span class=nt>&lt;/dependency&gt;</span>
 </span></span><span class=line><span class=cl><span class=nt>&lt;/dependencies&gt;</span>
-</span></span></code></pre></td></tr></table></div></div><ol><li>mapstruct 含有对应的注解,比如<code>@Mapper</code></li><li>mapstruct-processor 包含Java处理机制,代码生成的关键</li></ol><h3 id=编写java-bean>编写Java Bean</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span><span class=lnt>6
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Data</span><span class=w>
+</span></span></code></pre></div><ol><li>mapstruct 含有对应的注解,比如<code>@Mapper</code></li><li>mapstruct-processor 包含Java处理机制,代码生成的关键</li></ol><h3 id=编写java-bean>编写Java Bean</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Data</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=kd>class</span> <span class=nc>User</span><span class=w> </span><span class=kd>implements</span><span class=w> </span><span class=n>Serializable</span><span class=w> </span><span class=p>{</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>	</span><span class=kd>private</span><span class=w> </span><span class=n>String</span><span class=w> </span><span class=n>loginName</span><span class=p>;</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>	</span><span class=kd>private</span><span class=w> </span><span class=n>String</span><span class=w> </span><span class=n>password</span><span class=p>;</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span><span class=lnt>6
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Data</span><span class=w>
+</span></span></span></code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Data</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=kd>class</span> <span class=nc>UserDto</span><span class=w> </span><span class=kd>implements</span><span class=w> </span><span class=n>Serializable</span><span class=w> </span><span class=p>{</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>	</span><span class=kd>private</span><span class=w> </span><span class=n>String</span><span class=w> </span><span class=n>username</span><span class=p>;</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>	</span><span class=kd>private</span><span class=w> </span><span class=n>String</span><span class=w> </span><span class=n>password</span><span class=p>;</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><h3 id=编写mapper>编写Mapper</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span><span class=lnt>6
-</span><span class=lnt>7
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Mapper</span><span class=p>(</span><span class=n>componentModel</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=s>&#34;spring&#34;</span><span class=p>)</span><span class=w>
+</span></span></span></code></pre></div><h3 id=编写mapper>编写Mapper</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Mapper</span><span class=p>(</span><span class=n>componentModel</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=s>&#34;spring&#34;</span><span class=p>)</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=kd>interface</span> <span class=nc>UserMapper</span><span class=w> </span><span class=p>{</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>	</span><span class=n>UserMapper</span><span class=w> </span><span class=n>INSTANCE</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>Mappers</span><span class=p>.</span><span class=na>getMapper</span><span class=p>(</span><span class=n>UserMapper</span><span class=p>.</span><span class=na>class</span><span class=p>);</span><span class=w>    
 </span></span></span><span class=line><span class=cl><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nd>@Mapping</span><span class=p>(</span><span class=n>source</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=s>&#34;loginName&#34;</span><span class=p>,</span><span class=w> </span><span class=n>target</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=s>&#34;username&#34;</span><span class=p>)</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>	</span><span class=n>UserDto</span><span class=w> </span><span class=nf>userToUserDto</span><span class=p>(</span><span class=n>User</span><span class=w> </span><span class=n>user</span><span class=p>);</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><ol><li><code>@Mapper(componentModel = "spring")</code>使用spring方式注入</li><li><code>UserMapper INSTANCE = Mappers.getMapper(UserMapper.class); </code>不使用spring注入时,可以使用实例模式,默认</li><li><code>@Mapping(source = "loginName", target = "username")</code> 约定映射关系,多个使用<code>@Mappings</code></li></ol><h3 id=测试>测试</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span><span class=lnt>17
-</span><span class=lnt>18
-</span><span class=lnt>19
-</span><span class=lnt>20
-</span><span class=lnt>21
-</span><span class=lnt>22
-</span><span class=lnt>23
-</span><span class=lnt>24
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Slf4j</span><span class=w>
+</span></span></span></code></pre></div><ol><li><code>@Mapper(componentModel = "spring")</code>使用spring方式注入</li><li><code>UserMapper INSTANCE = Mappers.getMapper(UserMapper.class); </code>不使用spring注入时,可以使用实例模式,默认</li><li><code>@Mapping(source = "loginName", target = "username")</code> 约定映射关系,多个使用<code>@Mappings</code></li></ol><h3 id=测试>测试</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Slf4j</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=kd>class</span> <span class=nc>DomainTest</span><span class=w> </span><span class=kd>extends</span><span class=w> </span><span class=n>ApplicationTest</span><span class=w> </span><span class=p>{</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nd>@Autowired</span><span class=w>
@@ -124,34 +69,13 @@ The generated mapping code uses plain method invocations and thus is fast, type-
 </span></span></span><span class=line><span class=cl><span class=w>		</span><span class=n>log</span><span class=p>.</span><span class=na>info</span><span class=p>(</span><span class=s>&#34;result:{}&#34;</span><span class=p>,</span><span class=n>userMapper</span><span class=p>.</span><span class=na>userToUserDto</span><span class=p>(</span><span class=n>user</span><span class=p>));</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>	</span><span class=p>}</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><h2 id=原理>原理</h2><p>上文讲述了如何使用<code>MapStruct</code>,现在我们来讲述下原理,讲述原理前,我们要知道一个大杀器</p><h3 id=annotation-processor>Annotation Processor</h3><p><code>Annotation Processor</code>注解处理器是javac内置的一个用于编译时扫描和处理注解(Annotation)的工具.
-简单的说,在源代码编译阶段,通过注解处理器,我们可以获取源文件内注解(Annotation)相关内容.</p><p><a class=link href=https://www.jianshu.com/p/ac6a69adecff target=_blank rel=noopener>编译时注解处理器AnnotationProcessor的使用</a></p><p>查看<code>lombok</code>和<code>MapStruct</code>源码,我们都发现有这样一个文件</p><p><code>META-INF/services/javax.annotation.processing.Processor</code></p><p>内容大概是这样的,它在告诉javac对应的注解处理是哪些</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Copyright MapStruct Authors.</span>
+</span></span></span></code></pre></div><h2 id=原理>原理</h2><p>上文讲述了如何使用<code>MapStruct</code>,现在我们来讲述下原理,讲述原理前,我们要知道一个大杀器</p><h3 id=annotation-processor>Annotation Processor</h3><p><code>Annotation Processor</code>注解处理器是javac内置的一个用于编译时扫描和处理注解(Annotation)的工具.
+简单的说,在源代码编译阶段,通过注解处理器,我们可以获取源文件内注解(Annotation)相关内容.</p><p><a class=link href=https://www.jianshu.com/p/ac6a69adecff target=_blank rel=noopener>编译时注解处理器AnnotationProcessor的使用</a></p><p>查看<code>lombok</code>和<code>MapStruct</code>源码,我们都发现有这样一个文件</p><p><code>META-INF/services/javax.annotation.processing.Processor</code></p><p>内容大概是这样的,它在告诉javac对应的注解处理是哪些</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Copyright MapStruct Authors.</span>
 </span></span><span class=line><span class=cl><span class=c1>#</span>
 </span></span><span class=line><span class=cl><span class=c1># Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>org.mapstruct.ap.MappingProcessor
-</span></span></code></pre></td></tr></table></div></div><p>通过<code>MappingProcessor</code>一系列的处理后,<code>MapStruct</code>为你生成了对应的mapper的实现类,我们来看看生成的代码怎样的</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Component</span><span class=w>
+</span></span></code></pre></div><p>通过<code>MappingProcessor</code>一系列的处理后,<code>MapStruct</code>为你生成了对应的mapper的实现类,我们来看看生成的代码怎样的</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Component</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=kd>class</span> <span class=nc>UserMapperImpl</span><span class=w> </span><span class=kd>implements</span><span class=w> </span><span class=n>UserMapper</span><span class=w> </span><span class=p>{</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>public</span><span class=w> </span><span class=nf>UserMapperImpl</span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
@@ -167,13 +91,13 @@ The generated mapping code uses plain method invocations and thus is fast, type-
 </span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><p>此时,是不是觉得哪些代理、反射都弱爆了,对此你有什么样的看法呢,欢迎留言,我们一起探讨</p></section><footer class=article-footer><section class=article-tags><a href=/tags/spring/>Spring</a>
+</span></span></span></code></pre></div><p>此时,是不是觉得哪些代理、反射都弱爆了,对此你有什么样的看法呢,欢迎留言,我们一起探讨</p></section><footer class=article-footer><section class=article-tags><a href=/tags/spring/>Spring</a>
 <a href=/tags/java/>Java</a></section><section class=article-lastmod><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
 <span>最后更新于 Jun 21, 2020 18:22 +0800</span></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article class=has-image><a href=/p/beanfactory%E8%AF%A6%E8%A7%A3/><div class=article-image><img src="https://image.tianhui.xin/spring/beanFactory/01.png?x-oss-process=style/make" loading=lazy data-key data-hash="https://image.tianhui.xin/spring/beanFactory/01.png?x-oss-process=style/make"></div><div class=article-details><h2 class=article-title>BeanFactory详解</h2></div></a></article><article><a href=/p/mybatis%E5%AF%B9%E6%95%B0%E6%8D%AE%E8%BF%9B%E8%A1%8C%E5%8A%A0%E5%AF%86/><div class=article-details><h2 class=article-title>mybatis对数据进行加密</h2></div></a></article><article class=has-image><a href=/p/%E8%B7%9F%E6%88%91%E5%AD%A6springcloud-%E4%B9%8B-nacos/><div class=article-image><img src="https://image.tianhui.xin/spring-cloud/nacos.png?x-oss-process=style/make" loading=lazy data-key data-hash="https://image.tianhui.xin/spring-cloud/nacos.png?x-oss-process=style/make"></div><div class=article-details><h2 class=article-title>跟我学SpringCloud 之 nacos</h2></div></a></article><article><a href=/p/mybatis-interceptor-%E5%AE%9E%E7%8E%B0%E6%95%B0%E6%8D%AE%E8%84%B1%E6%95%8F/><div class=article-details><h2 class=article-title>Mybatis Interceptor 实现数据脱敏</h2></div></a></article><article><a href=/p/%E4%BC%98%E9%9B%85%E7%9A%84%E4%BD%BF%E7%94%A8java%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/><div class=article-details><h2 class=article-title>优雅的使用Java分布式锁</h2></div></a></article></div></div></aside><div class=disqus-container><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//codly.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener("onColorSchemeChange",e=>{typeof DISQUS=="object"&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
 2018 -
 2024 Codly</section><section class=running-time>本博客已稳定运行
 <span id=runningdays class=running-days></span></section><section class=totalcount>发表了27篇文章 ·
-总计11.95k字</section><section class=powerby>ICP证：<a href=http://www.beian.miit.gov.cn>京16046477</a><br>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.29.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+总计9.06k字</section><section class=powerby>ICP证：<a href=http://www.beian.miit.gov.cn>京16046477</a><br>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.29.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
 <button class="pswp__button pswp__button--share" title=Share></button>
 <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">

@@ -14,38 +14,18 @@
 嗯？这应该是一个痛苦的过程，好吧，今晚给大家安利一个强大的工具<code>data-shield</code>，针对<code>mybatis</code>架构，对数据在进行写入时加密，查询解密，为你的数据保驾护航,
 我想你一定会爱上它</p><h2 id=data-shield>data-shield</h2><p><code>data-shield</code>的实现采用<code>mybatis</code>的<code>Interceptor</code>实现，不仅实现的常规的查询和更新，也针对<code>Cursor</code>模式下的查询操作，
 对业务代码无任何浸入性，只需要在需要加密的字段，添加一个注解，全程帮你完成数据的加密及解密操作，真是开发一大利器，话不多说，
-进入今日的正题</p><h3 id=pomxml配置>pom.xml配置</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=nt>&lt;dependency&gt;</span>
+进入今日的正题</p><h3 id=pomxml配置>pom.xml配置</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=nt>&lt;dependency&gt;</span>
 </span></span><span class=line><span class=cl>   <span class=nt>&lt;groupId&gt;</span>com.github.homeant<span class=nt>&lt;/groupId&gt;</span>
 </span></span><span class=line><span class=cl>   <span class=nt>&lt;artifactId&gt;</span>data-shield-spring-boot-starter<span class=nt>&lt;/artifactId&gt;</span>
 </span></span><span class=line><span class=cl>   <span class=nt>&lt;version&gt;</span>1.0-RELEASE<span class=nt>&lt;/version&gt;</span>
 </span></span><span class=line><span class=cl><span class=nt>&lt;/dependency&gt;</span>
-</span></span></code></pre></td></tr></table></div></div><h3 id=yaml配置>yaml配置</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span><span class=lnt>6
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>app</span><span class=p>:</span><span class=w>
+</span></span></code></pre></div><h3 id=yaml配置>yaml配置</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>app</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>data</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>shield</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>enable</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>strategy</span><span class=p>:</span><span class=w> </span><span class=l>aes</span><span class=w> </span><span class=c>#支持AES/DES模式 </span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>key</span><span class=p>:</span><span class=w> </span><span class=l>AD42F6697B035B7580E4FEF93BE20BAD</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><h3 id=业务字段配置>业务字段配置</h3><p>为需要处理的业务字段添加@TableField注解,只支持String类型</p><p>encrypt: 修改过程是否需要加密,默认为false</p><p>decode: 查询过程是否需要解密,默认为false</p><p>asserts: decode为true时，针对某些数据(历史数据)提供断言,默认值DefaultAssert.class(encrypt=true,decode=true)</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span><span class=lnt>6
-</span><span class=lnt>7
-</span><span class=lnt>8
-</span><span class=lnt>9
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Data</span><span class=w>
+</span></span></span></code></pre></div><h3 id=业务字段配置>业务字段配置</h3><p>为需要处理的业务字段添加@TableField注解,只支持String类型</p><p>encrypt: 修改过程是否需要加密,默认为false</p><p>decode: 查询过程是否需要解密,默认为false</p><p>asserts: decode为true时，针对某些数据(历史数据)提供断言,默认值DefaultAssert.class(encrypt=true,decode=true)</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Data</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=kd>class</span> <span class=nc>User</span><span class=w> </span><span class=p>{</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>private</span><span class=w> </span><span class=n>Integer</span><span class=w> </span><span class=n>id</span><span class=p>;</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>
@@ -54,43 +34,7 @@
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nd>@TableField</span><span class=p>(</span><span class=n>encrypt</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=kc>true</span><span class=p>,</span><span class=n>decode</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=kc>true</span><span class=p>,</span><span class=n>assertion</span><span class=o>=</span><span class=n>Base64Assert</span><span class=p>.</span><span class=na>class</span><span class=p>)</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>private</span><span class=w> </span><span class=n>String</span><span class=w> </span><span class=n>phone</span><span class=p>;</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><h3 id=代码调用>代码调用</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span><span class=lnt>17
-</span><span class=lnt>18
-</span><span class=lnt>19
-</span><span class=lnt>20
-</span><span class=lnt>21
-</span><span class=lnt>22
-</span><span class=lnt>23
-</span><span class=lnt>24
-</span><span class=lnt>25
-</span><span class=lnt>26
-</span><span class=lnt>27
-</span><span class=lnt>28
-</span><span class=lnt>29
-</span><span class=lnt>30
-</span><span class=lnt>31
-</span><span class=lnt>32
-</span><span class=lnt>33
-</span><span class=lnt>34
-</span><span class=lnt>35
-</span><span class=lnt>36
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span><span class=w> </span><span class=kd>class</span> <span class=nc>Test</span><span class=p>{</span><span class=w>
+</span></span></span></code></pre></div><h3 id=代码调用>代码调用</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span><span class=w> </span><span class=kd>class</span> <span class=nc>Test</span><span class=p>{</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>   </span><span class=nd>@Autowired</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>   </span><span class=kd>private</span><span class=w> </span><span class=n>UserMapper</span><span class=w> </span><span class=n>userMapper</span><span class=p>;</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>
@@ -126,29 +70,14 @@
 </span></span></span><span class=line><span class=cl><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>   </span><span class=p>}</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span><span class=lnt>6
-</span><span class=lnt>7
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>2021-04-03 16:23:16.604 DEBUG <span class=m>3020</span> --- <span class=o>[</span>           main<span class=o>]</span> c.g.h.d.shield.mapper.UserMapper.insert  : <span class=o>==</span>&gt;  Preparing: insert into t_user <span class=o>(</span>username,password<span class=o>)</span> values <span class=o>(</span> ?, ?<span class=o>)</span> 
+</span></span></span></code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>2021-04-03 16:23:16.604 DEBUG <span class=m>3020</span> --- <span class=o>[</span>           main<span class=o>]</span> c.g.h.d.shield.mapper.UserMapper.insert  : <span class=o>==</span>&gt;  Preparing: insert into t_user <span class=o>(</span>username,password<span class=o>)</span> values <span class=o>(</span> ?, ?<span class=o>)</span> 
 </span></span><span class=line><span class=cl>2021-04-03 16:23:16.629 DEBUG <span class=m>3020</span> --- <span class=o>[</span>           main<span class=o>]</span> c.g.h.d.shield.mapper.UserMapper.insert  : <span class=o>==</span>&gt; Parameters: tom<span class=o>(</span>String<span class=o>)</span>, <span class=nv>L0wfhbKDAELRnj03GtjKoQ</span><span class=o>==(</span>String<span class=o>)</span>
 </span></span><span class=line><span class=cl>2021-04-03 16:23:16.651 DEBUG <span class=m>3020</span> --- <span class=o>[</span>           main<span class=o>]</span> c.g.h.d.shield.mapper.UserMapper.insert  : &lt;<span class=o>==</span>    Updates: <span class=m>1</span>
 </span></span><span class=line><span class=cl>2021-04-03 16:23:16.675 DEBUG <span class=m>3020</span> --- <span class=o>[</span>           main<span class=o>]</span> c.g.h.d.s.mapper.UserMapper.selectOn     : <span class=o>==</span>&gt;  Preparing: <span class=k>select</span> id,username,password from t_user where <span class=nv>id</span> <span class=o>=</span> ? 
 </span></span><span class=line><span class=cl>2021-04-03 16:23:16.675 DEBUG <span class=m>3020</span> --- <span class=o>[</span>           main<span class=o>]</span> c.g.h.d.s.mapper.UserMapper.selectOn     : <span class=o>==</span>&gt; Parameters: 75<span class=o>(</span>Integer<span class=o>)</span>
 </span></span><span class=line><span class=cl>2021-04-03 16:23:23.313 DEBUG <span class=m>3020</span> --- <span class=o>[</span>           main<span class=o>]</span> c.g.h.d.s.mapper.UserMapper.selectOn     : &lt;<span class=o>==</span>      Total: <span class=m>1</span>
 </span></span><span class=line><span class=cl>2021-04-03 16:23:26.166 DEBUG <span class=m>3020</span> --- <span class=o>[</span>           main<span class=o>]</span> com.github.homeant.data.shield.DataTest  : user:User<span class=o>(</span><span class=nv>id</span><span class=o>=</span>75, <span class=nv>username</span><span class=o>=</span>tom, <span class=nv>password</span><span class=o>=</span>p@ssw0rd1234567<span class=o>)</span>
-</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span><span class=lnt>6
-</span><span class=lnt>7
-</span><span class=lnt>8
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>mysql&gt; <span class=k>select</span> * from t_user<span class=p>;</span>
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>mysql&gt; <span class=k>select</span> * from t_user<span class=p>;</span>
 </span></span><span class=line><span class=cl>+----+----------+--------------------------+
 </span></span><span class=line><span class=cl><span class=p>|</span> id <span class=p>|</span> username <span class=p>|</span> password                 <span class=p>|</span>
 </span></span><span class=line><span class=cl>+----+----------+--------------------------+
@@ -156,7 +85,7 @@
 </span></span><span class=line><span class=cl><span class=p>|</span> <span class=m>75</span> <span class=p>|</span> tom      <span class=p>|</span> <span class=nv>L0wfhbKDAELRnj03GtjKoQ</span><span class=o>==</span> <span class=p>|</span>
 </span></span><span class=line><span class=cl>+----+----------+--------------------------+
 </span></span><span class=line><span class=cl><span class=m>2</span> rows in <span class=nb>set</span> <span class=o>(</span>0.03 sec<span class=o>)</span>
-</span></span></code></pre></td></tr></table></div></div><p><a class=link href=https://github.com/homeant/data-shield target=_blank rel=noopener>代码地址</a></p></section><footer class=article-footer><section class=article-tags><a href=/tags/spring-boot/>Spring Boot</a>
+</span></span></code></pre></div><p><a class=link href=https://github.com/homeant/data-shield target=_blank rel=noopener>代码地址</a></p></section><footer class=article-footer><section class=article-tags><a href=/tags/spring-boot/>Spring Boot</a>
 <a href=/tags/mybatis/>Mybatis</a>
 <a href=/tags/data-security/>Data Security</a>
 <a href=/tags/java/>Java</a>
@@ -165,7 +94,7 @@
 2018 -
 2024 Codly</section><section class=running-time>本博客已稳定运行
 <span id=runningdays class=running-days></span></section><section class=totalcount>发表了27篇文章 ·
-总计11.95k字</section><section class=powerby>ICP证：<a href=http://www.beian.miit.gov.cn>京16046477</a><br>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.29.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+总计9.06k字</section><section class=powerby>ICP证：<a href=http://www.beian.miit.gov.cn>京16046477</a><br>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.29.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
 <button class="pswp__button pswp__button--share" title=Share></button>
 <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">

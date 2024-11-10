@@ -10,46 +10,22 @@
 <svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
 <span>暗色模式</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><ol><li><a href=#contidional-介绍>Contidional 介绍</a></li><li><a href=#condition-接口>Condition 接口</a></li><li><a href=#contidional-申明>Contidional 申明</a></li><li><a href=#contidional-实战>Contidional 实战</a><ol><li><a href=#自定义条件>自定义条件</a></li><li><a href=#常见的条件注解>常见的条件注解</a></li></ol></li><li><a href=#contidional-进阶>Contidional 进阶</a><ol><li><a href=#多重注解条件>多重注解条件</a></li></ol></li><li><a href=#写在最后>写在最后</a></li></ol></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><header class=article-category><a href=/categories/%E5%AD%A6%E6%97%A0%E6%AD%A2%E5%A2%83/ style=background-color:#2a9d8f;color:#fff>学无止境</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/spring-conditional%E8%AF%A6%E8%A7%A3/>Spring Conditional详解</a></h2></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
 <time class=article-time--published>Sep 16, 2021</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
-<time class=article-time--reading>阅读时长: 2 分钟</time></div></footer></div></header><section class=article-content><p><code>@Conditional</code>是<code>Spring4</code>新提供的注解，它的作用是按照一定条件进行判断，满足条件就将bean注册到容器。</p><h3 id=contidional-介绍>Contidional 介绍</h3><p><code>Conditional</code>是由<code>SpringFramework</code>提供的一个注解，位于 <code>org.springframework.context.annotation</code> 包内，定义如下。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span><span class=lnt>6
-</span><span class=lnt>7
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Retention</span><span class=p>(</span><span class=n>RetentionPolicy</span><span class=p>.</span><span class=na>RUNTIME</span><span class=p>)</span><span class=w>
+<time class=article-time--reading>阅读时长: 2 分钟</time></div></footer></div></header><section class=article-content><p><code>@Conditional</code>是<code>Spring4</code>新提供的注解，它的作用是按照一定条件进行判断，满足条件就将bean注册到容器。</p><h3 id=contidional-介绍>Contidional 介绍</h3><p><code>Conditional</code>是由<code>SpringFramework</code>提供的一个注解，位于 <code>org.springframework.context.annotation</code> 包内，定义如下。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Retention</span><span class=p>(</span><span class=n>RetentionPolicy</span><span class=p>.</span><span class=na>RUNTIME</span><span class=p>)</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=nd>@Target</span><span class=p>({</span><span class=n>ElementType</span><span class=p>.</span><span class=na>TYPE</span><span class=p>,</span><span class=w> </span><span class=n>ElementType</span><span class=p>.</span><span class=na>METHOD</span><span class=p>})</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=nd>@interface</span><span class=w> </span><span class=n>Conditional</span><span class=w> </span><span class=p>{</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>	</span><span class=n>Class</span><span class=o>&lt;?</span><span class=w> </span><span class=kd>extends</span><span class=w> </span><span class=n>Condition</span><span class=o>&gt;[]</span><span class=w> </span><span class=nf>value</span><span class=p>();</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><p>我们可以将 <code>Spring</code> 的<code>@Conditional</code>注解用于以下场景：</p><ul><li>可以作为类级别的注解直接或者间接的与<code>@Component</code>相关联，包括<code>@Configuration类</code>；</li><li>可以作为元注解，用于自动编写构造性注解；</li><li>作为方法级别的注解，作用在任何@Bean方法上。</li></ul><h3 id=condition-接口>Condition 接口</h3><p>Condition 将在即将注册 Bean 定义之前进行检查，并且可以根据它的 <code>matches()</code> 方法返回值动态决定是否注册组件（true-允许注册；false-不允许注册）。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span><span class=w> </span><span class=kd>interface</span> <span class=nc>Condition</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span></code></pre></div><p>我们可以将 <code>Spring</code> 的<code>@Conditional</code>注解用于以下场景：</p><ul><li>可以作为类级别的注解直接或者间接的与<code>@Component</code>相关联，包括<code>@Configuration类</code>；</li><li>可以作为元注解，用于自动编写构造性注解；</li><li>作为方法级别的注解，作用在任何@Bean方法上。</li></ul><h3 id=condition-接口>Condition 接口</h3><p>Condition 将在即将注册 Bean 定义之前进行检查，并且可以根据它的 <code>matches()</code> 方法返回值动态决定是否注册组件（true-允许注册；false-不允许注册）。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span><span class=w> </span><span class=kd>interface</span> <span class=nc>Condition</span><span class=w> </span><span class=p>{</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>	</span><span class=kt>boolean</span><span class=w> </span><span class=nf>matches</span><span class=p>(</span><span class=n>ConditionContext</span><span class=w> </span><span class=n>context</span><span class=p>,</span><span class=w> </span><span class=n>AnnotatedTypeMetadata</span><span class=w> </span><span class=n>metadata</span><span class=p>);</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><blockquote><p>注意：Condition 必须遵循与 BeanFactoryPostProcessor 相同的限制，并注意永远不要与 bean 实例交互。对于与 @Configuration bean 交互的条件的更细粒度控制，请考虑实现 ConfigurationCondition 接口。</p></blockquote><h3 id=contidional-申明>Contidional 申明</h3><ul><li>某个<code>@Configuration</code>注解的配置类上</li><li>某个<code>@Configuration</code>注解配置类中带有<code>@Bean</code>注解的方法上</li><li>任何用<code>@Component</code>、<code>@Service</code>、<code>@Repository</code>或<code>@Controller</code>注释声明的 Bean</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Configuration</span><span class=w>
+</span></span></span></code></pre></div><blockquote><p>注意：Condition 必须遵循与 BeanFactoryPostProcessor 相同的限制，并注意永远不要与 bean 实例交互。对于与 @Configuration bean 交互的条件的更细粒度控制，请考虑实现 ConfigurationCondition 接口。</p></blockquote><h3 id=contidional-申明>Contidional 申明</h3><ul><li>某个<code>@Configuration</code>注解的配置类上</li><li>某个<code>@Configuration</code>注解配置类中带有<code>@Bean</code>注解的方法上</li><li>任何用<code>@Component</code>、<code>@Service</code>、<code>@Repository</code>或<code>@Controller</code>注释声明的 Bean</li></ul><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Configuration</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=nd>@Conditional</span><span class=p>(</span><span class=n>IsDevEnvCondition</span><span class=p>.</span><span class=na>class</span><span class=p>)</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>class</span> <span class=nc>DevEnvLoggingConfiguration</span><span class=w> </span><span class=p>{</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// ...</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span><span class=lnt>6
-</span><span class=lnt>7
-</span><span class=lnt>8
-</span><span class=lnt>9
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Configuration</span><span class=w>
+</span></span></span></code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Configuration</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>class</span> <span class=nc>DevEnvLoggingConfiguration</span><span class=w> </span><span class=p>{</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nd>@Bean</span><span class=w>
@@ -58,47 +34,23 @@
 </span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>return</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>LoggingService</span><span class=p>();</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Service</span><span class=w>
+</span></span></span></code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Service</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=nd>@Conditional</span><span class=p>(</span><span class=n>IsDevEnvCondition</span><span class=p>.</span><span class=na>class</span><span class=p>)</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>class</span> <span class=nc>LoggingService</span><span class=w> </span><span class=p>{</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// ...</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><h3 id=contidional-实战>Contidional 实战</h3><h4 id=自定义条件>自定义条件</h4><p>检查 Java 版本是否为 8</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span><span class=lnt>6
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>class</span> <span class=nc>Java8Condition</span><span class=w> </span><span class=kd>implements</span><span class=w> </span><span class=n>Condition</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span></code></pre></div><h3 id=contidional-实战>Contidional 实战</h3><h4 id=自定义条件>自定义条件</h4><p>检查 Java 版本是否为 8</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>class</span> <span class=nc>Java8Condition</span><span class=w> </span><span class=kd>implements</span><span class=w> </span><span class=n>Condition</span><span class=w> </span><span class=p>{</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nd>@Override</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>public</span><span class=w> </span><span class=kt>boolean</span><span class=w> </span><span class=nf>matches</span><span class=p>(</span><span class=n>ConditionContext</span><span class=w> </span><span class=n>context</span><span class=p>,</span><span class=w> </span><span class=n>AnnotatedTypeMetadata</span><span class=w> </span><span class=n>metadata</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>return</span><span class=w> </span><span class=n>JavaVersion</span><span class=p>.</span><span class=na>getJavaVersion</span><span class=p>().</span><span class=na>equals</span><span class=p>(</span><span class=n>JavaVersion</span><span class=p>.</span><span class=na>EIGHT</span><span class=p>);</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><p>将 <code>Java8Condition</code> 作为 <code>@Conditional</code> 注释中的一个属性：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Service</span><span class=w>
+</span></span></span></code></pre></div><p>将 <code>Java8Condition</code> 作为 <code>@Conditional</code> 注释中的一个属性：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Service</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=nd>@Conditional</span><span class=p>(</span><span class=n>Java8Condition</span><span class=p>.</span><span class=na>class</span><span class=p>)</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=kd>class</span> <span class=nc>Java8DependedService</span><span class=w> </span><span class=p>{</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// ...</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><h4 id=常见的条件注解>常见的条件注解</h4><h5 id=conditionalonproperty>ConditionalOnProperty</h5><ol><li><code>value</code>属性，指定要检查的配置属性;</li><li><code>haveValue</code>属性，定义这个条件所需的值；</li><li><code>matchIfMissing</code>属性，如果缺少参数，是否应该匹配条件。</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span><span class=lnt>6
-</span><span class=lnt>7
-</span><span class=lnt>8
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Service</span><span class=w>
+</span></span></span></code></pre></div><h4 id=常见的条件注解>常见的条件注解</h4><h5 id=conditionalonproperty>ConditionalOnProperty</h5><ol><li><code>value</code>属性，指定要检查的配置属性;</li><li><code>haveValue</code>属性，定义这个条件所需的值；</li><li><code>matchIfMissing</code>属性，如果缺少参数，是否应该匹配条件。</li></ol><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Service</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=nd>@ConditionalOnProperty</span><span class=p>(</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>  </span><span class=n>value</span><span class=o>=</span><span class=s>&#34;logging.enabled&#34;</span><span class=p>,</span><span class=w> 
 </span></span></span><span class=line><span class=cl><span class=w>  </span><span class=n>havingValue</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=s>&#34;true&#34;</span><span class=p>,</span><span class=w> 
@@ -106,59 +58,26 @@
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>class</span> <span class=nc>LoggingService</span><span class=w> </span><span class=p>{</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// ...</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><h5 id=conditionalonexpression>ConditionalOnExpression</h5><p>相比较前面的Bean，Class是否存在，配置参数是否存在或者有某个值而言，这个依赖<code>SPEL</code>表达式的，就显得更加的高级了；
-其主要就是执行<code>Spel</code>表达式，根据返回的<code>true</code>/<code>false</code>来判断是否满足条件</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span><span class=lnt>6
-</span><span class=lnt>7
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Service</span><span class=w>
+</span></span></span></code></pre></div><h5 id=conditionalonexpression>ConditionalOnExpression</h5><p>相比较前面的Bean，Class是否存在，配置参数是否存在或者有某个值而言，这个依赖<code>SPEL</code>表达式的，就显得更加的高级了；
+其主要就是执行<code>Spel</code>表达式，根据返回的<code>true</code>/<code>false</code>来判断是否满足条件</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Service</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=nd>@ConditionalOnExpression</span><span class=p>(</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>  </span><span class=s>&#34;${logging.enabled:true} and &#39;${logging.level}&#39;.equals(&#39;DEBUG&#39;)&#34;</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>)</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>class</span> <span class=nc>LoggingService</span><span class=w> </span><span class=p>{</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// ...</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><h5 id=conditionalonbean>ConditionalOnBean</h5><p>只有在容器中注册了某个bean,该条件才起作用</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Service</span><span class=w>
+</span></span></span></code></pre></div><h5 id=conditionalonbean>ConditionalOnBean</h5><p>只有在容器中注册了某个bean,该条件才起作用</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Service</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=nd>@ConditionalOnBean</span><span class=p>(</span><span class=n>CustomLoggingConfiguration</span><span class=p>.</span><span class=na>class</span><span class=p>)</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>class</span> <span class=nc>LoggingService</span><span class=w> </span><span class=p>{</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// ...</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><h3 id=contidional-进阶>Contidional 进阶</h3><h4 id=多重注解条件>多重注解条件</h4><p>此处demo实现满足某个环境变量时该条件才能生效</p><p>创建注解类 Env</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span><span class=lnt>6
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Target</span><span class=p>({</span><span class=n>ElementType</span><span class=p>.</span><span class=na>TYPE</span><span class=p>,</span><span class=w> </span><span class=n>ElementType</span><span class=p>.</span><span class=na>METHOD</span><span class=p>})</span><span class=w>
+</span></span></span></code></pre></div><h3 id=contidional-进阶>Contidional 进阶</h3><h4 id=多重注解条件>多重注解条件</h4><p>此处demo实现满足某个环境变量时该条件才能生效</p><p>创建注解类 Env</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Target</span><span class=p>({</span><span class=n>ElementType</span><span class=p>.</span><span class=na>TYPE</span><span class=p>,</span><span class=w> </span><span class=n>ElementType</span><span class=p>.</span><span class=na>METHOD</span><span class=p>})</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=nd>@Retention</span><span class=p>(</span><span class=n>RetentionPolicy</span><span class=p>.</span><span class=na>RUNTIME</span><span class=p>)</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=nd>@Documented</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=nd>@interface</span><span class=w> </span><span class=n>Env</span><span class=w> </span><span class=p>{</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>String</span><span class=o>[]</span><span class=w> </span><span class=nf>value</span><span class=p>();</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><p>创建 Condition 实现</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span><span class=w> </span><span class=kd>class</span> <span class=nc>EnvCondition</span><span class=w> </span><span class=kd>implements</span><span class=w> </span><span class=n>Condition</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span></code></pre></div><p>创建 Condition 实现</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span><span class=w> </span><span class=kd>class</span> <span class=nc>EnvCondition</span><span class=w> </span><span class=kd>implements</span><span class=w> </span><span class=n>Condition</span><span class=w> </span><span class=p>{</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nd>@Override</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>public</span><span class=w> </span><span class=kt>boolean</span><span class=w> </span><span class=nf>matches</span><span class=p>(</span><span class=n>ConditionContext</span><span class=w> </span><span class=n>conditionContext</span><span class=p>,</span><span class=w> </span><span class=n>AnnotatedTypeMetadata</span><span class=w> </span><span class=n>metadata</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
@@ -173,21 +92,7 @@
 </span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>return</span><span class=w> </span><span class=kc>false</span><span class=p>;</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><p>自定义条件使用</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Configuration</span><span class=w>
+</span></span></span></code></pre></div><p>自定义条件使用</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Configuration</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=kd>class</span> <span class=nc>DemoConfiguration</span><span class=p>{</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nd>@Env</span><span class=p>(</span><span class=s>&#34;dev&#34;</span><span class=p>)</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nd>@EnvCondition</span><span class=w>
@@ -201,13 +106,13 @@
 </span></span></span><span class=line><span class=cl><span class=w>        </span><span class=c1>// ...</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><h3 id=写在最后>写在最后</h3><p>码字不易，因个人能力有限，难免有疏漏和错误之处，如发现bug或者有更好的建议，欢迎批评指正，不吝感激</p></section><footer class=article-footer><section class=article-tags><a href=/tags/spring-boot/>Spring Boot</a>
+</span></span></span></code></pre></div><h3 id=写在最后>写在最后</h3><p>码字不易，因个人能力有限，难免有疏漏和错误之处，如发现bug或者有更好的建议，欢迎批评指正，不吝感激</p></section><footer class=article-footer><section class=article-tags><a href=/tags/spring-boot/>Spring Boot</a>
 <a href=/tags/spring-conditional/>Spring Conditional</a></section><section class=article-lastmod><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
 <span>最后更新于 Sep 16, 2021 18:30 +0800</span></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article><a href=/p/mybatis%E5%AF%B9%E6%95%B0%E6%8D%AE%E8%BF%9B%E8%A1%8C%E5%8A%A0%E5%AF%86/><div class=article-details><h2 class=article-title>mybatis对数据进行加密</h2></div></a></article><article><a href=/p/m3ub_download/><div class=article-details><h2 class=article-title>python m3u8 下载</h2></div></a></article><article class=has-image><a href=/p/spring-boot-admin-on-kubernetes/><div class=article-image><img src="https://image.tianhui.xin/spring/boot/admin/spring-boot-admin-on-kubernetes.png?x-oss-process=style/make" loading=lazy data-key data-hash="https://image.tianhui.xin/spring/boot/admin/spring-boot-admin-on-kubernetes.png?x-oss-process=style/make"></div><div class=article-details><h2 class=article-title>Spring Boot Admin On Kubernetes</h2></div></a></article><article class=has-image><a href=/p/%E8%B7%9F%E6%88%91%E5%AD%A6springcloud-%E4%B9%8B-nacos/><div class=article-image><img src="https://image.tianhui.xin/spring-cloud/nacos.png?x-oss-process=style/make" loading=lazy data-key data-hash="https://image.tianhui.xin/spring-cloud/nacos.png?x-oss-process=style/make"></div><div class=article-details><h2 class=article-title>跟我学SpringCloud 之 nacos</h2></div></a></article><article class=has-image><a href=/p/%E4%B8%80%E8%A7%81%E5%80%BE%E5%BF%83%E4%B9%8B%E5%88%9D%E9%81%87mapstruct/><div class=article-image><img src="https://image.tianhui.xin/mapstruct/Mapstruct.png?x-oss-process=style/make" loading=lazy data-key data-hash="https://image.tianhui.xin/mapstruct/Mapstruct.png?x-oss-process=style/make"></div><div class=article-details><h2 class=article-title>一见倾心之初遇MapStruct</h2></div></a></article></div></div></aside><div class=disqus-container><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//codly.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener("onColorSchemeChange",e=>{typeof DISQUS=="object"&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
 2018 -
 2024 Codly</section><section class=running-time>本博客已稳定运行
 <span id=runningdays class=running-days></span></section><section class=totalcount>发表了27篇文章 ·
-总计11.95k字</section><section class=powerby>ICP证：<a href=http://www.beian.miit.gov.cn>京16046477</a><br>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.29.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+总计9.06k字</section><section class=powerby>ICP证：<a href=http://www.beian.miit.gov.cn>京16046477</a><br>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.29.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
 <button class="pswp__button pswp__button--share" title=Share></button>
 <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">

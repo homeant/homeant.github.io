@@ -10,29 +10,8 @@
 <svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
 <span>暗色模式</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#什么是spring-integration>什么是Spring Integration</a></li><li><a href=#组成>组成</a><ol><li><a href=#message>Message</a></li><li><a href=#channel>Channel</a><ol><li><a href=#messagechannel>MessageChannel</a></li><li><a href=#消息通道>消息通道</a></li><li><a href=#通道拦截器>通道拦截器</a></li></ol></li><li><a href=#message-endpoint>Message EndPoint</a><ol><li><a href=#channel-adapter>Channel Adapter</a></li><li><a href=#gateway>Gateway</a></li><li><a href=#service-activator>Service Activator</a></li><li><a href=#router>Router</a></li><li><a href=#filter>Filter</a></li><li><a href=#splitter>Splitter</a></li><li><a href=#aggregator>Aggregator</a></li><li><a href=#enricher>Enricher</a></li><li><a href=#transformer>Transformer</a></li><li><a href=#bridge>Bridge</a></li></ol></li></ol></li><li><a href=#快速入门>快速入门</a><ol><li><a href=#编写快速启动类>编写快速启动类</a></li><li><a href=#编写接口类>编写接口类</a></li><li><a href=#编写xml>编写xml</a></li></ol></li><li><a href=#开始使用>开始使用</a><ol><li><a href=#pom中加入依赖>pom中加入依赖</a></li><li><a href=#编写测试类>编写测试类</a></li><li><a href=#启动测试类>启动测试类</a></li></ol></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><header class=article-category><a href=/categories/%E5%AD%A6%E6%97%A0%E6%AD%A2%E5%A2%83/ style=background-color:#2a9d8f;color:#fff>学无止境</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/springboot%E4%B8%AD%E4%BD%BF%E7%94%A8springintegration/>SpringBoot中使用SpringIntegration</a></h2></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
 <time class=article-time--published>Sep 30, 2019</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
-<time class=article-time--reading>阅读时长: 7 分钟</time></div></footer></div></header><section class=article-content><p>spring-integration是一个功能强大的EIP(Enterprise Integration Patterns)，即企业集成模式。对，spring-integration是一个集大成者。就我自己的理解，集成了众多功能的它，是一种便捷的事件驱动消息框架用来在系统之间做消息传递的。
-今天我们来探索一下如果使用它发送http请求。</p><h2 id=什么是spring-integration>什么是Spring Integration</h2><blockquote><p>Spring Integration在基于Spring的应用程序中实现轻量级消息传递，并支持通过声明适配器与外部系统集成。 Spring Integration的主要目标是提供一个简单的模型来构建企业集成解决方案，同时保持关注点的分离，这对于生成可维护，可测试的代码至关重要。Spring Framework鼓励开发人员使用接口进行编码，并使用依赖注入（DI）为普通旧Java对象（POJO）提供执行其任务所需的依赖项。 Spring Integration将这一概念更进一步，其中POJO使用消息传递范例连接在一起，并且各个组件可能不了解应用程序中的其他组件。这种应用程序是通过组装细粒度可重用组件来构建的，以形成更高级别的功能。通过精心设计，这些流程可以模块化，并在更高的层次上重复使用。</p></blockquote><p>官方地址：<a class=link href=https://spring.io/projects/spring-integration target=_blank rel=noopener>spring-integration</a></p><h2 id=组成>组成</h2><p>Spring Integration 主要有Message、Channel、Message EndPoint组成。</p><h3 id=message>Message</h3><p>Message是用来在不同部分之间传递的数据。Message有两部分组成:消息体(payload)与消息头(header)。消息体可以是任何数据类型；消息头表示的元数据就是解释消息体的内容。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span><span class=lnt>17
-</span><span class=lnt>18
-</span><span class=lnt>19
-</span><span class=lnt>20
-</span><span class=lnt>21
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=cm>/**
+<time class=article-time--reading>阅读时长: 6 分钟</time></div></footer></div></header><section class=article-content><p>spring-integration是一个功能强大的EIP(Enterprise Integration Patterns)，即企业集成模式。对，spring-integration是一个集大成者。就我自己的理解，集成了众多功能的它，是一种便捷的事件驱动消息框架用来在系统之间做消息传递的。
+今天我们来探索一下如果使用它发送http请求。</p><h2 id=什么是spring-integration>什么是Spring Integration</h2><blockquote><p>Spring Integration在基于Spring的应用程序中实现轻量级消息传递，并支持通过声明适配器与外部系统集成。 Spring Integration的主要目标是提供一个简单的模型来构建企业集成解决方案，同时保持关注点的分离，这对于生成可维护，可测试的代码至关重要。Spring Framework鼓励开发人员使用接口进行编码，并使用依赖注入（DI）为普通旧Java对象（POJO）提供执行其任务所需的依赖项。 Spring Integration将这一概念更进一步，其中POJO使用消息传递范例连接在一起，并且各个组件可能不了解应用程序中的其他组件。这种应用程序是通过组装细粒度可重用组件来构建的，以形成更高级别的功能。通过精心设计，这些流程可以模块化，并在更高的层次上重复使用。</p></blockquote><p>官方地址：<a class=link href=https://spring.io/projects/spring-integration target=_blank rel=noopener>spring-integration</a></p><h2 id=组成>组成</h2><p>Spring Integration 主要有Message、Channel、Message EndPoint组成。</p><h3 id=message>Message</h3><p>Message是用来在不同部分之间传递的数据。Message有两部分组成:消息体(payload)与消息头(header)。消息体可以是任何数据类型；消息头表示的元数据就是解释消息体的内容。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=cm>/**
 </span></span></span><span class=line><span class=cl><span class=cm> * A generic message representation with headers and body.
 </span></span></span><span class=line><span class=cl><span class=cm> *
 </span></span></span><span class=line><span class=cl><span class=cm> * @author Mark Fisher
@@ -53,39 +32,8 @@
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>MessageHeaders</span><span class=w> </span><span class=nf>getHeaders</span><span class=p>();</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><h3 id=channel>Channel</h3><p>在消息系统中，消息发送者发送消息到通道(Channel)，消息接受者从通道(Channel)接收消息。
-MessageChannel 有两大子接口，分别是PollableChannel (可轮询)和SubscribableChannel(可订阅)。我们所有的消息通道类都是现实这两个接口。</p><h4 id=messagechannel>MessageChannel</h4><p>MessageChannel 是Spring Integration消息通道的顶级接口：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span><span class=lnt>17
-</span><span class=lnt>18
-</span><span class=lnt>19
-</span><span class=lnt>20
-</span><span class=lnt>21
-</span><span class=lnt>22
-</span><span class=lnt>23
-</span><span class=lnt>24
-</span><span class=lnt>25
-</span><span class=lnt>26
-</span><span class=lnt>27
-</span><span class=lnt>28
-</span><span class=lnt>29
-</span><span class=lnt>30
-</span><span class=lnt>31
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span><span class=w> </span><span class=kd>interface</span> <span class=nc>MessageChannel</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span></code></pre></div><h3 id=channel>Channel</h3><p>在消息系统中，消息发送者发送消息到通道(Channel)，消息接受者从通道(Channel)接收消息。
+MessageChannel 有两大子接口，分别是PollableChannel (可轮询)和SubscribableChannel(可订阅)。我们所有的消息通道类都是现实这两个接口。</p><h4 id=messagechannel>MessageChannel</h4><p>MessageChannel 是Spring Integration消息通道的顶级接口：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span><span class=w> </span><span class=kd>interface</span> <span class=nc>MessageChannel</span><span class=w> </span><span class=p>{</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=cm>/**
 </span></span></span><span class=line><span class=cl><span class=cm>     * Constant for sending a message without a prescribed timeout.
@@ -116,25 +64,7 @@ MessageChannel 有两大子接口，分别是PollableChannel (可轮询)和Subsc
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kt>boolean</span><span class=w> </span><span class=nf>send</span><span class=p>(</span><span class=n>Message</span><span class=o>&lt;?&gt;</span><span class=w> </span><span class=n>message</span><span class=p>,</span><span class=w> </span><span class=kt>long</span><span class=w> </span><span class=n>timeout</span><span class=p>);</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><h5 id=pollablechannel>PollableChannel</h5><p>PollableChannel 具备轮询获得消息的能力。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span><span class=lnt>17
-</span><span class=lnt>18
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span><span class=w> </span><span class=kd>interface</span> <span class=nc>PollableChannel</span><span class=w> </span><span class=kd>extends</span><span class=w> </span><span class=n>MessageChannel</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span></code></pre></div><h5 id=pollablechannel>PollableChannel</h5><p>PollableChannel 具备轮询获得消息的能力。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span><span class=w> </span><span class=kd>interface</span> <span class=nc>PollableChannel</span><span class=w> </span><span class=kd>extends</span><span class=w> </span><span class=n>MessageChannel</span><span class=w> </span><span class=p>{</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=cm>/**
 </span></span></span><span class=line><span class=cl><span class=cm>     * Receive a message from this channel, blocking indefinitely if necessary.
@@ -152,24 +82,7 @@ MessageChannel 有两大子接口，分别是PollableChannel (可轮询)和Subsc
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>Message</span><span class=o>&lt;?&gt;</span><span class=w> </span><span class=n>receive</span><span class=p>(</span><span class=kt>long</span><span class=w> </span><span class=n>timeout</span><span class=p>);</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><h5 id=subscribablechannel>SubscribableChannel</h5><p>SubscribableChannel 发送消息给订阅了MessageHanlder的订阅者</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span><span class=lnt>17
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span><span class=w> </span><span class=kd>interface</span> <span class=nc>SubscribableChannel</span><span class=w> </span><span class=kd>extends</span><span class=w> </span><span class=n>MessageChannel</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span></code></pre></div><h5 id=subscribablechannel>SubscribableChannel</h5><p>SubscribableChannel 发送消息给订阅了MessageHanlder的订阅者</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span><span class=w> </span><span class=kd>interface</span> <span class=nc>SubscribableChannel</span><span class=w> </span><span class=kd>extends</span><span class=w> </span><span class=n>MessageChannel</span><span class=w> </span><span class=p>{</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=cm>/**
 </span></span></span><span class=line><span class=cl><span class=cm>     * Register a message handler.
@@ -186,16 +99,7 @@ MessageChannel 有两大子接口，分别是PollableChannel (可轮询)和Subsc
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kt>boolean</span><span class=w> </span><span class=nf>unsubscribe</span><span class=p>(</span><span class=n>MessageHandler</span><span class=w> </span><span class=n>handler</span><span class=p>);</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><h4 id=消息通道>消息通道</h4><h5 id=publishsubscribechannel>PublishSubscribeChannel</h5><p>PublishSubscribeChannel允许广播消息给所有订阅者，配置方式如下：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span><span class=lnt>6
-</span><span class=lnt>7
-</span><span class=lnt>8
-</span><span class=lnt>9
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=cm>/**
+</span></span></span></code></pre></div><h4 id=消息通道>消息通道</h4><h5 id=publishsubscribechannel>PublishSubscribeChannel</h5><p>PublishSubscribeChannel允许广播消息给所有订阅者，配置方式如下：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=cm>/**
 </span></span></span><span class=line><span class=cl><span class=cm> * 允许广播消息给所有订阅者，当前消息通道的id为publishSubscribeChannel
 </span></span></span><span class=line><span class=cl><span class=cm> * @return
 </span></span></span><span class=line><span class=cl><span class=cm> */</span><span class=w>
@@ -204,62 +108,27 @@ MessageChannel 有两大子接口，分别是PollableChannel (可轮询)和Subsc
 </span></span></span><span class=line><span class=cl><span class=w>	</span><span class=n>PublishSubscribeChannel</span><span class=w> </span><span class=n>channel</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>PublishSubscribeChannel</span><span class=p>();</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>return</span><span class=w> </span><span class=n>channel</span><span class=p>;</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><h5 id=queuechannel>QueueChannel</h5><p>QueueChannel允许消息接收者轮询获得消息，用一个队列(queue)接收消息，队列的容量大小可配置，配置方式如下：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Bean</span><span class=w>
+</span></span></span></code></pre></div><h5 id=queuechannel>QueueChannel</h5><p>QueueChannel允许消息接收者轮询获得消息，用一个队列(queue)接收消息，队列的容量大小可配置，配置方式如下：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Bean</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=n>QueueChannel</span><span class=w> </span><span class=nf>queueChannel</span><span class=p>(){</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>	</span><span class=n>QueueChannel</span><span class=w> </span><span class=n>channel</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>QueueChannel</span><span class=p>(</span><span class=n>10</span><span class=p>);</span><span class=c1>//10的队列的容量</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>return</span><span class=w> </span><span class=n>channel</span><span class=p>;</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><h5 id=prioritychannel>PriorityChannel</h5><p>PriorityChannel可按照优先级将数据存储到队列，它依据于消息的消息头priority属性，配置方式如下：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Bean</span><span class=w>
+</span></span></span></code></pre></div><h5 id=prioritychannel>PriorityChannel</h5><p>PriorityChannel可按照优先级将数据存储到队列，它依据于消息的消息头priority属性，配置方式如下：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Bean</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=n>PriorityChannel</span><span class=w> </span><span class=nf>priorityChannel</span><span class=p>(){</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>	</span><span class=n>PriorityChannel</span><span class=w> </span><span class=n>channel</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>PriorityChannel</span><span class=p>(</span><span class=n>10</span><span class=p>);</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>return</span><span class=w> </span><span class=n>channel</span><span class=p>;</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><h5 id=rendezvouschannel>RendezvousChannel</h5><p>RendezvousChannel确保每一个接收者都接收到消息后再发送消息，配置方式如下：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Bean</span><span class=w>
+</span></span></span></code></pre></div><h5 id=rendezvouschannel>RendezvousChannel</h5><p>RendezvousChannel确保每一个接收者都接收到消息后再发送消息，配置方式如下：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Bean</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=n>RendezvousChannel</span><span class=w> </span><span class=nf>rendezvousChannel</span><span class=p>(){</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>	</span><span class=n>RendezvousChannel</span><span class=w> </span><span class=n>channel</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>RendezvousChannel</span><span class=p>();</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>return</span><span class=w> </span><span class=n>channel</span><span class=p>;</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><h5 id=directchannel>DirectChannel</h5><p>DirectChannel是Spring Integration默认的消息通道，它允许将消息发送给为一个订阅者，然后阻碍发送直到消息被接收，配置方式如下：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Bean</span><span class=w>
+</span></span></span></code></pre></div><h5 id=directchannel>DirectChannel</h5><p>DirectChannel是Spring Integration默认的消息通道，它允许将消息发送给为一个订阅者，然后阻碍发送直到消息被接收，配置方式如下：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Bean</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=n>DirectChannel</span><span class=w> </span><span class=nf>directChannel</span><span class=p>(){</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>	</span><span class=n>DirectChannel</span><span class=w> </span><span class=n>channel</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>DirectChannel</span><span class=p>();</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>return</span><span class=w> </span><span class=n>channel</span><span class=p>;</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><h5 id=executorchannel>ExecutorChannel</h5><p>ExecutorChannel可绑定一个多线程的task executor，配置方式如下：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Bean</span><span class=w>
+</span></span></span></code></pre></div><h5 id=executorchannel>ExecutorChannel</h5><p>ExecutorChannel可绑定一个多线程的task executor，配置方式如下：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Bean</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=n>ExecutorChannel</span><span class=w> </span><span class=nf>executorChannel</span><span class=p>(){</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>	</span><span class=n>ExecutorChannel</span><span class=w> </span><span class=n>channel</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>ExecutorChannel</span><span class=p>(</span><span class=n>executor</span><span class=p>());</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>return</span><span class=w> </span><span class=n>channel</span><span class=p>;</span><span class=w>
@@ -274,23 +143,8 @@ MessageChannel 有两大子接口，分别是PollableChannel (可轮询)和Subsc
 </span></span></span><span class=line><span class=cl><span class=w>	</span><span class=n>taskExecutor</span><span class=p>.</span><span class=na>initialize</span><span class=p>();</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>return</span><span class=w> </span><span class=n>taskExecutor</span><span class=p>;</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><h4 id=通道拦截器>通道拦截器</h4><h5 id=channelinterceptor>ChannelInterceptor</h5><p>Spring Integration给消息通道提供了通道拦截器(ChannelInterceptor)，用来拦截发送和接收消息的操作。
-ChannelInterceptor接口定义如下，我们只需要实现这个接口即可：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span><span class=w> </span><span class=kd>interface</span> <span class=nc>ChannelInterceptor</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span></code></pre></div><h4 id=通道拦截器>通道拦截器</h4><h5 id=channelinterceptor>ChannelInterceptor</h5><p>Spring Integration给消息通道提供了通道拦截器(ChannelInterceptor)，用来拦截发送和接收消息的操作。
+ChannelInterceptor接口定义如下，我们只需要实现这个接口即可：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span><span class=w> </span><span class=kd>interface</span> <span class=nc>ChannelInterceptor</span><span class=w> </span><span class=p>{</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>	</span><span class=n>Message</span><span class=o>&lt;?&gt;</span><span class=w> </span><span class=n>preSend</span><span class=p>(</span><span class=n>Message</span><span class=o>&lt;?&gt;</span><span class=w> </span><span class=n>message</span><span class=p>,</span><span class=w> </span><span class=n>MessageChannel</span><span class=w> </span><span class=n>channel</span><span class=p>);</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>
@@ -305,25 +159,10 @@ ChannelInterceptor接口定义如下，我们只需要实现这个接口即可�
 </span></span></span><span class=line><span class=cl><span class=w>	</span><span class=kt>void</span><span class=w> </span><span class=nf>afterReceiveCompletion</span><span class=p>(</span><span class=n>Message</span><span class=o>&lt;?&gt;</span><span class=w> </span><span class=n>message</span><span class=p>,</span><span class=w> </span><span class=n>MessageChannel</span><span class=w> </span><span class=n>channel</span><span class=p>,</span><span class=w> </span><span class=n>Exception</span><span class=w> </span><span class=n>ex</span><span class=p>);</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><h3 id=message-endpoint>Message EndPoint</h3><p>消息端点(Message EndPoint)是真正处理消息的(Message)组件，它还可以控制通道的路由。</p><h4 id=channel-adapter>Channel Adapter</h4><p>通道适配器(Channel Adapter)是一种连接外部系统或传输协议的端点(EndPoint)，可以分为入站(inbound)和出站(outbound)。 
+</span></span></span></code></pre></div><h3 id=message-endpoint>Message EndPoint</h3><p>消息端点(Message EndPoint)是真正处理消息的(Message)组件，它还可以控制通道的路由。</p><h4 id=channel-adapter>Channel Adapter</h4><p>通道适配器(Channel Adapter)是一种连接外部系统或传输协议的端点(EndPoint)，可以分为入站(inbound)和出站(outbound)。 
 通道适配器是单向的，入站通道适配器只支持接收消息，出站通道适配器只支持输出消息。
-Spring Integration内置了如下的适配器：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>RabbitMQ、Feed、File、FTP/SFTP、Gemfire、HTTP、TCP/UDP、JDBC、JPA、JMS、Mail、MongoDB、Redis、RMITwitter、XMPP、WebServices<span class=o>(</span>SOAP、REST<span class=o>)</span>、WebSocket
-</span></span></code></pre></td></tr></table></div></div><h4 id=gateway>Gateway</h4><p>消息网关(Gateway)类似于Adapter，但是提供了双向的请求/返回集成方式，也分为入站(inbound)和出站(outbound)。 Spring Integration 对响应的Adapter都提供了Gateway。</p><h4 id=service-activator>Service Activator</h4><p>Service Activator 可调用Spring的Bean来处理消息，并将处理后的结果输出到指定的消息通道。</p><h4 id=router>Router</h4><p>路由(Router) 可根据消息体内容(Payload Type Router)、消息头的值(Header Value Router) 以及定义好的接收表(Recipient List Router) 作为条件，来决定消息传递到的通道。</p><h4 id=filter>Filter</h4><p>过滤器(Filter) 类似于路由(Router)，不同的是过滤器不决定消息路由到哪里，而是决定消息是否可以传递给消息通道。</p><h4 id=splitter>Splitter</h4><p>拆分器(Splitter)将消息拆分为几个部分单独处理，拆分器处理的返回值是一个集合或者数组。</p><h4 id=aggregator>Aggregator</h4><p>聚合器(Aggregator)与拆分器相反，它接收一个java.util.List作为参数，将多个消息合并为一个消息。</p><h4 id=enricher>Enricher</h4><p>当我们从外部获得消息后，需要增加额外的消息到已有的消息中，这时就需要使用消息增强器(Enricher)。消息增强器主要有消息体 增强器(Payload Enricher)和消息头增强器(Header Enricher)两种。</p><h4 id=transformer>Transformer</h4><p>转换器(Transformer)是对获得的消息进行一定的转换处理(如数据格式转换)。</p><h4 id=bridge>Bridge</h4><p>使用连接桥(Bridge)可以简单的将两个消息通道连接起来。</p><h2 id=快速入门>快速入门</h2><p>阅读官方文档它是这样描述的：</p><blockquote><p>In the following &ldquo;quick start&rdquo; application you can see that the same gateway interface is used to invoke two completely different service implementations. To build and run this program you will need the spring-integration-ws and spring-integration-xml modules as described above.</p></blockquote><p>大概意思是使用这个示例，需要<em>spring-integration-ws</em>和<em>spring-integration-xml</em>两个模块，同时它使用了相同的网关接口调用了两个不同的服务实现。</p><h3 id=编写快速启动类>编写快速启动类</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span><span class=w> </span><span class=kd>class</span> <span class=nc>Main</span><span class=w> </span><span class=p>{</span><span class=w>
+Spring Integration内置了如下的适配器：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>RabbitMQ、Feed、File、FTP/SFTP、Gemfire、HTTP、TCP/UDP、JDBC、JPA、JMS、Mail、MongoDB、Redis、RMITwitter、XMPP、WebServices<span class=o>(</span>SOAP、REST<span class=o>)</span>、WebSocket
+</span></span></code></pre></div><h4 id=gateway>Gateway</h4><p>消息网关(Gateway)类似于Adapter，但是提供了双向的请求/返回集成方式，也分为入站(inbound)和出站(outbound)。 Spring Integration 对响应的Adapter都提供了Gateway。</p><h4 id=service-activator>Service Activator</h4><p>Service Activator 可调用Spring的Bean来处理消息，并将处理后的结果输出到指定的消息通道。</p><h4 id=router>Router</h4><p>路由(Router) 可根据消息体内容(Payload Type Router)、消息头的值(Header Value Router) 以及定义好的接收表(Recipient List Router) 作为条件，来决定消息传递到的通道。</p><h4 id=filter>Filter</h4><p>过滤器(Filter) 类似于路由(Router)，不同的是过滤器不决定消息路由到哪里，而是决定消息是否可以传递给消息通道。</p><h4 id=splitter>Splitter</h4><p>拆分器(Splitter)将消息拆分为几个部分单独处理，拆分器处理的返回值是一个集合或者数组。</p><h4 id=aggregator>Aggregator</h4><p>聚合器(Aggregator)与拆分器相反，它接收一个java.util.List作为参数，将多个消息合并为一个消息。</p><h4 id=enricher>Enricher</h4><p>当我们从外部获得消息后，需要增加额外的消息到已有的消息中，这时就需要使用消息增强器(Enricher)。消息增强器主要有消息体 增强器(Payload Enricher)和消息头增强器(Header Enricher)两种。</p><h4 id=transformer>Transformer</h4><p>转换器(Transformer)是对获得的消息进行一定的转换处理(如数据格式转换)。</p><h4 id=bridge>Bridge</h4><p>使用连接桥(Bridge)可以简单的将两个消息通道连接起来。</p><h2 id=快速入门>快速入门</h2><p>阅读官方文档它是这样描述的：</p><blockquote><p>In the following &ldquo;quick start&rdquo; application you can see that the same gateway interface is used to invoke two completely different service implementations. To build and run this program you will need the spring-integration-ws and spring-integration-xml modules as described above.</p></blockquote><p>大概意思是使用这个示例，需要<em>spring-integration-ws</em>和<em>spring-integration-xml</em>两个模块，同时它使用了相同的网关接口调用了两个不同的服务实现。</p><h3 id=编写快速启动类>编写快速启动类</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span><span class=w> </span><span class=kd>class</span> <span class=nc>Main</span><span class=w> </span><span class=p>{</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>        </span><span class=kd>public</span><span class=w> </span><span class=kd>static</span><span class=w> </span><span class=kt>void</span><span class=w> </span><span class=nf>main</span><span class=p>(</span><span class=n>String</span><span class=p>...</span><span class=w> </span><span class=n>args</span><span class=p>)</span><span class=w> </span><span class=kd>throws</span><span class=w> </span><span class=n>Exception</span><span class=w> </span><span class=p>{</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>                </span><span class=n>ApplicationContext</span><span class=w> </span><span class=n>ctx</span><span class=w> </span><span class=o>=</span><span class=w>
@@ -337,42 +176,12 @@ Spring Integration内置了如下的适配器：</p><div class=highlight><div cl
 </span></span></span><span class=line><span class=cl><span class=w>                </span><span class=n>System</span><span class=p>.</span><span class=na>out</span><span class=p>.</span><span class=na>println</span><span class=p>(</span><span class=n>converter</span><span class=p>.</span><span class=na>fahrenheitToCelcius</span><span class=p>(</span><span class=n>68</span><span class=p>.</span><span class=na>0f</span><span class=p>));</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w> </span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><h3 id=编写接口类>编写接口类</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span><span class=w> </span><span class=kd>interface</span> <span class=nc>TempConverter</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span></code></pre></div><h3 id=编写接口类>编写接口类</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span><span class=w> </span><span class=kd>interface</span> <span class=nc>TempConverter</span><span class=w> </span><span class=p>{</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>        </span><span class=kt>float</span><span class=w> </span><span class=nf>fahrenheitToCelcius</span><span class=p>(</span><span class=kt>float</span><span class=w> </span><span class=n>fahren</span><span class=p>);</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><h3 id=编写xml>编写xml</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span><span class=lnt>17
-</span><span class=lnt>18
-</span><span class=lnt>19
-</span><span class=lnt>20
-</span><span class=lnt>21
-</span><span class=lnt>22
-</span><span class=lnt>23
-</span><span class=lnt>24
-</span><span class=lnt>25
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=c>&lt;!-- Simple Service --&gt;</span>
+</span></span></span></code></pre></div><h3 id=编写xml>编写xml</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=c>&lt;!-- Simple Service --&gt;</span>
 </span></span><span class=line><span class=cl><span class=c>&lt;!-- 网关:simpleGateway --&gt;</span>
 </span></span><span class=line><span class=cl><span class=nt>&lt;int:gateway</span> <span class=na>id=</span><span class=s>&#34;simpleGateway&#34;</span>
 </span></span><span class=line><span class=cl>        <span class=na>service-interface=</span><span class=s>&#34;foo.TempConverter&#34;</span>
@@ -397,44 +206,7 @@ Spring Integration内置了如下的适配器：</p><div class=highlight><div cl
 </span></span><span class=line><span class=cl>                <span class=na>uri=</span><span class=s>&#34;https://www.w3schools.com/xml/tempconvert.asmx&#34;</span><span class=nt>/&gt;</span>
 </span></span><span class=line><span class=cl>        <span class=nt>&lt;int-xml:xpath-transformer</span>
 </span></span><span class=line><span class=cl>                <span class=na>xpath-expression=</span><span class=s>&#34;/*[local-name()=&#39;FahrenheitToCelsiusResponse&#39;]/*[local-name()=&#39;FahrenheitToCelsiusResult&#39;]&#34;</span><span class=nt>/&gt;&lt;/int:chain&gt;</span>
-</span></span></code></pre></td></tr></table></div></div><p>咦，嫌弃，和我们想用的内容有差距啊，,既然用SpringBoot那就得跟上节奏，JavaBean配置，接着往下看</p><blockquote><p>And here is the same application (web service part) using the Java DSL (and Spring Boot). You will need the spring-boot-starter-integration dependency or spring-integration-java-dsl directly if you don’t use Spring Boot. If you use Spring Integration starting version 5.0, you don’t need any additional dependencies - the Java DSL is included to the core project</p></blockquote><p>进入正题了，大意是使用<em>JavaBean</em>配置或者<em>spring boot</em>的示例，如果不实用Spring Boot那么就需要咱们手动加入<em>spring-boot-starter-integration</em>或者<em>spring-integration-java-dsl</em>所依赖的模块，如果使用的是5.0及以上的版本，那么你不需要手动引入依赖，Java DSL已经包含在其中</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span><span class=lnt>17
-</span><span class=lnt>18
-</span><span class=lnt>19
-</span><span class=lnt>20
-</span><span class=lnt>21
-</span><span class=lnt>22
-</span><span class=lnt>23
-</span><span class=lnt>24
-</span><span class=lnt>25
-</span><span class=lnt>26
-</span><span class=lnt>27
-</span><span class=lnt>28
-</span><span class=lnt>29
-</span><span class=lnt>30
-</span><span class=lnt>31
-</span><span class=lnt>32
-</span><span class=lnt>33
-</span><span class=lnt>34
-</span><span class=lnt>35
-</span><span class=lnt>36
-</span><span class=lnt>37
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Configuration</span><span class=w>
+</span></span></code></pre></div><p>咦，嫌弃，和我们想用的内容有差距啊，,既然用SpringBoot那就得跟上节奏，JavaBean配置，接着往下看</p><blockquote><p>And here is the same application (web service part) using the Java DSL (and Spring Boot). You will need the spring-boot-starter-integration dependency or spring-integration-java-dsl directly if you don’t use Spring Boot. If you use Spring Integration starting version 5.0, you don’t need any additional dependencies - the Java DSL is included to the core project</p></blockquote><p>进入正题了，大意是使用<em>JavaBean</em>配置或者<em>spring boot</em>的示例，如果不实用Spring Boot那么就需要咱们手动加入<em>spring-boot-starter-integration</em>或者<em>spring-integration-java-dsl</em>所依赖的模块，如果使用的是5.0及以上的版本，那么你不需要手动引入依赖，Java DSL已经包含在其中</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Configuration</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=nd>@SpringBootApplication</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=nd>@IntegrationComponentScan</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=kd>class</span> <span class=nc>Application</span><span class=w> </span><span class=p>{</span><span class=w>
@@ -471,33 +243,7 @@ Spring Integration内置了如下的适配器：</p><div class=highlight><div cl
 </span></span></span><span class=line><span class=cl><span class=w>  </span><span class=p>}</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><h2 id=开始使用>开始使用</h2><p>翻阅了一遍官网的samples，根本没找到http方式关于SpringBoot的示例，没事，咱们活学活用，参考其他模块，直接上代码</p><h3 id=pom中加入依赖>pom中加入依赖</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span><span class=lnt>17
-</span><span class=lnt>18
-</span><span class=lnt>19
-</span><span class=lnt>20
-</span><span class=lnt>21
-</span><span class=lnt>22
-</span><span class=lnt>23
-</span><span class=lnt>24
-</span><span class=lnt>25
-</span><span class=lnt>26
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=nt>&lt;dependencies&gt;</span>
+</span></span></span></code></pre></div><h2 id=开始使用>开始使用</h2><p>翻阅了一遍官网的samples，根本没找到http方式关于SpringBoot的示例，没事，咱们活学活用，参考其他模块，直接上代码</p><h3 id=pom中加入依赖>pom中加入依赖</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=nt>&lt;dependencies&gt;</span>
 </span></span><span class=line><span class=cl>	<span class=nt>&lt;dependency&gt;</span>
 </span></span><span class=line><span class=cl>		<span class=nt>&lt;groupId&gt;</span>org.springframework.boot<span class=nt>&lt;/groupId&gt;</span>
 </span></span><span class=line><span class=cl>		<span class=nt>&lt;artifactId&gt;</span>spring-boot-starter-integration<span class=nt>&lt;/artifactId&gt;</span>
@@ -523,59 +269,7 @@ Spring Integration内置了如下的适配器：</p><div class=highlight><div cl
 </span></span><span class=line><span class=cl>		<span class=nt>&lt;scope&gt;</span>test<span class=nt>&lt;/scope&gt;</span>
 </span></span><span class=line><span class=cl>	<span class=nt>&lt;/dependency&gt;</span>
 </span></span><span class=line><span class=cl><span class=nt>&lt;/dependencies&gt;</span>
-</span></span></code></pre></td></tr></table></div></div><h3 id=编写测试类>编写测试类</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span><span class=lnt>17
-</span><span class=lnt>18
-</span><span class=lnt>19
-</span><span class=lnt>20
-</span><span class=lnt>21
-</span><span class=lnt>22
-</span><span class=lnt>23
-</span><span class=lnt>24
-</span><span class=lnt>25
-</span><span class=lnt>26
-</span><span class=lnt>27
-</span><span class=lnt>28
-</span><span class=lnt>29
-</span><span class=lnt>30
-</span><span class=lnt>31
-</span><span class=lnt>32
-</span><span class=lnt>33
-</span><span class=lnt>34
-</span><span class=lnt>35
-</span><span class=lnt>36
-</span><span class=lnt>37
-</span><span class=lnt>38
-</span><span class=lnt>39
-</span><span class=lnt>40
-</span><span class=lnt>41
-</span><span class=lnt>42
-</span><span class=lnt>43
-</span><span class=lnt>44
-</span><span class=lnt>45
-</span><span class=lnt>46
-</span><span class=lnt>47
-</span><span class=lnt>48
-</span><span class=lnt>49
-</span><span class=lnt>50
-</span><span class=lnt>51
-</span><span class=lnt>52
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Slf4j</span><span class=w>
+</span></span></code></pre></div><h3 id=编写测试类>编写测试类</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Slf4j</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=nd>@RunWith</span><span class=p>(</span><span class=n>SpringRunner</span><span class=p>.</span><span class=na>class</span><span class=p>)</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=nd>@SpringBootTest</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=kd>class</span> <span class=nc>ApplicationTest</span><span class=w> </span><span class=p>{</span><span class=w>
@@ -627,17 +321,15 @@ Spring Integration内置了如下的适配器：</p><div class=highlight><div cl
 </span></span></span><span class=line><span class=cl><span class=w>		</span><span class=p>}</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>	</span><span class=p>}</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><h3 id=启动测试类>启动测试类</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=o>[</span>2019-09-30 22:11:54.977<span class=o>]</span> <span class=o>[</span>main<span class=o>]</span> <span class=o>[</span>DEBUG<span class=o>]</span> <span class=o>[</span>fun.vyse.cloud.test.ApplicationTest     :34  <span class=o>]</span> - info:<span class=o>{</span><span class=s2>&#34;login&#34;</span>:<span class=s2>&#34;homeant&#34;</span>,<span class=s2>&#34;id&#34;</span>:28803295,<span class=s2>&#34;node_id&#34;</span>:<span class=s2>&#34;MDQ6VXNlcjI4ODAzMjk1&#34;</span>,<span class=s2>&#34;avatar_url&#34;</span>:<span class=s2>&#34;https://avatars0.githubusercontent.com/u/28803295?v=4&#34;</span>,<span class=s2>&#34;gravatar_id&#34;</span>:<span class=s2>&#34;&#34;</span>,<span class=s2>&#34;url&#34;</span>:<span class=s2>&#34;https://api.github.com/users/homeant&#34;</span>,<span class=s2>&#34;html_url&#34;</span>:<span class=s2>&#34;https://github.com/homeant&#34;</span>,<span class=s2>&#34;followers_url&#34;</span>:<span class=s2>&#34;https://api.github.com/users/homeant/followers&#34;</span>,<span class=s2>&#34;following_url&#34;</span>:<span class=s2>&#34;https://api.github.com/users/homeant/following{/other_user}&#34;</span>,<span class=s2>&#34;gists_url&#34;</span>:<span class=s2>&#34;https://api.github.com/users/homeant/gists{/gist_id}&#34;</span>,<span class=s2>&#34;starred_url&#34;</span>:<span class=s2>&#34;https://api.github.com/users/homeant/starred{/owner}{/repo}&#34;</span>,<span class=s2>&#34;subscriptions_url&#34;</span>:<span class=s2>&#34;https://api.github.com/users/homeant/subscriptions&#34;</span>,<span class=s2>&#34;organizations_url&#34;</span>:<span class=s2>&#34;https://api.github.com/users/homeant/orgs&#34;</span>,<span class=s2>&#34;repos_url&#34;</span>:<span class=s2>&#34;https://api.github.com/users/homeant/repos&#34;</span>,<span class=s2>&#34;events_url&#34;</span>:<span class=s2>&#34;https://api.github.com/users/homeant/events{/privacy}&#34;</span>,<span class=s2>&#34;received_events_url&#34;</span>:<span class=s2>&#34;https://api.github.com/users/homeant/received_events&#34;</span>,<span class=s2>&#34;type&#34;</span>:<span class=s2>&#34;User&#34;</span>,<span class=s2>&#34;site_admin&#34;</span>:false,<span class=s2>&#34;name&#34;</span>:<span class=s2>&#34;俊晨&#34;</span>,<span class=s2>&#34;company&#34;</span>:null,<span class=s2>&#34;blog&#34;</span>:<span class=s2>&#34;https://tianhui.xin&#34;</span>,<span class=s2>&#34;location&#34;</span>:<span class=s2>&#34;China-BeiJing&#34;</span>,<span class=s2>&#34;email&#34;</span>:null,<span class=s2>&#34;hireable&#34;</span>:null,<span class=s2>&#34;bio&#34;</span>:<span class=s2>&#34;高山仰止，景行行止。虽不能至，心向往之&#34;</span>,<span class=s2>&#34;public_repos&#34;</span>:15,<span class=s2>&#34;public_gists&#34;</span>:0,<span class=s2>&#34;followers&#34;</span>:3,<span class=s2>&#34;following&#34;</span>:3,<span class=s2>&#34;created_at&#34;</span>:<span class=s2>&#34;2017-05-19T08:53:17Z&#34;</span>,<span class=s2>&#34;updated_at&#34;</span>:<span class=s2>&#34;2019-09-27T06:10:27Z&#34;</span><span class=o>}</span>
+</span></span></span></code></pre></div><h3 id=启动测试类>启动测试类</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=o>[</span>2019-09-30 22:11:54.977<span class=o>]</span> <span class=o>[</span>main<span class=o>]</span> <span class=o>[</span>DEBUG<span class=o>]</span> <span class=o>[</span>fun.vyse.cloud.test.ApplicationTest     :34  <span class=o>]</span> - info:<span class=o>{</span><span class=s2>&#34;login&#34;</span>:<span class=s2>&#34;homeant&#34;</span>,<span class=s2>&#34;id&#34;</span>:28803295,<span class=s2>&#34;node_id&#34;</span>:<span class=s2>&#34;MDQ6VXNlcjI4ODAzMjk1&#34;</span>,<span class=s2>&#34;avatar_url&#34;</span>:<span class=s2>&#34;https://avatars0.githubusercontent.com/u/28803295?v=4&#34;</span>,<span class=s2>&#34;gravatar_id&#34;</span>:<span class=s2>&#34;&#34;</span>,<span class=s2>&#34;url&#34;</span>:<span class=s2>&#34;https://api.github.com/users/homeant&#34;</span>,<span class=s2>&#34;html_url&#34;</span>:<span class=s2>&#34;https://github.com/homeant&#34;</span>,<span class=s2>&#34;followers_url&#34;</span>:<span class=s2>&#34;https://api.github.com/users/homeant/followers&#34;</span>,<span class=s2>&#34;following_url&#34;</span>:<span class=s2>&#34;https://api.github.com/users/homeant/following{/other_user}&#34;</span>,<span class=s2>&#34;gists_url&#34;</span>:<span class=s2>&#34;https://api.github.com/users/homeant/gists{/gist_id}&#34;</span>,<span class=s2>&#34;starred_url&#34;</span>:<span class=s2>&#34;https://api.github.com/users/homeant/starred{/owner}{/repo}&#34;</span>,<span class=s2>&#34;subscriptions_url&#34;</span>:<span class=s2>&#34;https://api.github.com/users/homeant/subscriptions&#34;</span>,<span class=s2>&#34;organizations_url&#34;</span>:<span class=s2>&#34;https://api.github.com/users/homeant/orgs&#34;</span>,<span class=s2>&#34;repos_url&#34;</span>:<span class=s2>&#34;https://api.github.com/users/homeant/repos&#34;</span>,<span class=s2>&#34;events_url&#34;</span>:<span class=s2>&#34;https://api.github.com/users/homeant/events{/privacy}&#34;</span>,<span class=s2>&#34;received_events_url&#34;</span>:<span class=s2>&#34;https://api.github.com/users/homeant/received_events&#34;</span>,<span class=s2>&#34;type&#34;</span>:<span class=s2>&#34;User&#34;</span>,<span class=s2>&#34;site_admin&#34;</span>:false,<span class=s2>&#34;name&#34;</span>:<span class=s2>&#34;俊晨&#34;</span>,<span class=s2>&#34;company&#34;</span>:null,<span class=s2>&#34;blog&#34;</span>:<span class=s2>&#34;https://tianhui.xin&#34;</span>,<span class=s2>&#34;location&#34;</span>:<span class=s2>&#34;China-BeiJing&#34;</span>,<span class=s2>&#34;email&#34;</span>:null,<span class=s2>&#34;hireable&#34;</span>:null,<span class=s2>&#34;bio&#34;</span>:<span class=s2>&#34;高山仰止，景行行止。虽不能至，心向往之&#34;</span>,<span class=s2>&#34;public_repos&#34;</span>:15,<span class=s2>&#34;public_gists&#34;</span>:0,<span class=s2>&#34;followers&#34;</span>:3,<span class=s2>&#34;following&#34;</span>:3,<span class=s2>&#34;created_at&#34;</span>:<span class=s2>&#34;2017-05-19T08:53:17Z&#34;</span>,<span class=s2>&#34;updated_at&#34;</span>:<span class=s2>&#34;2019-09-27T06:10:27Z&#34;</span><span class=o>}</span>
 </span></span><span class=line><span class=cl><span class=o>[</span>2019-09-30 22:11:55.971<span class=o>]</span> <span class=o>[</span>main<span class=o>]</span> <span class=o>[</span>DEBUG<span class=o>]</span> <span class=o>[</span>fun.vyse.cloud.test.ApplicationTest     :35  <span class=o>]</span> - userInfo:UserInfo<span class=o>(</span><span class=nv>login</span><span class=o>=</span>homeant, <span class=nv>id</span><span class=o>=</span>28803295, <span class=nv>node_id</span><span class=o>=</span>MDQ6VXNlcjI4ODAzMjk1, <span class=nv>avatar_url</span><span class=o>=</span>https://avatars0.githubusercontent.com/u/28803295?v<span class=o>=</span>4, <span class=nv>gravatar_id</span><span class=o>=</span>, <span class=nv>url</span><span class=o>=</span>https://api.github.com/users/homeant, <span class=nv>html_url</span><span class=o>=</span>https://github.com/homeant, <span class=nv>followers_url</span><span class=o>=</span>https://api.github.com/users/homeant/followers, <span class=nv>following_url</span><span class=o>=</span>https://api.github.com/users/homeant/following<span class=o>{</span>/other_user<span class=o>}</span>, <span class=nv>gists_url</span><span class=o>=</span>https://api.github.com/users/homeant/gists<span class=o>{</span>/gist_id<span class=o>}</span>, <span class=nv>starred_url</span><span class=o>=</span>https://api.github.com/users/homeant/starred<span class=o>{</span>/owner<span class=o>}{</span>/repo<span class=o>}</span>, <span class=nv>subscriptions_url</span><span class=o>=</span>https://api.github.com/users/homeant/subscriptions, <span class=nv>organizations_url</span><span class=o>=</span>https://api.github.com/users/homeant/orgs, <span class=nv>repos_url</span><span class=o>=</span>https://api.github.com/users/homeant/repos, <span class=nv>events_url</span><span class=o>=</span>https://api.github.com/users/homeant/events<span class=o>{</span>/privacy<span class=o>}</span>, <span class=nv>received_events_url</span><span class=o>=</span>https://api.github.com/users/homeant/received_events, <span class=nv>type</span><span class=o>=</span>User, <span class=nv>site_admin</span><span class=o>=</span>false, <span class=nv>name</span><span class=o>=</span>俊晨, <span class=nv>company</span><span class=o>=</span>null, <span class=nv>blog</span><span class=o>=</span>https://tianhui.xin, <span class=nv>location</span><span class=o>=</span>China-BeiJing, <span class=nv>email</span><span class=o>=</span>null, <span class=nv>hireable</span><span class=o>=</span>null, <span class=nv>bio</span><span class=o>=</span>高山仰止，景行行止。虽不能至，心向往之, <span class=nv>public_repos</span><span class=o>=</span>15, <span class=nv>public_gists</span><span class=o>=</span>0, <span class=nv>followers</span><span class=o>=</span>3, <span class=nv>following</span><span class=o>=</span>3, <span class=nv>created_at</span><span class=o>=</span>2017-05-19T08:53:17Z, <span class=nv>updated_at</span><span class=o>=</span>2019-09-27T06:10:27Z<span class=o>)</span>
-</span></span></code></pre></td></tr></table></div></div><p>参考文档</p><ul><li><p><a class=link href=https://github.com/SpringSource/spring-integration-samples target=_blank rel=noopener>spring-integration-samples</a></p></li><li><p><a class=link href=https://blog.csdn.net/qq_27808011/article/details/80108622 target=_blank rel=noopener>spring-integration初探</a></p></li><li><p><a class=link href=https://docs.spring.io/spring-integration/reference/html/index.html target=_blank rel=noopener>spring doc</a></p></li></ul></section><footer class=article-footer><section class=article-tags><a href=/tags/springboot/>Springboot</a>
+</span></span></code></pre></div><p>参考文档</p><ul><li><p><a class=link href=https://github.com/SpringSource/spring-integration-samples target=_blank rel=noopener>spring-integration-samples</a></p></li><li><p><a class=link href=https://blog.csdn.net/qq_27808011/article/details/80108622 target=_blank rel=noopener>spring-integration初探</a></p></li><li><p><a class=link href=https://docs.spring.io/spring-integration/reference/html/index.html target=_blank rel=noopener>spring doc</a></p></li></ul></section><footer class=article-footer><section class=article-tags><a href=/tags/springboot/>Springboot</a>
 <a href=/tags/spring-integration/>Spring Integration</a>
 <a href=/tags/java/>Java</a></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article><a href=/p/%E4%BC%98%E9%9B%85%E7%9A%84%E4%BD%BF%E7%94%A8java%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/><div class=article-details><h2 class=article-title>优雅的使用Java分布式锁</h2></div></a></article><article><a href=/p/springboot-%E5%AE%9A%E5%88%B6%E8%87%AA%E5%B7%B1%E7%9A%84starter/><div class=article-details><h2 class=article-title>springBoot 定制自己的starter</h2></div></a></article><article class=has-image><a href=/p/springboot%E7%B3%BB%E5%88%97-%E9%9B%86%E6%88%90jwt%E5%AE%9E%E7%8E%B0%E6%8E%A5%E5%8F%A3%E6%9D%83%E9%99%90%E8%AE%A4%E8%AF%81/><div class=article-image><img src=https://image.tianhui.xin/liveLearn/5/api-security.jpg loading=lazy data-key data-hash=https://image.tianhui.xin/liveLearn/5/api-security.jpg></div><div class=article-details><h2 class=article-title>springBoot系列 - 集成JWT实现接口权限认证</h2></div></a></article><article><a href=/p/mybatis%E5%AF%B9%E6%95%B0%E6%8D%AE%E8%BF%9B%E8%A1%8C%E5%8A%A0%E5%AF%86/><div class=article-details><h2 class=article-title>mybatis对数据进行加密</h2></div></a></article><article class=has-image><a href=/p/%E8%B7%9F%E6%88%91%E5%AD%A6springcloud-%E4%B9%8B-nacos/><div class=article-image><img src="https://image.tianhui.xin/spring-cloud/nacos.png?x-oss-process=style/make" loading=lazy data-key data-hash="https://image.tianhui.xin/spring-cloud/nacos.png?x-oss-process=style/make"></div><div class=article-details><h2 class=article-title>跟我学SpringCloud 之 nacos</h2></div></a></article></div></div></aside><div class=disqus-container><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//codly.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener("onColorSchemeChange",e=>{typeof DISQUS=="object"&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
 2018 -
 2024 Codly</section><section class=running-time>本博客已稳定运行
 <span id=runningdays class=running-days></span></section><section class=totalcount>发表了27篇文章 ·
-总计11.95k字</section><section class=powerby>ICP证：<a href=http://www.beian.miit.gov.cn>京16046477</a><br>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.29.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+总计9.06k字</section><section class=powerby>ICP证：<a href=http://www.beian.miit.gov.cn>京16046477</a><br>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.29.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
 <button class="pswp__button pswp__button--share" title=Share></button>
 <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">

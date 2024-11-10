@@ -10,21 +10,8 @@
 <svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
 <span>暗色模式</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#interceptor接口>Interceptor接口</a></li><li><a href=#需求实现>需求实现</a></li><li><a href=#拦截器的注册>拦截器的注册</a></li><li><a href=#使用>使用</a></li><li><a href=#效果>效果</a></li><li><a href=#代码直通车>代码直通车</a></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><header class=article-category><a href=/categories/%E5%AD%A6%E6%97%A0%E6%AD%A2%E5%A2%83/ style=background-color:#2a9d8f;color:#fff>学无止境</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/mybatis-interceptor-%E5%AE%9E%E7%8E%B0%E6%95%B0%E6%8D%AE%E8%84%B1%E6%95%8F/>Mybatis Interceptor 实现数据脱敏</a></h2></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
 <time class=article-time--published>May 31, 2020</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
-<time class=article-time--reading>阅读时长: 3 分钟</time></div></footer></div></header><section class=article-content><p>拦截器的一个作用就是我们可以拦截某些方法的调用，我们可以选择在这些被拦截的方法执行前后加上某些逻辑。
-那么如果使用Mybatis对数据进行拦截，做一些满足自己需求的东西呢。今天我们就用这个实现一个数据的脱敏功能。</p><h2 id=interceptor接口>Interceptor接口</h2><p>对于拦截器<code>Mybatis</code>为我们提供了一个<code>Interceptor</code>接口，通过实现该接口就可以定义我们自己的拦截器。首先我们先来看一下这个接口的定义：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kn>package</span><span class=w> </span><span class=nn>org.apache.ibatis.plugin</span><span class=p>;</span><span class=w>
+<time class=article-time--reading>阅读时长: 2 分钟</time></div></footer></div></header><section class=article-content><p>拦截器的一个作用就是我们可以拦截某些方法的调用，我们可以选择在这些被拦截的方法执行前后加上某些逻辑。
+那么如果使用Mybatis对数据进行拦截，做一些满足自己需求的东西呢。今天我们就用这个实现一个数据的脱敏功能。</p><h2 id=interceptor接口>Interceptor接口</h2><p>对于拦截器<code>Mybatis</code>为我们提供了一个<code>Interceptor</code>接口，通过实现该接口就可以定义我们自己的拦截器。首先我们先来看一下这个接口的定义：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kn>package</span><span class=w> </span><span class=nn>org.apache.ibatis.plugin</span><span class=p>;</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=kn>import</span><span class=w> </span><span class=nn>java.util.Properties</span><span class=p>;</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>
@@ -37,79 +24,9 @@
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kt>void</span><span class=w> </span><span class=nf>setProperties</span><span class=p>(</span><span class=n>Properties</span><span class=w> </span><span class=n>properties</span><span class=p>);</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w> 
-</span></span></span></code></pre></td></tr></table></div></div><p>可以看到，需要我们实现的方法有：</p><p><code>intercept</code>拦截器的处理逻辑
+</span></span></span></code></pre></div><p>可以看到，需要我们实现的方法有：</p><p><code>intercept</code>拦截器的处理逻辑
 <code>plugin</code>拦截器用于封装目标对象的，通过该方法我们可以返回目标对象本身，也可以返回一个它的代理。
-<code>setProperties</code>为插件设置<code>properties</code>属性</p><h2 id=需求实现>需求实现</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span><span class=lnt>17
-</span><span class=lnt>18
-</span><span class=lnt>19
-</span><span class=lnt>20
-</span><span class=lnt>21
-</span><span class=lnt>22
-</span><span class=lnt>23
-</span><span class=lnt>24
-</span><span class=lnt>25
-</span><span class=lnt>26
-</span><span class=lnt>27
-</span><span class=lnt>28
-</span><span class=lnt>29
-</span><span class=lnt>30
-</span><span class=lnt>31
-</span><span class=lnt>32
-</span><span class=lnt>33
-</span><span class=lnt>34
-</span><span class=lnt>35
-</span><span class=lnt>36
-</span><span class=lnt>37
-</span><span class=lnt>38
-</span><span class=lnt>39
-</span><span class=lnt>40
-</span><span class=lnt>41
-</span><span class=lnt>42
-</span><span class=lnt>43
-</span><span class=lnt>44
-</span><span class=lnt>45
-</span><span class=lnt>46
-</span><span class=lnt>47
-</span><span class=lnt>48
-</span><span class=lnt>49
-</span><span class=lnt>50
-</span><span class=lnt>51
-</span><span class=lnt>52
-</span><span class=lnt>53
-</span><span class=lnt>54
-</span><span class=lnt>55
-</span><span class=lnt>56
-</span><span class=lnt>57
-</span><span class=lnt>58
-</span><span class=lnt>59
-</span><span class=lnt>60
-</span><span class=lnt>61
-</span><span class=lnt>62
-</span><span class=lnt>63
-</span><span class=lnt>64
-</span><span class=lnt>65
-</span><span class=lnt>66
-</span><span class=lnt>67
-</span><span class=lnt>68
-</span><span class=lnt>69
-</span><span class=lnt>70
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Intercepts</span><span class=p>({</span><span class=w>
+<code>setProperties</code>为插件设置<code>properties</code>属性</p><h2 id=需求实现>需求实现</h2><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Intercepts</span><span class=p>({</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nd>@Signature</span><span class=p>(</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>                </span><span class=n>type</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>ResultSetHandler</span><span class=p>.</span><span class=na>class</span><span class=p>,</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>                </span><span class=n>method</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=s>&#34;handleResultSets&#34;</span><span class=p>,</span><span class=w>
@@ -179,32 +96,7 @@
 </span></span></span><span class=line><span class=cl><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>   
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><p>解释代码中为啥要使用<code>DataShieldHelper</code>来实现脱敏登记，我们在项目开发过程中，经常会用到Java对象复用的情况，那么如果在某个字段上加上脱敏注解，会出现实现问题，我们不能对拦截器去判断哪些查询需要脱敏哪些不需要，那么怎么才能实现需要时才对数据进行脱敏，某些情况不需要呢，此时<code>ThreadLocal</code>就能帮助到我们，<code>ThreadLoca</code>l提供了线程内存储变量的能力，这些变量不同之处在于每一个线程读取的变量是对应的互相独立的。通过get和set方法就可以得到当前线程对应的值。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span><span class=lnt>17
-</span><span class=lnt>18
-</span><span class=lnt>19
-</span><span class=lnt>20
-</span><span class=lnt>21
-</span><span class=lnt>22
-</span><span class=lnt>23
-</span><span class=lnt>24
-</span><span class=lnt>25
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=cm>/**
+</span></span></span></code></pre></div><p>解释代码中为啥要使用<code>DataShieldHelper</code>来实现脱敏登记，我们在项目开发过程中，经常会用到Java对象复用的情况，那么如果在某个字段上加上脱敏注解，会出现实现问题，我们不能对拦截器去判断哪些查询需要脱敏哪些不需要，那么怎么才能实现需要时才对数据进行脱敏，某些情况不需要呢，此时<code>ThreadLocal</code>就能帮助到我们，<code>ThreadLoca</code>l提供了线程内存储变量的能力，这些变量不同之处在于每一个线程读取的变量是对应的互相独立的。通过get和set方法就可以得到当前线程对应的值。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=cm>/**
 </span></span></span><span class=line><span class=cl><span class=cm>/* 线程工具类 主要用于登记脱敏操作
 </span></span></span><span class=line><span class=cl><span class=cm>**/</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=kd>class</span> <span class=nc>DataShieldHelper</span><span class=w> </span><span class=p>{</span><span class=w>
@@ -229,38 +121,8 @@
 </span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>LOCAL_DATA_MASKING</span><span class=p>.</span><span class=na>remove</span><span class=p>();</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><p>使用<code>@Intercepts</code> 拦截<code>ResultSetHandler</code>接口中参数类型为<code>Statement</code>的<code>handleResultSets</code>方法
-ResultSetHandler 主要负责将JDBC返回的ResultSet结果集对象转换成List类型的集合</p><h2 id=拦截器的注册>拦截器的注册</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span><span class=lnt>17
-</span><span class=lnt>18
-</span><span class=lnt>19
-</span><span class=lnt>20
-</span><span class=lnt>21
-</span><span class=lnt>22
-</span><span class=lnt>23
-</span><span class=lnt>24
-</span><span class=lnt>25
-</span><span class=lnt>26
-</span><span class=lnt>27
-</span><span class=lnt>28
-</span><span class=lnt>29
-</span><span class=lnt>30
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=cp>&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34; ?&gt;</span>
+</span></span></span></code></pre></div><p>使用<code>@Intercepts</code> 拦截<code>ResultSetHandler</code>接口中参数类型为<code>Statement</code>的<code>handleResultSets</code>方法
+ResultSetHandler 主要负责将JDBC返回的ResultSet结果集对象转换成List类型的集合</p><h2 id=拦截器的注册>拦截器的注册</h2><div class=highlight><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=cp>&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34; ?&gt;</span>
 </span></span><span class=line><span class=cl><span class=cp>&lt;!DOCTYPE configuration  
 </span></span></span><span class=line><span class=cl><span class=cp>  PUBLIC &#34;-//mybatis.org//DTD Config 3.0//EN&#34;  
 </span></span></span><span class=line><span class=cl><span class=cp>  &#34;http://mybatis.org/dtd/mybatis-3-config.dtd&#34;&gt;</span>
@@ -290,20 +152,7 @@ ResultSetHandler 主要负责将JDBC返回的ResultSet结果集对象转换成Li
 </span></span><span class=line><span class=cl>        <span class=nt>&lt;mapper</span> <span class=na>resource=</span><span class=s>&#34;com/github/homeant/mapper/UserMapper.xml&#34;</span> <span class=nt>/&gt;</span>
 </span></span><span class=line><span class=cl>    <span class=nt>&lt;/mappers&gt;</span>
 </span></span><span class=line><span class=cl><span class=nt>&lt;/configuration&gt;</span>
-</span></span></code></pre></td></tr></table></div></div><h2 id=使用>使用</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span><span class=w> </span><span class=kd>class</span> <span class=nc>Test</span><span class=p>{</span><span class=w>
+</span></span></code></pre></div><h2 id=使用>使用</h2><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span><span class=w> </span><span class=kd>class</span> <span class=nc>Test</span><span class=p>{</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nd>@Test</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>public</span><span class=w> </span><span class=kt>void</span><span class=w> </span><span class=nf>test</span><span class=p>(){</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>        </span><span class=c1>// 脱敏登记</span><span class=w>
@@ -316,20 +165,16 @@ ResultSetHandler 主要负责将JDBC返回的ResultSet结果集对象转换成Li
 </span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>});</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><h2 id=效果>效果</h2><p>可以看到，我们查询出来的数据已经脱敏了</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>2020-06-01 23:34:11.910 DEBUG <span class=m>34392</span> --- <span class=o>[</span>           main<span class=o>]</span> c.g.h.d.s.mapper.UserMapper.selectOn     : <span class=o>==</span>&gt;  Preparing: <span class=k>select</span> id,username,password from t_user where <span class=nv>id</span> <span class=o>=</span> ? 
+</span></span></span></code></pre></div><h2 id=效果>效果</h2><p>可以看到，我们查询出来的数据已经脱敏了</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>2020-06-01 23:34:11.910 DEBUG <span class=m>34392</span> --- <span class=o>[</span>           main<span class=o>]</span> c.g.h.d.s.mapper.UserMapper.selectOn     : <span class=o>==</span>&gt;  Preparing: <span class=k>select</span> id,username,password from t_user where <span class=nv>id</span> <span class=o>=</span> ? 
 </span></span><span class=line><span class=cl>2020-06-01 23:34:11.910 DEBUG <span class=m>34392</span> --- <span class=o>[</span>           main<span class=o>]</span> c.g.h.d.s.mapper.UserMapper.selectOn     : <span class=o>==</span>&gt; Parameters: 71<span class=o>(</span>Integer<span class=o>)</span>
 </span></span><span class=line><span class=cl>2020-06-01 23:34:11.930 DEBUG <span class=m>34392</span> --- <span class=o>[</span>           main<span class=o>]</span> c.g.h.d.s.mapper.UserMapper.selectOn     : &lt;<span class=o>==</span>      Total: <span class=m>1</span>
 </span></span><span class=line><span class=cl>2020-06-01 23:34:11.940 DEBUG <span class=m>34392</span> --- <span class=o>[</span>           main<span class=o>]</span> com.github.homeant.data.shield.DataTest  : user:User<span class=o>(</span><span class=nv>id</span><span class=o>=</span>71, <span class=nv>username</span><span class=o>=</span>tom, <span class=nv>password</span><span class=o>=</span>p@***********67<span class=o>)</span>
-</span></span></code></pre></td></tr></table></div></div><p>上述为简易版代码，如果需要，请前往GitHub进行下载</p><h2 id=代码直通车>代码直通车</h2><p><a class=link href=https://github.com/homeant/data-shield target=_blank rel=noopener>data-shield</a></p></section><footer class=article-footer><section class=article-tags><a href=/tags/mybatis/>Mybatis</a>
+</span></span></code></pre></div><p>上述为简易版代码，如果需要，请前往GitHub进行下载</p><h2 id=代码直通车>代码直通车</h2><p><a class=link href=https://github.com/homeant/data-shield target=_blank rel=noopener>data-shield</a></p></section><footer class=article-footer><section class=article-tags><a href=/tags/mybatis/>Mybatis</a>
 <a href=/tags/java/>Java</a></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article><a href=/p/mybatis%E5%AF%B9%E6%95%B0%E6%8D%AE%E8%BF%9B%E8%A1%8C%E5%8A%A0%E5%AF%86/><div class=article-details><h2 class=article-title>mybatis对数据进行加密</h2></div></a></article><article class=has-image><a href=/p/%E8%B7%9F%E6%88%91%E5%AD%A6springcloud-%E4%B9%8B-nacos/><div class=article-image><img src="https://image.tianhui.xin/spring-cloud/nacos.png?x-oss-process=style/make" loading=lazy data-key data-hash="https://image.tianhui.xin/spring-cloud/nacos.png?x-oss-process=style/make"></div><div class=article-details><h2 class=article-title>跟我学SpringCloud 之 nacos</h2></div></a></article><article class=has-image><a href=/p/%E4%B8%80%E8%A7%81%E5%80%BE%E5%BF%83%E4%B9%8B%E5%88%9D%E9%81%87mapstruct/><div class=article-image><img src="https://image.tianhui.xin/mapstruct/Mapstruct.png?x-oss-process=style/make" loading=lazy data-key data-hash="https://image.tianhui.xin/mapstruct/Mapstruct.png?x-oss-process=style/make"></div><div class=article-details><h2 class=article-title>一见倾心之初遇MapStruct</h2></div></a></article><article><a href=/p/%E4%BC%98%E9%9B%85%E7%9A%84%E4%BD%BF%E7%94%A8java%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/><div class=article-details><h2 class=article-title>优雅的使用Java分布式锁</h2></div></a></article><article><a href=/p/springboot%E4%B8%AD%E4%BD%BF%E7%94%A8springintegration/><div class=article-details><h2 class=article-title>SpringBoot中使用SpringIntegration</h2></div></a></article></div></div></aside><div class=disqus-container><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//codly.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener("onColorSchemeChange",e=>{typeof DISQUS=="object"&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
 2018 -
 2024 Codly</section><section class=running-time>本博客已稳定运行
 <span id=runningdays class=running-days></span></section><section class=totalcount>发表了27篇文章 ·
-总计11.95k字</section><section class=powerby>ICP证：<a href=http://www.beian.miit.gov.cn>京16046477</a><br>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.29.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+总计9.06k字</section><section class=powerby>ICP证：<a href=http://www.beian.miit.gov.cn>京16046477</a><br>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.29.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
 <button class="pswp__button pswp__button--share" title=Share></button>
 <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">

@@ -10,83 +10,25 @@
 <svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
 <span>暗色模式</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#准备工作>准备工作</a><ol><li><a href=#ssh-key-生成>SSH key 生成</a></li><li><a href=#配置私钥>配置私钥</a></li><li><a href=#上传公钥服务器>上传公钥服务器</a></li></ol></li><li><a href=#思考>思考</a></li><li><a href=#新建job脚本测试ssh脚本>新建job脚本(测试SSH脚本)</a></li><li><a href=#最终的job脚本>最终的job脚本</a><ol><li><a href=#配置说明>配置说明</a></li><li><a href=#job文件>job文件</a></li></ol></li><li><a href=#远程服务器操作>远程服务器操作</a><ol><li><a href=#新建developsh>新建develop.sh</a></li><li><a href=#给予执行权限>给予执行权限</a></li></ol></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><header class=article-category><a href=/categories/%E5%AD%A6%E6%97%A0%E6%AD%A2%E5%A2%83/ style=background-color:#2a9d8f;color:#fff>学无止境</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/%E9%80%9A%E8%BF%87github-actions%E5%8F%91%E5%B8%83hugo%E5%88%B0%E7%A7%81%E6%9C%89%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/>通过GitHub actions发布hugo到私有云服务器</a></h2></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
 <time class=article-time--published>Nov 29, 2019</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
-<time class=article-time--reading>阅读时长: 4 分钟</time></div></footer></div></header><section class=article-content><p>继上次分享的GitHub actions 发布到GitHub pages,收到的反馈还不错，咱们这次也记录了下编写脚本的过程，过程比较坎坷，如果只要结果，请看文章最后几个板块的内容。</p><h2 id=准备工作>准备工作</h2><h3 id=ssh-key-生成>SSH key 生成</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>ssh-keygen -t rsa -b <span class=m>4096</span> -C <span class=s2>&#34;</span><span class=k>$(</span>git config user.email<span class=k>)</span><span class=s2>&#34;</span> -f gh-pages -N <span class=s2>&#34;&#34;</span>
+<time class=article-time--reading>阅读时长: 3 分钟</time></div></footer></div></header><section class=article-content><p>继上次分享的GitHub actions 发布到GitHub pages,收到的反馈还不错，咱们这次也记录了下编写脚本的过程，过程比较坎坷，如果只要结果，请看文章最后几个板块的内容。</p><h2 id=准备工作>准备工作</h2><h3 id=ssh-key-生成>SSH key 生成</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>ssh-keygen -t rsa -b <span class=m>4096</span> -C <span class=s2>&#34;</span><span class=k>$(</span>git config user.email<span class=k>)</span><span class=s2>&#34;</span> -f gh-pages -N <span class=s2>&#34;&#34;</span>
 </span></span><span class=line><span class=cl><span class=c1># You will get 2 files:</span>
 </span></span><span class=line><span class=cl><span class=c1>#   gh-pages.pub (public key)</span>
 </span></span><span class=line><span class=cl><span class=c1>#   gh-pages     (private key)</span>
-</span></span></code></pre></td></tr></table></div></div><h3 id=配置私钥>配置私钥</h3><p>如果前面读过我的<a class=link href=/blog/2019/11/17/hugousegithubactionstopages/>hugo通过Github Action部署到Github Pages</a>文章，那么一定知道怎么去上传公钥，这里我们再重复一下</p><p>假设 开发项目为 tianhui.xin<br>打开tianhui.xin仓库的<strong>settings</strong>，再点击<strong>Secrets</strong>，然后添加咱们刚刚生成的私钥，name为<strong>ACTIONS_DEPLOY_KEY</strong></p><div class=table-wrapper><table><thead><tr><th style=text-align:left>Add your private key</th><th style=text-align:left>Success</th></tr></thead><tbody><tr><td style=text-align:left><img src="https://image.tianhui.xin/hugo_github_actions/008.jpg?x-oss-process=style/make" loading=lazy></td><td style=text-align:left><img src="https://image.tianhui.xin/hugo_github_actions/009.jpg?x-oss-process=style/make" loading=lazy></td></tr></tbody></table></div><h3 id=上传公钥服务器>上传公钥服务器</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span><span class=lnt>6
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>ssh-copy-id appuser@10.10.10.10
+</span></span></code></pre></div><h3 id=配置私钥>配置私钥</h3><p>如果前面读过我的<a class=link href=/blog/2019/11/17/hugousegithubactionstopages/>hugo通过Github Action部署到Github Pages</a>文章，那么一定知道怎么去上传公钥，这里我们再重复一下</p><p>假设 开发项目为 tianhui.xin<br>打开tianhui.xin仓库的<strong>settings</strong>，再点击<strong>Secrets</strong>，然后添加咱们刚刚生成的私钥，name为<strong>ACTIONS_DEPLOY_KEY</strong></p><div class=table-wrapper><table><thead><tr><th style=text-align:left>Add your private key</th><th style=text-align:left>Success</th></tr></thead><tbody><tr><td style=text-align:left><img src="https://image.tianhui.xin/hugo_github_actions/008.jpg?x-oss-process=style/make" loading=lazy></td><td style=text-align:left><img src="https://image.tianhui.xin/hugo_github_actions/009.jpg?x-oss-process=style/make" loading=lazy></td></tr></tbody></table></div><h3 id=上传公钥服务器>上传公钥服务器</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>ssh-copy-id appuser@10.10.10.10
 </span></span><span class=line><span class=cl>/usr/bin/ssh-copy-id: INFO: Source of key<span class=o>(</span>s<span class=o>)</span> to be installed: <span class=s2>&#34;/home/appuser/.ssh/id_rsa.pub&#34;</span>
 </span></span><span class=line><span class=cl>The authenticity of host <span class=s1>&#39;10.10.10.10 (10.10.10.10)&#39;</span> can<span class=err>&#39;</span>t be established.
 </span></span><span class=line><span class=cl>ECDSA key fingerprint is SHA256:mpM5LP8zLMh/CibV34URdTFbciAJ3fvCG1f9kSD2ITI.
 </span></span><span class=line><span class=cl>ECDSA key fingerprint is MD5:60:40:77:02:5b:c6:e0:9a:e7:a3:96:bf:10:da:12:1c.
 </span></span><span class=line><span class=cl>Are you sure you want to <span class=k>continue</span> connecting <span class=o>(</span>yes/no<span class=o>)</span>? yes
-</span></span></code></pre></td></tr></table></div></div><p>输入远程用户的密码后，SSH公钥就会自动上传了．SSH公钥保存在远程Linux服务器的<code>.ssh/authorized_keys</code>文件中</p><h2 id=思考>思考</h2><blockquote><p><code>docker</code>镜像每次都是一个新的，<code>SSH</code>在第一次连接都会询问这个一个问题</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span><span class=lnt>6
-</span><span class=lnt>7
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>The authenticity of host <span class=s1>&#39;10.10.10.10 (10.10.10.10)&#39;</span> can<span class=s1>&#39;t be established.
+</span></span></code></pre></div><p>输入远程用户的密码后，SSH公钥就会自动上传了．SSH公钥保存在远程Linux服务器的<code>.ssh/authorized_keys</code>文件中</p><h2 id=思考>思考</h2><blockquote><p><code>docker</code>镜像每次都是一个新的，<code>SSH</code>在第一次连接都会询问这个一个问题</p></blockquote><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>The authenticity of host <span class=s1>&#39;10.10.10.10 (10.10.10.10)&#39;</span> can<span class=s1>&#39;t be established.
 </span></span></span><span class=line><span class=cl><span class=s1>
 </span></span></span><span class=line><span class=cl><span class=s1>RSA key fingerprint is 97:8c:1b:f2:6f:14:6b:5c:3b:ec:aa:46:46:74:7c:40.
 </span></span></span><span class=line><span class=cl><span class=s1>Are you sure you want to continue connecting (yes/no)? yes
 </span></span></span><span class=line><span class=cl><span class=s1>Warning: Permanently added &#39;</span>10.10.10.10 <span class=o>(</span>10.10.10.10<span class=o>)</span><span class=s1>&#39; (RSA) to the list of
 </span></span></span><span class=line><span class=cl><span class=s1>known hosts.
 </span></span></span><span class=line><span class=cl><span class=s1>Enter passphrase for key &#39;</span>/home/appuser/.ssh/id_rsa<span class=err>&#39;</span>:
-</span></span></code></pre></td></tr></table></div></div><p>其原因是因为<code>/home/appuser/.ssh</code>目录下的<code>known_hosts</code>不存在对你正要连接的服务器信息，也就是说你是第一次连接；那么我们是不是可以伪造一个呢，喏，你还别说，我还真去把自己电脑上的<code>known_hosts</code>的对应记录复制了一份上去，我简直是个天才，但结果不尽人意，好吧，咱们继续折腾。</p><p>幸运的是我在梯子的帮助下，找到了这样一个命令<code>ssh-keyscan</code>，搞起🤕</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>ssh-keyscan -t rsa 10.10.10.10 &gt;&gt; <span class=s2>&#34;/home/appuser/known_hosts&#34;</span>
-</span></span></code></pre></td></tr></table></div></div><h2 id=新建job脚本测试ssh脚本>新建job脚本(测试SSH脚本)</h2><p>主要过程就是测试下在<code>docker</code>环境下如何远程<code>SSH</code>，</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span><span class=lnt>17
-</span><span class=lnt>18
-</span><span class=lnt>19
-</span><span class=lnt>20
-</span><span class=lnt>21
-</span><span class=lnt>22
-</span><span class=lnt>23
-</span><span class=lnt>24
-</span><span class=lnt>25
-</span><span class=lnt>26
-</span><span class=lnt>27
-</span><span class=lnt>28
-</span><span class=lnt>29
-</span><span class=lnt>30
-</span><span class=lnt>31
-</span><span class=lnt>32
-</span><span class=lnt>33
-</span><span class=lnt>34
-</span><span class=lnt>35
-</span><span class=lnt>36
-</span><span class=lnt>37
-</span><span class=lnt>38
-</span><span class=lnt>39
-</span><span class=lnt>40
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>aliyun</span><span class=w>
+</span></span></code></pre></div><p>其原因是因为<code>/home/appuser/.ssh</code>目录下的<code>known_hosts</code>不存在对你正要连接的服务器信息，也就是说你是第一次连接；那么我们是不是可以伪造一个呢，喏，你还别说，我还真去把自己电脑上的<code>known_hosts</code>的对应记录复制了一份上去，我简直是个天才，但结果不尽人意，好吧，咱们继续折腾。</p><p>幸运的是我在梯子的帮助下，找到了这样一个命令<code>ssh-keyscan</code>，搞起🤕</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>ssh-keyscan -t rsa 10.10.10.10 &gt;&gt; <span class=s2>&#34;/home/appuser/known_hosts&#34;</span>
+</span></span></code></pre></div><h2 id=新建job脚本测试ssh脚本>新建job脚本(测试SSH脚本)</h2><p>主要过程就是测试下在<code>docker</code>环境下如何远程<code>SSH</code>，</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>aliyun</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>on</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>push</span><span class=p>:</span><span class=w>
@@ -126,56 +68,7 @@
 </span></span></span><span class=line><span class=cl><span class=sd>          ssh-add &#34;$SSH_PATH/id_rsa&#34;
 </span></span></span><span class=line><span class=cl><span class=sd>          ssh-keyscan -t rsa $HOST &gt;&gt; &#34;$SSH_PATH/known_hosts&#34;
 </span></span></span><span class=line><span class=cl><span class=sd>          ssh -o StrictHostKeyChecking=no -i $SSH_PATH/id_rsa -A -tt $USER@$HOST ls</span><span class=w>          
-</span></span></span></code></pre></td></tr></table></div></div><p>执行<code>push</code>，等待CI部署完成，查看<code>log</code>发现已经打印出了服务器的文件文件夹信息，😄</p><p><img src="https://image.tianhui.xin/githubActionPublishECS/1.png?x-oss-process=style/make" loading=lazy alt=测试结果></p><h2 id=最终的job脚本>最终的job脚本</h2><h3 id=配置说明>配置说明</h3><p>使用只需要关注<code>deploy</code>中的<code>env</code>配置</p><div class=table-wrapper><table><thead><tr><th style=text-align:left>config</th><th style=text-align:left>description</th></tr></thead><tbody><tr><td style=text-align:left>ACTIONS_DEPLOY_KEY</td><td style=text-align:left>连接服务的私钥(在GitHub项目下的<code>setting</code>><code>Secrets</code>配置)</td></tr><tr><td style=text-align:left>HOST</td><td style=text-align:left>服务器的IP地址</td></tr><tr><td style=text-align:left>USER</td><td style=text-align:left>服务器的部署用户，对应的私钥的用户</td></tr><tr><td style=text-align:left>HOME_PATH</td><td style=text-align:left>登陆服务器后，我们去哪个目录，一般设置为用户目录</td></tr><tr><td style=text-align:left>DEVELOP_SH_PATH</td><td style=text-align:left>服务器部署脚本(咱们的部署目录还是服务器上执行，不写在job中)</td></tr><tr><td style=text-align:left>PACKAGE_NAME</td><td style=text-align:left>打包的名称(public.tar.gz),目前只支持这个</td></tr><tr><td style=text-align:left>DEVELOP_DIR</td><td style=text-align:left>项目部署文件夹</td></tr><tr><td style=text-align:left>BACKUP_DIR</td><td style=text-align:left>项目的备份文件夹</td></tr></tbody></table></div><h3 id=job文件>job文件</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span><span class=lnt>17
-</span><span class=lnt>18
-</span><span class=lnt>19
-</span><span class=lnt>20
-</span><span class=lnt>21
-</span><span class=lnt>22
-</span><span class=lnt>23
-</span><span class=lnt>24
-</span><span class=lnt>25
-</span><span class=lnt>26
-</span><span class=lnt>27
-</span><span class=lnt>28
-</span><span class=lnt>29
-</span><span class=lnt>30
-</span><span class=lnt>31
-</span><span class=lnt>32
-</span><span class=lnt>33
-</span><span class=lnt>34
-</span><span class=lnt>35
-</span><span class=lnt>36
-</span><span class=lnt>37
-</span><span class=lnt>38
-</span><span class=lnt>39
-</span><span class=lnt>40
-</span><span class=lnt>41
-</span><span class=lnt>42
-</span><span class=lnt>43
-</span><span class=lnt>44
-</span><span class=lnt>45
-</span><span class=lnt>46
-</span><span class=lnt>47
-</span><span class=lnt>48
-</span><span class=lnt>49
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>aliyun</span><span class=w>
+</span></span></span></code></pre></div><p>执行<code>push</code>，等待CI部署完成，查看<code>log</code>发现已经打印出了服务器的文件文件夹信息，😄</p><p><img src="https://image.tianhui.xin/githubActionPublishECS/1.png?x-oss-process=style/make" loading=lazy alt=测试结果></p><h2 id=最终的job脚本>最终的job脚本</h2><h3 id=配置说明>配置说明</h3><p>使用只需要关注<code>deploy</code>中的<code>env</code>配置</p><div class=table-wrapper><table><thead><tr><th style=text-align:left>config</th><th style=text-align:left>description</th></tr></thead><tbody><tr><td style=text-align:left>ACTIONS_DEPLOY_KEY</td><td style=text-align:left>连接服务的私钥(在GitHub项目下的<code>setting</code>><code>Secrets</code>配置)</td></tr><tr><td style=text-align:left>HOST</td><td style=text-align:left>服务器的IP地址</td></tr><tr><td style=text-align:left>USER</td><td style=text-align:left>服务器的部署用户，对应的私钥的用户</td></tr><tr><td style=text-align:left>HOME_PATH</td><td style=text-align:left>登陆服务器后，我们去哪个目录，一般设置为用户目录</td></tr><tr><td style=text-align:left>DEVELOP_SH_PATH</td><td style=text-align:left>服务器部署脚本(咱们的部署目录还是服务器上执行，不写在job中)</td></tr><tr><td style=text-align:left>PACKAGE_NAME</td><td style=text-align:left>打包的名称(public.tar.gz),目前只支持这个</td></tr><tr><td style=text-align:left>DEVELOP_DIR</td><td style=text-align:left>项目部署文件夹</td></tr><tr><td style=text-align:left>BACKUP_DIR</td><td style=text-align:left>项目的备份文件夹</td></tr></tbody></table></div><h3 id=job文件>job文件</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>aliyun</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>on</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>push</span><span class=p>:</span><span class=w>
@@ -224,77 +117,7 @@
 </span></span></span><span class=line><span class=cl><span class=sd>          ssh -o StrictHostKeyChecking=no -i $SSH_PATH/id_rsa -A -tt $USER@$HOST sh $DEVELOP_SH_PATH \
 </span></span></span><span class=line><span class=cl><span class=sd>            -d $HOME_PATH/$DEVELOP_DIR -b $HOME_PATH/$BACKUP_DIR -f $HOME_PATH/$PACKAGE_NAME
 </span></span></span><span class=line><span class=cl><span class=sd>          exit</span><span class=w>          
-</span></span></span></code></pre></td></tr></table></div></div><h2 id=远程服务器操作>远程服务器操作</h2><h3 id=新建developsh>新建develop.sh</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span><span class=lnt>17
-</span><span class=lnt>18
-</span><span class=lnt>19
-</span><span class=lnt>20
-</span><span class=lnt>21
-</span><span class=lnt>22
-</span><span class=lnt>23
-</span><span class=lnt>24
-</span><span class=lnt>25
-</span><span class=lnt>26
-</span><span class=lnt>27
-</span><span class=lnt>28
-</span><span class=lnt>29
-</span><span class=lnt>30
-</span><span class=lnt>31
-</span><span class=lnt>32
-</span><span class=lnt>33
-</span><span class=lnt>34
-</span><span class=lnt>35
-</span><span class=lnt>36
-</span><span class=lnt>37
-</span><span class=lnt>38
-</span><span class=lnt>39
-</span><span class=lnt>40
-</span><span class=lnt>41
-</span><span class=lnt>42
-</span><span class=lnt>43
-</span><span class=lnt>44
-</span><span class=lnt>45
-</span><span class=lnt>46
-</span><span class=lnt>47
-</span><span class=lnt>48
-</span><span class=lnt>49
-</span><span class=lnt>50
-</span><span class=lnt>51
-</span><span class=lnt>52
-</span><span class=lnt>53
-</span><span class=lnt>54
-</span><span class=lnt>55
-</span><span class=lnt>56
-</span><span class=lnt>57
-</span><span class=lnt>58
-</span><span class=lnt>59
-</span><span class=lnt>60
-</span><span class=lnt>61
-</span><span class=lnt>62
-</span><span class=lnt>63
-</span><span class=lnt>64
-</span><span class=lnt>65
-</span><span class=lnt>66
-</span><span class=lnt>67
-</span><span class=lnt>68
-</span><span class=lnt>69
-</span><span class=lnt>70
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/bin/sh
+</span></span></span></code></pre></div><h2 id=远程服务器操作>远程服务器操作</h2><h3 id=新建developsh>新建develop.sh</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/bin/sh
 </span></span></span><span class=line><span class=cl><span class=cp></span><span class=nb>set</span> -e
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=nv>FILE_NAME</span><span class=o>=</span><span class=sb>`</span>basename <span class=nv>$0</span><span class=sb>`</span>
@@ -364,14 +187,13 @@
 </span></span><span class=line><span class=cl>tar -xf <span class=nv>$opt_file_path</span> -C <span class=nv>$opt_develop_path</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;publish success!&#34;</span>
-</span></span></code></pre></td></tr></table></div></div><h3 id=给予执行权限>给予执行权限</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>chomd u+x develop.sh
-</span></span></code></pre></td></tr></table></div></div><p><img src="https://image.tianhui.xin/githubActionPublishECS/2.png?x-oss-process=style/make" loading=lazy alt=执行结果></p><p>一切准备就绪，开始你的奇妙之旅吧，码字不易，有问题请留言交流。</p><p>相关文章:</p><ol><li><a class=link href=/blog/2019/11/17/hugousegithubactionstopages/>hugo通过Github Action部署到Github Pages</a></li></ol></section><footer class=article-footer><section class=article-tags><a href=/tags/hugo/>Hugo</a>
+</span></span></code></pre></div><h3 id=给予执行权限>给予执行权限</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>chomd u+x develop.sh
+</span></span></code></pre></div><p><img src="https://image.tianhui.xin/githubActionPublishECS/2.png?x-oss-process=style/make" loading=lazy alt=执行结果></p><p>一切准备就绪，开始你的奇妙之旅吧，码字不易，有问题请留言交流。</p><p>相关文章:</p><ol><li><a class=link href=/blog/2019/11/17/hugousegithubactionstopages/>hugo通过Github Action部署到Github Pages</a></li></ol></section><footer class=article-footer><section class=article-tags><a href=/tags/hugo/>Hugo</a>
 <a href=/tags/githubaction/>GithubAction</a></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article><a href=/p/hugo%E9%80%9A%E8%BF%87github-action%E9%83%A8%E7%BD%B2%E5%88%B0github-pages/><div class=article-details><h2 class=article-title>hugo通过Github Action部署到Github Pages</h2></div></a></article><article><a href=/p/m3ub_download/><div class=article-details><h2 class=article-title>python m3u8 下载</h2></div></a></article><article class=has-image><a href=/p/spring-boot-admin-on-kubernetes/><div class=article-image><img src="https://image.tianhui.xin/spring/boot/admin/spring-boot-admin-on-kubernetes.png?x-oss-process=style/make" loading=lazy data-key data-hash="https://image.tianhui.xin/spring/boot/admin/spring-boot-admin-on-kubernetes.png?x-oss-process=style/make"></div><div class=article-details><h2 class=article-title>Spring Boot Admin On Kubernetes</h2></div></a></article><article><a href=/p/spring-conditional%E8%AF%A6%E8%A7%A3/><div class=article-details><h2 class=article-title>Spring Conditional详解</h2></div></a></article><article><a href=/p/mybatis%E5%AF%B9%E6%95%B0%E6%8D%AE%E8%BF%9B%E8%A1%8C%E5%8A%A0%E5%AF%86/><div class=article-details><h2 class=article-title>mybatis对数据进行加密</h2></div></a></article></div></div></aside><div class=disqus-container><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//codly.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener("onColorSchemeChange",e=>{typeof DISQUS=="object"&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
 2018 -
 2024 Codly</section><section class=running-time>本博客已稳定运行
 <span id=runningdays class=running-days></span></section><section class=totalcount>发表了27篇文章 ·
-总计11.95k字</section><section class=powerby>ICP证：<a href=http://www.beian.miit.gov.cn>京16046477</a><br>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.29.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+总计9.06k字</section><section class=powerby>ICP证：<a href=http://www.beian.miit.gov.cn>京16046477</a><br>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.29.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
 <button class="pswp__button pswp__button--share" title=Share></button>
 <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">

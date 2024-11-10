@@ -15,55 +15,7 @@
 服务<code>employee-service</code>部署在命名空间a中，<code>department-service</code>部署在命名空间b中，而<code>organization-service</code>部署在命名空间c中，
 <code>Spring Boot Admin</code>也使用<code>Spring Boot</code>启动，并默认部署在命名空间中。
 此时，我们就可以通过<code>kubernetes</code>的<code>Api</code>对服务进行管理和监控。
-PS：图是我抄的😜</p><p><img src="https://image.tianhui.xin/spring/boot/admin/spring-boot-admin-on-kubernetes.png?x-oss-process=style/make" loading=lazy></p><h3 id=启动spring-boot-admin-server>启动Spring Boot Admin Server</h3><h4 id=引入相关依赖>引入相关依赖</h4><p>在SBA中，已经集成了<code>kubernetes</code>,如果需要通过<code>kubernetes</code>来发现服务，我们还需要把<code>kubernetes-client</code>包加入到项目中，<code>SpringCloud</code>已经为我们提供了<code>spring-cloud-starter-kubernetes-client</code></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span><span class=lnt>17
-</span><span class=lnt>18
-</span><span class=lnt>19
-</span><span class=lnt>20
-</span><span class=lnt>21
-</span><span class=lnt>22
-</span><span class=lnt>23
-</span><span class=lnt>24
-</span><span class=lnt>25
-</span><span class=lnt>26
-</span><span class=lnt>27
-</span><span class=lnt>28
-</span><span class=lnt>29
-</span><span class=lnt>30
-</span><span class=lnt>31
-</span><span class=lnt>32
-</span><span class=lnt>33
-</span><span class=lnt>34
-</span><span class=lnt>35
-</span><span class=lnt>36
-</span><span class=lnt>37
-</span><span class=lnt>38
-</span><span class=lnt>39
-</span><span class=lnt>40
-</span><span class=lnt>41
-</span><span class=lnt>42
-</span><span class=lnt>43
-</span><span class=lnt>44
-</span><span class=lnt>45
-</span><span class=lnt>46
-</span><span class=lnt>47
-</span><span class=lnt>48
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=cp>&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34; ?&gt;</span>
+PS：图是我抄的😜</p><p><img src="https://image.tianhui.xin/spring/boot/admin/spring-boot-admin-on-kubernetes.png?x-oss-process=style/make" loading=lazy></p><h3 id=启动spring-boot-admin-server>启动Spring Boot Admin Server</h3><h4 id=引入相关依赖>引入相关依赖</h4><p>在SBA中，已经集成了<code>kubernetes</code>,如果需要通过<code>kubernetes</code>来发现服务，我们还需要把<code>kubernetes-client</code>包加入到项目中，<code>SpringCloud</code>已经为我们提供了<code>spring-cloud-starter-kubernetes-client</code></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=cp>&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34; ?&gt;</span>
 </span></span><span class=line><span class=cl><span class=nt>&lt;project&gt;</span>
 </span></span><span class=line><span class=cl>  <span class=nt>&lt;properties&gt;</span>
 </span></span><span class=line><span class=cl>    <span class=nt>&lt;spring-boot.version&gt;</span>2.6.1<span class=nt>&lt;/spring-boot.version&gt;</span>
@@ -111,16 +63,7 @@ PS：图是我抄的😜</p><p><img src="https://image.tianhui.xin/spring/boot/a
 </span></span><span class=line><span class=cl>    <span class=nt>&lt;/dependency&gt;</span>
 </span></span><span class=line><span class=cl>  <span class=nt>&lt;/dependencies&gt;</span>
 </span></span><span class=line><span class=cl><span class=nt>&lt;/project&gt;</span>
-</span></span></code></pre></td></tr></table></div></div><h4 id=启动类配置>启动类配置</h4><ul><li><code>@EnableAdminServer</code> 启用<code>SBA Server</code>服务</li><li><code>EnableDiscoveryClient</code> 启用服务发现的能力</li><li><code>EnableScheduling</code> 启用定时任务，这个很关键，不然你会发现启动的服务，无法在<code>SBA</code>中显示</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span><span class=lnt>6
-</span><span class=lnt>7
-</span><span class=lnt>8
-</span><span class=lnt>9
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@SpringBootApplication</span><span class=w>
+</span></span></code></pre></div><h4 id=启动类配置>启动类配置</h4><ul><li><code>@EnableAdminServer</code> 启用<code>SBA Server</code>服务</li><li><code>EnableDiscoveryClient</code> 启用服务发现的能力</li><li><code>EnableScheduling</code> 启用定时任务，这个很关键，不然你会发现启动的服务，无法在<code>SBA</code>中显示</li></ul><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@SpringBootApplication</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=nd>@EnableAdminServer</span><span class=w> </span><span class=c1>// 启用 SBA Server 服务</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=nd>@EnableDiscoveryClient</span><span class=w> </span><span class=c1>// 启用服务发现</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=nd>@EnableScheduling</span><span class=w> </span><span class=c1>// 启用定时器</span><span class=w>
@@ -129,27 +72,9 @@ PS：图是我抄的😜</p><p><img src="https://image.tianhui.xin/spring/boot/a
 </span></span></span><span class=line><span class=cl><span class=w>		</span><span class=n>SpringApplication</span><span class=p>.</span><span class=na>run</span><span class=p>(</span><span class=n>OpsAdminCloudServerApplication</span><span class=p>.</span><span class=na>class</span><span class=p>,</span><span class=w> </span><span class=n>args</span><span class=p>);</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>	</span><span class=p>}</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><h4 id=spring-boot-admin-server-配置>Spring Boot Admin Server 配置</h4><p>既然我们使用<code>kubernetes</code>来发现服务，那么我们就需要对<code>kubernetes</code>的属性进行配置</p><ul><li><code>spring.cloud.kubernetes.discovery.service-labels</code> 通过 <code>Services</code> 的 <code>meta</code> 中匹配对应的标记，不满足的则会被排除</li><li><code>spring.cloud.kubernetes.discovery.primary-port-name</code> 当给 <code>NodePort</code> 指定多个多个端口时，通过<code>name</code>来确认使用哪个端口作为主端口</li><li><code>spring.cloud.kubernetes.client.namespace</code> 指定服务所在的命名空间</li><li><code>spring.cloud.kubernetes.discovery.all-namespaces</code> 当然，如果你不想指定命名空间，也可以设置该属性为true，程序会找到所有命名空间下满足<code>service-labels</code>的实例</li><li><code>spring.boot.admin.discovery.converter.management-context-path</code> 如果实例的<code>actuator</code>地址被修改，需要配置该属性，默认值 <code>/actuator</code>；
+</span></span></span></code></pre></div><h4 id=spring-boot-admin-server-配置>Spring Boot Admin Server 配置</h4><p>既然我们使用<code>kubernetes</code>来发现服务，那么我们就需要对<code>kubernetes</code>的属性进行配置</p><ul><li><code>spring.cloud.kubernetes.discovery.service-labels</code> 通过 <code>Services</code> 的 <code>meta</code> 中匹配对应的标记，不满足的则会被排除</li><li><code>spring.cloud.kubernetes.discovery.primary-port-name</code> 当给 <code>NodePort</code> 指定多个多个端口时，通过<code>name</code>来确认使用哪个端口作为主端口</li><li><code>spring.cloud.kubernetes.client.namespace</code> 指定服务所在的命名空间</li><li><code>spring.cloud.kubernetes.discovery.all-namespaces</code> 当然，如果你不想指定命名空间，也可以设置该属性为true，程序会找到所有命名空间下满足<code>service-labels</code>的实例</li><li><code>spring.boot.admin.discovery.converter.management-context-path</code> 如果实例的<code>actuator</code>地址被修改，需要配置该属性，默认值 <code>/actuator</code>；
 该配置为全局配置，假设每个服务都有自己的<code>context-path</code>,需要编辑<code>kubernetes</code>文件，<code>metadata.labels</code>中配置<code>management.context-path</code></li><li><code>spring.boot.admin.discovery.converter.health-endpoint-path</code> 如果实例的<code>health</code>地址被修改，需要配置该属性，默认值 <code>/health</code>；
-该配置为全局配置，如果每个服务都有自己的健康检查,需要编辑<code>kubernetes</code>文件，<code>metadata.labels</code>中配置<code>health.path</code></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span><span class=lnt>17
-</span><span class=lnt>18
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yml data-lang=yml><span class=line><span class=cl><span class=nt>spring</span><span class=p>:</span><span class=w>
+该配置为全局配置，如果每个服务都有自己的健康检查,需要编辑<code>kubernetes</code>文件，<code>metadata.labels</code>中配置<code>health.path</code></li></ul><div class=highlight><pre tabindex=0 class=chroma><code class=language-yml data-lang=yml><span class=line><span class=cl><span class=nt>spring</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>cloud</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>kubernetes</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>discovery</span><span class=p>:</span><span class=w>
@@ -167,27 +92,7 @@ PS：图是我抄的😜</p><p><img src="https://image.tianhui.xin/spring/boot/a
 </span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>converter</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>management-context-path</span><span class=p>:</span><span class=w> </span><span class=l>/actuator</span><span class=w> </span><span class=c># 访问实例 的 Spring Boot actuator 的根路径</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>health-endpoint-path</span><span class=p>:</span><span class=w> </span><span class=l>/health</span><span class=w> </span><span class=c># 访问实例 健康检查的地址</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><h3 id=实例配置>实例配置</h3><h4 id=编写kubernetes文件>编写kubernetes文件</h4><ul><li>在<code>metadata.labels</code>属性下添加<code>spa-admin: enabled</code>，方便<code>SPA</code>过滤实例，对应<code>SPA</code>配置中的<code>spring.cloud.kubernetes.discovery.service-labels</code></li><li>在<code>spec.ports</code>中配置端口信息，<code>name</code>的值为<code>http</code>，对应<code>SPA</code>配置中的<code>spring.cloud.kubernetes.discovery.primary-port-name</code></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span><span class=lnt>17
-</span><span class=lnt>18
-</span><span class=lnt>19
-</span><span class=lnt>20
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yml data-lang=yml><span class=line><span class=cl><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>Service</span><span class=w>
+</span></span></span></code></pre></div><h3 id=实例配置>实例配置</h3><h4 id=编写kubernetes文件>编写kubernetes文件</h4><ul><li>在<code>metadata.labels</code>属性下添加<code>spa-admin: enabled</code>，方便<code>SPA</code>过滤实例，对应<code>SPA</code>配置中的<code>spring.cloud.kubernetes.discovery.service-labels</code></li><li>在<code>spec.ports</code>中配置端口信息，<code>name</code>的值为<code>http</code>，对应<code>SPA</code>配置中的<code>spring.cloud.kubernetes.discovery.primary-port-name</code></li></ul><div class=highlight><pre tabindex=0 class=chroma><code class=language-yml data-lang=yml><span class=line><span class=cl><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>Service</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>v1</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>admin-user-server</span><span class=w>
@@ -207,33 +112,7 @@ PS：图是我抄的😜</p><p><img src="https://image.tianhui.xin/spring/boot/a
 </span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>nodePort</span><span class=p>:</span><span class=w> </span><span class=m>32000</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>selector</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>app</span><span class=p>:</span><span class=w> </span><span class=l>admin-user-server</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><h4 id=加入相关依赖>加入相关依赖</h4><ul><li>添加<code>spring-boot-starter-actuator</code>，给实例赋予<code>actuator</code>能力</li><li>通过<code>spring-boot-maven-plugin</code>插件，可以为<code>actuator</code>的<code>info</code>接口提供更多的信息</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span><span class=lnt>17
-</span><span class=lnt>18
-</span><span class=lnt>19
-</span><span class=lnt>20
-</span><span class=lnt>21
-</span><span class=lnt>22
-</span><span class=lnt>23
-</span><span class=lnt>24
-</span><span class=lnt>25
-</span><span class=lnt>26
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl>
+</span></span></span></code></pre></div><h4 id=加入相关依赖>加入相关依赖</h4><ul><li>添加<code>spring-boot-starter-actuator</code>，给实例赋予<code>actuator</code>能力</li><li>通过<code>spring-boot-maven-plugin</code>插件，可以为<code>actuator</code>的<code>info</code>接口提供更多的信息</li></ul><div class=highlight><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=nt>&lt;project</span> <span class=nt>&gt;</span>
 </span></span><span class=line><span class=cl>  <span class=nt>&lt;dependencies&gt;</span>
 </span></span><span class=line><span class=cl>    <span class=nt>&lt;dependency&gt;</span>
@@ -259,18 +138,7 @@ PS：图是我抄的😜</p><p><img src="https://image.tianhui.xin/spring/boot/a
 </span></span><span class=line><span class=cl>    <span class=nt>&lt;/plugin&gt;</span>
 </span></span><span class=line><span class=cl>  <span class=nt>&lt;/build&gt;</span>
 </span></span><span class=line><span class=cl><span class=nt>&lt;/project&gt;</span>
-</span></span></code></pre></td></tr></table></div></div><h4 id=配置actuator>配置actuator</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yml data-lang=yml><span class=line><span class=cl><span class=nt>spring</span><span class=p>:</span><span class=w>
+</span></span></code></pre></div><h4 id=配置actuator>配置actuator</h4><div class=highlight><pre tabindex=0 class=chroma><code class=language-yml data-lang=yml><span class=line><span class=cl><span class=nt>spring</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>application</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>admin-user-server</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>management</span><span class=p>:</span><span class=w>
@@ -281,12 +149,12 @@ PS：图是我抄的😜</p><p><img src="https://image.tianhui.xin/spring/boot/a
 </span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>endpoint</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>health</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>show-details</span><span class=p>:</span><span class=w> </span><span class=l>ALWAYS</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><h3 id=效果图>效果图</h3><p><img src="https://image.tianhui.xin/spring/boot/admin/1641218000488.jpg?x-oss-process=style/make" loading=lazy></p><h3 id=写在最后>写在最后</h3><p>码字不易，因个人能力有限，难免有疏漏和错误之处，如发现bug或者有更好的建议，欢迎批评指正，不吝感激</p></section><footer class=article-footer><section class=article-tags><a href=/tags/spring-boot-admin/>Spring Boot Admin</a>
+</span></span></span></code></pre></div><h3 id=效果图>效果图</h3><p><img src="https://image.tianhui.xin/spring/boot/admin/1641218000488.jpg?x-oss-process=style/make" loading=lazy></p><h3 id=写在最后>写在最后</h3><p>码字不易，因个人能力有限，难免有疏漏和错误之处，如发现bug或者有更好的建议，欢迎批评指正，不吝感激</p></section><footer class=article-footer><section class=article-tags><a href=/tags/spring-boot-admin/>Spring Boot Admin</a>
 <a href=/tags/kubernetes/>Kubernetes</a></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article><a href=/p/m3ub_download/><div class=article-details><h2 class=article-title>python m3u8 下载</h2></div></a></article><article><a href=/p/spring-conditional%E8%AF%A6%E8%A7%A3/><div class=article-details><h2 class=article-title>Spring Conditional详解</h2></div></a></article><article><a href=/p/mybatis%E5%AF%B9%E6%95%B0%E6%8D%AE%E8%BF%9B%E8%A1%8C%E5%8A%A0%E5%AF%86/><div class=article-details><h2 class=article-title>mybatis对数据进行加密</h2></div></a></article><article class=has-image><a href=/p/%E8%B7%9F%E6%88%91%E5%AD%A6springcloud-%E4%B9%8B-nacos/><div class=article-image><img src="https://image.tianhui.xin/spring-cloud/nacos.png?x-oss-process=style/make" loading=lazy data-key data-hash="https://image.tianhui.xin/spring-cloud/nacos.png?x-oss-process=style/make"></div><div class=article-details><h2 class=article-title>跟我学SpringCloud 之 nacos</h2></div></a></article><article class=has-image><a href=/p/%E4%B8%80%E8%A7%81%E5%80%BE%E5%BF%83%E4%B9%8B%E5%88%9D%E9%81%87mapstruct/><div class=article-image><img src="https://image.tianhui.xin/mapstruct/Mapstruct.png?x-oss-process=style/make" loading=lazy data-key data-hash="https://image.tianhui.xin/mapstruct/Mapstruct.png?x-oss-process=style/make"></div><div class=article-details><h2 class=article-title>一见倾心之初遇MapStruct</h2></div></a></article></div></div></aside><div class=disqus-container><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//codly.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener("onColorSchemeChange",e=>{typeof DISQUS=="object"&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
 2018 -
 2024 Codly</section><section class=running-time>本博客已稳定运行
 <span id=runningdays class=running-days></span></section><section class=totalcount>发表了27篇文章 ·
-总计11.95k字</section><section class=powerby>ICP证：<a href=http://www.beian.miit.gov.cn>京16046477</a><br>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.29.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+总计9.06k字</section><section class=powerby>ICP证：<a href=http://www.beian.miit.gov.cn>京16046477</a><br>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.29.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
 <button class="pswp__button pswp__button--share" title=Share></button>
 <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">

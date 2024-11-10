@@ -10,28 +10,9 @@
 <svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
 <span>暗色模式</span></li></ol></li></ol></aside><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=/p/vue-cli-3%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/><img src=https://image.tianhui.xin/Vue-CLi/12.png loading=lazy alt="Featured image of post Vue CLi 3快速入门"></a></div><div class=article-details><header class=article-category><a href=/categories/%E5%AD%A6%E6%97%A0%E6%AD%A2%E5%A2%83/ style=background-color:#2a9d8f;color:#fff>学无止境</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/vue-cli-3%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/>Vue CLi 3快速入门</a></h2></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
 <time class=article-time--published>Aug 24, 2018</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
-<time class=article-time--reading>阅读时长: 1 分钟</time></div></footer></div></header><section class=article-content><p>Vue CLi 3快速入门</p><p>2018年08月13日在开源中国收到了Vue CLi 3.0 正式版的发布，关于它的横空出世，晨在这里简单说一下，很多人在微博都在调侃Vue,说是不是更新太块了，都学不过来，下面是我搜集的几张图，</p><p><img src=https://image.tianhui.xin/Vue-CLi/1.png loading=lazy alt=话说这位冒充尤雨溪的同学，真调皮&mldr;></p><p><img src=https://image.tianhui.xin/Vue-CLi/2.jpg loading=lazy alt=不得不说，前端同学真是聪明></p><p><img src=https://image.tianhui.xin/Vue-CLi/3.png loading=lazy alt=前端更新太块，学不动了></p><p>解释一下，Vue这次并没有发布新版本，而是出了一个简化配置的脚手架，命名为Vue CLi 3，不过调侃小右的也是用尽了各种技能。</p><p>好了，言归正传，回归我们今日的正题，<strong>快速入门Vue CLi 3</strong>，打开官方文档我们都能看到</p><blockquote><p>Vue CLI 的包名称由 <code>vue-cli</code> 改成了 <code>@vue/cli</code>。 如果你已经全局安装了旧版本的 <code>vue-cli</code> (1.x 或 2.x)，你需要先通过 <code>npm uninstall vue-cli -g</code> 或 <code>yarn global remove vue-cli</code> 卸载它。</p></blockquote><p>安装的细节，我们这里不做过多的阐述，具体的可以查看官方文档<a class=link href=https://cli.vuejs.org/guide/ target=_blank rel=noopener>Vue CLi 3</a></p><h1 id=创建项目>创建项目</h1><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-powershell data-lang=powershell><span class=line><span class=cl><span class=n>vue</span> <span class=n>create</span> <span class=nb>hello-world</span>
-</span></span></code></pre></td></tr></table></div></div><p>刚入门，一直回车就好，🙂</p><p>目录结构是啥样子的，让我们看一下</p><p><img src=https://image.tianhui.xin/Vue-CLi/4.png loading=lazy alt=目录结构></p><p><code>@vue/cli</code>在这次发布中，到底更新了什么呢，首先要说的第一个东西就是简化配置文件，集中配置文件到<code>vue.config.js</code>中,文件在哪呢，木有啊，那是因为<code>@vue/cli</code>做了一些默认的配置。我们可以自己创建一个这样的文件。</p><p><code>vue inspect</code>，是脚手架提供的一个配置检查的服务，并且生成一个你很熟悉的文件</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>vue inspect &gt; output.js
-</span></span></code></pre></td></tr></table></div></div><p>那么这样，是不是很熟悉呢</p><p><img src=https://image.tianhui.xin/Vue-CLi/6.png loading=lazy alt=webpack配置></p><p>是的，这个webpack的一些配置项，那么我们应该怎么书写呢，语法是这样的</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span><span class=lnt>17
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-javascript data-lang=javascript><span class=line><span class=cl><span class=c1>// vue.config.js
+<time class=article-time--reading>阅读时长: 1 分钟</time></div></footer></div></header><section class=article-content><p>Vue CLi 3快速入门</p><p>2018年08月13日在开源中国收到了Vue CLi 3.0 正式版的发布，关于它的横空出世，晨在这里简单说一下，很多人在微博都在调侃Vue,说是不是更新太块了，都学不过来，下面是我搜集的几张图，</p><p><img src=https://image.tianhui.xin/Vue-CLi/1.png loading=lazy alt=话说这位冒充尤雨溪的同学，真调皮&mldr;></p><p><img src=https://image.tianhui.xin/Vue-CLi/2.jpg loading=lazy alt=不得不说，前端同学真是聪明></p><p><img src=https://image.tianhui.xin/Vue-CLi/3.png loading=lazy alt=前端更新太块，学不动了></p><p>解释一下，Vue这次并没有发布新版本，而是出了一个简化配置的脚手架，命名为Vue CLi 3，不过调侃小右的也是用尽了各种技能。</p><p>好了，言归正传，回归我们今日的正题，<strong>快速入门Vue CLi 3</strong>，打开官方文档我们都能看到</p><blockquote><p>Vue CLI 的包名称由 <code>vue-cli</code> 改成了 <code>@vue/cli</code>。 如果你已经全局安装了旧版本的 <code>vue-cli</code> (1.x 或 2.x)，你需要先通过 <code>npm uninstall vue-cli -g</code> 或 <code>yarn global remove vue-cli</code> 卸载它。</p></blockquote><p>安装的细节，我们这里不做过多的阐述，具体的可以查看官方文档<a class=link href=https://cli.vuejs.org/guide/ target=_blank rel=noopener>Vue CLi 3</a></p><h1 id=创建项目>创建项目</h1><div class=highlight><pre tabindex=0 class=chroma><code class=language-powershell data-lang=powershell><span class=line><span class=cl><span class=n>vue</span> <span class=n>create</span> <span class=nb>hello-world</span>
+</span></span></code></pre></div><p>刚入门，一直回车就好，🙂</p><p>目录结构是啥样子的，让我们看一下</p><p><img src=https://image.tianhui.xin/Vue-CLi/4.png loading=lazy alt=目录结构></p><p><code>@vue/cli</code>在这次发布中，到底更新了什么呢，首先要说的第一个东西就是简化配置文件，集中配置文件到<code>vue.config.js</code>中,文件在哪呢，木有啊，那是因为<code>@vue/cli</code>做了一些默认的配置。我们可以自己创建一个这样的文件。</p><p><code>vue inspect</code>，是脚手架提供的一个配置检查的服务，并且生成一个你很熟悉的文件</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>vue inspect &gt; output.js
+</span></span></code></pre></div><p>那么这样，是不是很熟悉呢</p><p><img src=https://image.tianhui.xin/Vue-CLi/6.png loading=lazy alt=webpack配置></p><p>是的，这个webpack的一些配置项，那么我们应该怎么书写呢，语法是这样的</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-javascript data-lang=javascript><span class=line><span class=cl><span class=c1>// vue.config.js
 </span></span></span><span class=line><span class=cl><span class=c1></span><span class=nx>module</span><span class=p>.</span><span class=nx>exports</span> <span class=o>=</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>  <span class=nx>configureWebpack</span><span class=o>:</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>    <span class=nx>plugins</span><span class=o>:</span> <span class=p>[</span>
@@ -48,29 +29,7 @@
 </span></span><span class=line><span class=cl>        <span class=p>.</span><span class=nx>end</span><span class=p>()</span>
 </span></span><span class=line><span class=cl>  <span class=p>}</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>
-</span></span></code></pre></td></tr></table></div></div><p>那么，<code>chainWebpack</code>这是个什么东西，作者采用了<a class=link href=https://github.com/neutrinojs/webpack-chain target=_blank rel=noopener>webpack-chain</a>的思想，内部实现也是<code>webpack-chain</code>来实现<code>webpack</code>的配置，仔细看<code> webpack-chain</code>的文档就会看出，它是一个链式API的方式来简化配置的一个插件。</p><p>晨这边也修改过几个loader,大概分享一下代码吧</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span><span class=lnt>17
-</span><span class=lnt>18
-</span><span class=lnt>19
-</span><span class=lnt>20
-</span><span class=lnt>21
-</span><span class=lnt>22
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-javascript data-lang=javascript><span class=line><span class=cl><span class=nx>module</span><span class=p>.</span><span class=nx>exports</span> <span class=o>=</span> <span class=p>{</span>
+</span></span></code></pre></div><p>那么，<code>chainWebpack</code>这是个什么东西，作者采用了<a class=link href=https://github.com/neutrinojs/webpack-chain target=_blank rel=noopener>webpack-chain</a>的思想，内部实现也是<code>webpack-chain</code>来实现<code>webpack</code>的配置，仔细看<code> webpack-chain</code>的文档就会看出，它是一个链式API的方式来简化配置的一个插件。</p><p>晨这边也修改过几个loader,大概分享一下代码吧</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-javascript data-lang=javascript><span class=line><span class=cl><span class=nx>module</span><span class=p>.</span><span class=nx>exports</span> <span class=o>=</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>	<span class=nx>chainWebpack</span><span class=o>:</span> <span class=nx>config</span> <span class=p>=&gt;</span> <span class=p>{</span>
 </span></span><span class=line><span class=cl>	   <span class=nx>config</span><span class=p>.</span><span class=nx>module</span><span class=p>.</span><span class=nx>rule</span><span class=p>(</span><span class=s1>&#39;compile&#39;</span><span class=p>)</span>
 </span></span><span class=line><span class=cl>		   <span class=p>.</span><span class=nx>test</span><span class=p>(</span><span class=sr>/\.js$/</span><span class=p>)</span>
@@ -92,7 +51,7 @@
 </span></span><span class=line><span class=cl>		<span class=p>});</span>
 </span></span><span class=line><span class=cl>	<span class=p>}</span>
 </span></span><span class=line><span class=cl><span class=p>}</span>
-</span></span></code></pre></td></tr></table></div></div><h2 id=vue-ui>vue ui</h2><p>最后我们来介绍另一个东西，对，没错，现在要说的就是<code>vue ui</code>,它是做什么的呢？</p><ol><li>项目管理，包括创建和导入
+</span></span></code></pre></div><h2 id=vue-ui>vue ui</h2><p>最后我们来介绍另一个东西，对，没错，现在要说的就是<code>vue ui</code>,它是做什么的呢？</p><ol><li>项目管理，包括创建和导入
 <img src=https://image.tianhui.xin/Vue-CLi/11.png loading=lazy alt=项目管理></li><li>插件管理，包括依赖管理
 <img src=https://image.tianhui.xin/Vue-CLi/7.png loading=lazy alt=插件管理>
 <img src=https://image.tianhui.xin/Vue-CLi/8.png loading=lazy alt=依赖配置>
@@ -103,7 +62,7 @@
 2018 -
 2024 Codly</section><section class=running-time>本博客已稳定运行
 <span id=runningdays class=running-days></span></section><section class=totalcount>发表了27篇文章 ·
-总计11.95k字</section><section class=powerby>ICP证：<a href=http://www.beian.miit.gov.cn>京16046477</a><br>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.29.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+总计9.06k字</section><section class=powerby>ICP证：<a href=http://www.beian.miit.gov.cn>京16046477</a><br>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.29.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
 <button class="pswp__button pswp__button--share" title=Share></button>
 <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">

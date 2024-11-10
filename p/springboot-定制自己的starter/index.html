@@ -10,18 +10,7 @@
 <svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
 <span>暗色模式</span></li></ol></li></ol></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><header class=article-category><a href=/categories/%E5%AD%A6%E6%97%A0%E6%AD%A2%E5%A2%83/ style=background-color:#2a9d8f;color:#fff>学无止境</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/springboot-%E5%AE%9A%E5%88%B6%E8%87%AA%E5%B7%B1%E7%9A%84starter/>springBoot 定制自己的starter</a></h2></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
 <time class=article-time--published>Sep 08, 2019</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
-<time class=article-time--reading>阅读时长: 1 分钟</time></div></footer></div></header><section class=article-content><p>在学习Spring Boot的过程中，接触最多的就是starter。使用者可以把starter当成是一种服务，使得使用某个功能时不需要关注各种依赖库的处理，不需要具体的配置信息，由Spring Boot自动通过classpath路径下的类发现需要的Bean，并织入bean。而自动装配就是Springboot最大的特性。</p><h1 id=什么是定制starter>什么是定制starter</h1><p>springBoot官方推出了很多的starter，那么在这些starter的背后，它的启动流程是什么？starter包含两大模块：</p><ul><li>autoconfigure 自动配置类</li><li>starter 包含autoconfigure配置和其他的依赖</li></ul><h1 id=加入springboot依赖>加入springBoot依赖</h1><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=nt>&lt;dependencies&gt;</span>
+<time class=article-time--reading>阅读时长: 1 分钟</time></div></footer></div></header><section class=article-content><p>在学习Spring Boot的过程中，接触最多的就是starter。使用者可以把starter当成是一种服务，使得使用某个功能时不需要关注各种依赖库的处理，不需要具体的配置信息，由Spring Boot自动通过classpath路径下的类发现需要的Bean，并织入bean。而自动装配就是Springboot最大的特性。</p><h1 id=什么是定制starter>什么是定制starter</h1><p>springBoot官方推出了很多的starter，那么在这些starter的背后，它的启动流程是什么？starter包含两大模块：</p><ul><li>autoconfigure 自动配置类</li><li>starter 包含autoconfigure配置和其他的依赖</li></ul><h1 id=加入springboot依赖>加入springBoot依赖</h1><div class=highlight><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=nt>&lt;dependencies&gt;</span>
 </span></span><span class=line><span class=cl>    <span class=nt>&lt;dependency&gt;</span>
 </span></span><span class=line><span class=cl>        <span class=nt>&lt;groupId&gt;</span>org.springframework.boot<span class=nt>&lt;/groupId&gt;</span>
 </span></span><span class=line><span class=cl>        <span class=nt>&lt;artifactId&gt;</span>spring-boot-configuration-processor<span class=nt>&lt;/artifactId&gt;</span>
@@ -32,53 +21,26 @@
 </span></span><span class=line><span class=cl>       <span class=nt>&lt;artifactId&gt;</span>spring-boot-autoconfigure<span class=nt>&lt;/artifactId&gt;</span>
 </span></span><span class=line><span class=cl>   <span class=nt>&lt;/dependency&gt;</span>
 </span></span><span class=line><span class=cl><span class=nt>&lt;/dependencies&gt;</span>
-</span></span></code></pre></td></tr></table></div></div><h1 id=编写bean对象>编写bean对象</h1><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span><span class=w> </span><span class=kd>class</span> <span class=nc>Hello</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></code></pre></div><h1 id=编写bean对象>编写bean对象</h1><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span><span class=w> </span><span class=kd>class</span> <span class=nc>Hello</span><span class=w> </span><span class=p>{</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>public</span><span class=w> </span><span class=kt>void</span><span class=w> </span><span class=nf>say</span><span class=p>(</span><span class=n>String</span><span class=w> </span><span class=n>msg</span><span class=p>){</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>System</span><span class=p>.</span><span class=na>out</span><span class=p>.</span><span class=na>println</span><span class=p>(</span><span class=n>msg</span><span class=p>);</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><h1 id=编写starter>编写starter</h1><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span><span class=lnt>6
-</span><span class=lnt>7
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Configuration</span><span class=w>
+</span></span></span></code></pre></div><h1 id=编写starter>编写starter</h1><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@Configuration</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=kd>class</span> <span class=nc>DemoAutoConfiguration</span><span class=w> </span><span class=p>{</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nd>@Bean</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>public</span><span class=w> </span><span class=n>Hello</span><span class=w> </span><span class=nf>hello</span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>return</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>Hello</span><span class=p>();</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><h1 id=编写springfactories>编写spring.factories</h1><p>在 src/main/resources 目录下新建 META-INF 文件夹，然后新建 <strong>spring.factories</strong> 文件，这个文件用于告诉Spring Boot有那些自动配置类需要处理，因此它的内容是</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl>org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+</span></span></span></code></pre></div><h1 id=编写springfactories>编写spring.factories</h1><p>在 src/main/resources 目录下新建 META-INF 文件夹，然后新建 <strong>spring.factories</strong> 文件，这个文件用于告诉Spring Boot有那些自动配置类需要处理，因此它的内容是</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl>org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 </span></span><span class=line><span class=cl>xin.tianhui.cloud.starter.DemoAutoConfiguration
-</span></span></code></pre></td></tr></table></div></div><h1 id=使用>使用</h1><p>在使用的项目中加入maven依赖,也就是咱们刚刚写好的starter</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=nt>&lt;dependency&gt;</span>
+</span></span></code></pre></div><h1 id=使用>使用</h1><p>在使用的项目中加入maven依赖,也就是咱们刚刚写好的starter</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=nt>&lt;dependency&gt;</span>
 </span></span><span class=line><span class=cl>	<span class=nt>&lt;groupId&gt;</span>xin.tianhui.cloud<span class=nt>&lt;/groupId&gt;</span>
 </span></span><span class=line><span class=cl>	<span class=nt>&lt;artifactId&gt;</span>demo-starter<span class=nt>&lt;/artifactId&gt;</span>
 </span></span><span class=line><span class=cl>	<span class=nt>&lt;version&gt;</span>0.0.1-SNAPSHOT<span class=nt>&lt;/version&gt;</span>
 </span></span><span class=line><span class=cl><span class=nt>&lt;/dependency&gt;</span>
-</span></span></code></pre></td></tr></table></div></div><h1 id=代码中注入starter初始化好的bean>代码中注入starter初始化好的bean</h1><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span><span class=lnt>5
-</span><span class=lnt>6
-</span><span class=lnt>7
-</span><span class=lnt>8
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span><span class=w> </span><span class=kd>class</span> <span class=nc>Application</span><span class=p>{</span><span class=w>
+</span></span></code></pre></div><h1 id=代码中注入starter初始化好的bean>代码中注入starter初始化好的bean</h1><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span><span class=w> </span><span class=kd>class</span> <span class=nc>Application</span><span class=p>{</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nd>@Autowired</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>private</span><span class=w> </span><span class=n>Hello</span><span class=w> </span><span class=n>hello</span><span class=p>;</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    
@@ -86,12 +48,12 @@
 </span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>hello</span><span class=p>.</span><span class=na>say</span><span class=p>(</span><span class=s>&#34;hello&#34;</span><span class=p>);</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div></section><footer class=article-footer><section class=article-tags><a href=/tags/springboot/>Springboot</a>
+</span></span></span></code></pre></div></section><footer class=article-footer><section class=article-tags><a href=/tags/springboot/>Springboot</a>
 <a href=/tags/java/>Java</a></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article><a href=/p/springboot%E4%B8%AD%E4%BD%BF%E7%94%A8springintegration/><div class=article-details><h2 class=article-title>SpringBoot中使用SpringIntegration</h2></div></a></article><article class=has-image><a href=/p/springboot%E7%B3%BB%E5%88%97-%E9%9B%86%E6%88%90jwt%E5%AE%9E%E7%8E%B0%E6%8E%A5%E5%8F%A3%E6%9D%83%E9%99%90%E8%AE%A4%E8%AF%81/><div class=article-image><img src=https://image.tianhui.xin/liveLearn/5/api-security.jpg loading=lazy data-key data-hash=https://image.tianhui.xin/liveLearn/5/api-security.jpg></div><div class=article-details><h2 class=article-title>springBoot系列 - 集成JWT实现接口权限认证</h2></div></a></article><article><a href=/p/mybatis%E5%AF%B9%E6%95%B0%E6%8D%AE%E8%BF%9B%E8%A1%8C%E5%8A%A0%E5%AF%86/><div class=article-details><h2 class=article-title>mybatis对数据进行加密</h2></div></a></article><article class=has-image><a href=/p/%E8%B7%9F%E6%88%91%E5%AD%A6springcloud-%E4%B9%8B-nacos/><div class=article-image><img src="https://image.tianhui.xin/spring-cloud/nacos.png?x-oss-process=style/make" loading=lazy data-key data-hash="https://image.tianhui.xin/spring-cloud/nacos.png?x-oss-process=style/make"></div><div class=article-details><h2 class=article-title>跟我学SpringCloud 之 nacos</h2></div></a></article><article class=has-image><a href=/p/%E4%B8%80%E8%A7%81%E5%80%BE%E5%BF%83%E4%B9%8B%E5%88%9D%E9%81%87mapstruct/><div class=article-image><img src="https://image.tianhui.xin/mapstruct/Mapstruct.png?x-oss-process=style/make" loading=lazy data-key data-hash="https://image.tianhui.xin/mapstruct/Mapstruct.png?x-oss-process=style/make"></div><div class=article-details><h2 class=article-title>一见倾心之初遇MapStruct</h2></div></a></article></div></div></aside><div class=disqus-container><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//codly.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener("onColorSchemeChange",e=>{typeof DISQUS=="object"&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
 2018 -
 2024 Codly</section><section class=running-time>本博客已稳定运行
 <span id=runningdays class=running-days></span></section><section class=totalcount>发表了27篇文章 ·
-总计11.95k字</section><section class=powerby>ICP证：<a href=http://www.beian.miit.gov.cn>京16046477</a><br>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.29.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+总计9.06k字</section><section class=powerby>ICP证：<a href=http://www.beian.miit.gov.cn>京16046477</a><br>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.29.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
 <button class="pswp__button pswp__button--share" title=Share></button>
 <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">

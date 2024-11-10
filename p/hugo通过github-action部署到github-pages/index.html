@@ -10,20 +10,7 @@
 <svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
 <span>暗色模式</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#编写脚本>编写脚本</a></li><li><a href=#准备部署>准备部署</a></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><header class=article-category><a href=/categories/%E5%AD%A6%E6%97%A0%E6%AD%A2%E5%A2%83/ style=background-color:#2a9d8f;color:#fff>学无止境</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/hugo%E9%80%9A%E8%BF%87github-action%E9%83%A8%E7%BD%B2%E5%88%B0github-pages/>hugo通过Github Action部署到Github Pages</a></h2></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
 <time class=article-time--published>Nov 17, 2019</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
-<time class=article-time--reading>阅读时长: 2 分钟</time></div></footer></div></header><section class=article-content><p>最近一段时间，把博客从hexo迁移到了hugo,顺便整理下，使用github actions自动部署到github pages。</p><h2 id=编写脚本>编写脚本</h2><ol><li>首先打开自己项目中的Actions,进入之后，它有很多的自动化部署工具，我们选择<strong>Simple workflow</strong></li></ol><p><img src="https://image.tianhui.xin/hugo_github_actions/001.png?x-oss-process=style/make" loading=lazy></p><ol start=2><li>选择后，会出现一个yml文件的编辑器，里面的内容是这样的:</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>CI</span><span class=w>
+<time class=article-time--reading>阅读时长: 1 分钟</time></div></footer></div></header><section class=article-content><p>最近一段时间，把博客从hexo迁移到了hugo,顺便整理下，使用github actions自动部署到github pages。</p><h2 id=编写脚本>编写脚本</h2><ol><li>首先打开自己项目中的Actions,进入之后，它有很多的自动化部署工具，我们选择<strong>Simple workflow</strong></li></ol><p><img src="https://image.tianhui.xin/hugo_github_actions/001.png?x-oss-process=style/make" loading=lazy></p><ol start=2><li>选择后，会出现一个yml文件的编辑器，里面的内容是这样的:</li></ol><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>CI</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>on</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=l>push]</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>jobs</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>build</span><span class=p>:</span><span class=w>
@@ -36,34 +23,7 @@
 </span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>run</span><span class=p>:</span><span class=w> </span><span class=p>|</span><span class=sd>
 </span></span></span><span class=line><span class=cl><span class=sd>          echo Add other actions to build,
 </span></span></span><span class=line><span class=cl><span class=sd>          echo test, and deploy your project.</span><span class=w>          
-</span></span></span></code></pre></td></tr></table></div></div><p><img src="https://image.tianhui.xin/hugo_github_actions/002.png?x-oss-process=style/make" loading=lazy></p><ol start=3><li><p>我们结合上图，说下标注的地方，也是github的一个亮点吧，在编辑器中，他们我们的yam文件进行了语法的校验，同时也做些key的校验，比如存在<strong>users</strong>的时候，就不能出现<strong>run</strong>,我个人理解，users本身就是一个动作，所以无法再去执行其他命令；然后模板市场，里面有很多开发语言的部署脚本，都是大牛们封装好的，找到符合自身项目的直接使用就行。</p></li><li><p>调整yml文件内容</p></li></ol><p>因为使用的<strong>hugo</strong>的博客，所以官方是提供的自动化脚本的，我们再此使用了两个官方提供的workflow。</p><p><img src="https://img.shields.io/github/release/peaceiris/actions-gh-pages.svg?label=peaceiris%2Factions-gh-pages" loading=lazy alt="peaceiris/actions-gh-pages latest version"></p><p><img src="https://img.shields.io/github/release/peaceiris/actions-hugo.svg?label=peaceiris%2Factions-hugo" loading=lazy alt="peaceiris/actions-hugo latest version"></p><p><a class=link href=https://github.com/peaceiris/actions-gh-pages target=_blank rel=noopener><img src=https://gh-card.dev/repos/peaceiris/actions-hugo.svg?fullname loading=lazy alt="peaceiris/actions-hugo - GitHub"></a></p><p><a class=link href=https://github.com/peaceiris/actions-gh-pages target=_blank rel=noopener><img src=https://gh-card.dev/repos/peaceiris/actions-gh-pages.svg?fullname loading=lazy alt="peaceiris/actions-gh-pages - GitHub"></a></p><p>废话不多说，直接上代码</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span><span class=lnt>17
-</span><span class=lnt>18
-</span><span class=lnt>19
-</span><span class=lnt>20
-</span><span class=lnt>21
-</span><span class=lnt>22
-</span><span class=lnt>23
-</span><span class=lnt>24
-</span><span class=lnt>25
-</span><span class=lnt>26
-</span><span class=lnt>27
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>CI</span><span class=w> </span><span class=c>#自动化的名称</span><span class=w>
+</span></span></span></code></pre></div><p><img src="https://image.tianhui.xin/hugo_github_actions/002.png?x-oss-process=style/make" loading=lazy></p><ol start=3><li><p>我们结合上图，说下标注的地方，也是github的一个亮点吧，在编辑器中，他们我们的yam文件进行了语法的校验，同时也做些key的校验，比如存在<strong>users</strong>的时候，就不能出现<strong>run</strong>,我个人理解，users本身就是一个动作，所以无法再去执行其他命令；然后模板市场，里面有很多开发语言的部署脚本，都是大牛们封装好的，找到符合自身项目的直接使用就行。</p></li><li><p>调整yml文件内容</p></li></ol><p>因为使用的<strong>hugo</strong>的博客，所以官方是提供的自动化脚本的，我们再此使用了两个官方提供的workflow。</p><p><img src="https://img.shields.io/github/release/peaceiris/actions-gh-pages.svg?label=peaceiris%2Factions-gh-pages" loading=lazy alt="peaceiris/actions-gh-pages latest version"></p><p><img src="https://img.shields.io/github/release/peaceiris/actions-hugo.svg?label=peaceiris%2Factions-hugo" loading=lazy alt="peaceiris/actions-hugo latest version"></p><p><a class=link href=https://github.com/peaceiris/actions-gh-pages target=_blank rel=noopener><img src=https://gh-card.dev/repos/peaceiris/actions-hugo.svg?fullname loading=lazy alt="peaceiris/actions-hugo - GitHub"></a></p><p><a class=link href=https://github.com/peaceiris/actions-gh-pages target=_blank rel=noopener><img src=https://gh-card.dev/repos/peaceiris/actions-gh-pages.svg?fullname loading=lazy alt="peaceiris/actions-gh-pages - GitHub"></a></p><p>废话不多说，直接上代码</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>CI</span><span class=w> </span><span class=c>#自动化的名称</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>on</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>push</span><span class=p>:</span><span class=w> </span><span class=c># push的时候触发</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>branches</span><span class=p>:</span><span class=w> </span><span class=c># 那些分支需要触发</span><span class=w>
@@ -90,15 +50,11 @@
 </span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>EXTERNAL_REPOSITORY</span><span class=p>:</span><span class=w> </span><span class=l>homeant/homeant.github.io</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>PUBLISH_BRANCH</span><span class=p>:</span><span class=w> </span><span class=l>master</span><span class=w>
 </span></span></span><span class=line><span class=cl><span class=w>          </span><span class=nt>PUBLISH_DIR</span><span class=p>:</span><span class=w> </span><span class=l>./public</span><span class=w>
-</span></span></span></code></pre></td></tr></table></div></div><h2 id=准备部署>准备部署</h2><blockquote><p>我们开发的项目及<strong>github pages</strong>实际是分开的，所以咱们出现了两个仓库，那怎么在开发项目buider完成后，部署到<strong>github pages</strong>呢，别慌，跟我一步一步来。</p></blockquote><ol><li>生成提交代码用的<em>ssh key</em></li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>ssh-keygen -t rsa -b <span class=m>4096</span> -C <span class=s2>&#34;</span><span class=k>$(</span>git config user.email<span class=k>)</span><span class=s2>&#34;</span> -f gh-pages -N <span class=s2>&#34;&#34;</span>
+</span></span></span></code></pre></div><h2 id=准备部署>准备部署</h2><blockquote><p>我们开发的项目及<strong>github pages</strong>实际是分开的，所以咱们出现了两个仓库，那怎么在开发项目buider完成后，部署到<strong>github pages</strong>呢，别慌，跟我一步一步来。</p></blockquote><ol><li>生成提交代码用的<em>ssh key</em></li></ol><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>ssh-keygen -t rsa -b <span class=m>4096</span> -C <span class=s2>&#34;</span><span class=k>$(</span>git config user.email<span class=k>)</span><span class=s2>&#34;</span> -f gh-pages -N <span class=s2>&#34;&#34;</span>
 </span></span><span class=line><span class=cl><span class=c1># You will get 2 files:</span>
 </span></span><span class=line><span class=cl><span class=c1>#   gh-pages.pub (public key)</span>
 </span></span><span class=line><span class=cl><span class=c1>#   gh-pages     (private key)</span>
-</span></span></code></pre></td></tr></table></div></div><p>假设
+</span></span></code></pre></div><p>假设
 开发项目为 <strong>tianhui.xin</strong>
 部署的项目为 <strong>tianhui.github.io</strong></p><ol start=2><li><p>打开<strong>tianhui.xin</strong>仓库的settings，再点击<strong>Secrets</strong>，然后添加咱们刚刚生成的私钥，name为<strong>ACTIONS_DEPLOY_KEY</strong></p></li><li><p>同理，打开<strong>tianhui.github.io</strong>，点击<strong>Deploy keys</strong>，添加公钥，<strong>Allow write access</strong>一定要勾上，否则会无法提交</p></li></ol><div class=table-wrapper><table><thead><tr><th>Add your public key</th><th>Success</th></tr></thead><tbody><tr><td><img src="https://image.tianhui.xin/hugo_github_actions/006.jpg?x-oss-process=style/make" loading=lazy alt="public key"></td><td><img src="https://image.tianhui.xin/hugo_github_actions/007.jpg?x-oss-process=style/make" loading=lazy alt=success></td></tr></tbody></table></div><div class=table-wrapper><table><thead><tr><th>Add your private key</th><th>Success</th></tr></thead><tbody><tr><td><img src="https://image.tianhui.xin/hugo_github_actions/008.jpg?x-oss-process=style/make" loading=lazy alt="private key"></td><td><img src="https://image.tianhui.xin/hugo_github_actions/009.jpg?x-oss-process=style/make" loading=lazy alt=success></td></tr></tbody></table></div><p>然后，你就可以提交代码了，push成功后，打开仓库<strong>actions</strong>，至此部署成功，大功告成！</p><p><img src="https://image.tianhui.xin/hugo_github_actions/011.png?x-oss-process=style/make" loading=lazy></p><p><img src="https://image.tianhui.xin/hugo_github_actions/010.png?x-oss-process=style/make" loading=lazy></p><p>相关文章:</p><ol><li><a class=link href=/blog/2019/11/29/githubactionpublishecs>通过GitHub actions发布hugo到私有云服务器</a></li></ol></section><footer class=article-footer><section class=article-tags><a href=/tags/hugo/>Hugo</a>
 <a href=/tags/githubaction/>GithubAction</a>
@@ -106,7 +62,7 @@
 2018 -
 2024 Codly</section><section class=running-time>本博客已稳定运行
 <span id=runningdays class=running-days></span></section><section class=totalcount>发表了27篇文章 ·
-总计11.95k字</section><section class=powerby>ICP证：<a href=http://www.beian.miit.gov.cn>京16046477</a><br>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.29.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+总计9.06k字</section><section class=powerby>ICP证：<a href=http://www.beian.miit.gov.cn>京16046477</a><br>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.29.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
 <button class="pswp__button pswp__button--share" title=Share></button>
 <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
